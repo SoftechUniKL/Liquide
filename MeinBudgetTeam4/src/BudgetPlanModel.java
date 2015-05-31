@@ -65,6 +65,64 @@ public class BudgetPlanModel
             e.printStackTrace();
         }
     }
+    
+    public Connection initiateDatabase() {
+    	try {
+    		Class.forName("org.h2.Driver");
+            Connection dbConnection = DriverManager.getConnection("jdbc:h2:~/BudgetPlanerDaten", "Nutzername", "Password");
+            Statement statement = dbConnection.createStatement();
+            String query = "";// "DROP TABLE IF EXISTS " + "Tabellenname"; //Tabellenname ersetzen
+           /* statement.execute(query + ";");
+            statement.close(); */ //Für Testzwecke
+            statement = dbConnection.createStatement();
+            query = "CREATE TABLE IF NOT EXISTS " + "Tabellenname" + " ("
+            		+ "ID int NOT NULL AUTO_INCREMENT,"
+            		+ "Datum datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),"
+            		+ "Posten varchar(50) NOT NULL,"
+            		+ "Kategorie varchar(50)," //Sollte man eigentlich mit Enum machen
+            		+ "Subkategorie varchar(50)," //s.o.
+            		+ "Anzahl int DEFAULT 1,"
+            		+ "PRIMARY KEY (ID)"
+            		+ ")";
+            statement.executeUpdate(query + ";");
+            statement.close();
+            return dbConnection;
+    	}
+    	catch (Exception e) {
+    		System.out.println(e.getMessage());
+    		return null;
+    	}
+    }
+    public void select(String column_name, String table_name, String condition, Connection dbConnection) { //Datenbankanfrage
+    	try{
+    	Statement statement = dbConnection.createStatement();
+    	String query ="SELECT " + column_name + " FROM " + table_name + " WHERE " + condition;
+    	ResultSet resultSet = statement.executeQuery(query + ";");
+    	while(resultSet.next()) {
+    		String output = resultSet.getString(column_name);
+    		System.out.println(output); //Ersetzen durch GUI bzw. ändern in return
+    	}
+        statement.close();
+    	}
+    	catch(Exception e) {
+    		System.out.println(e.getMessage()); //Ersetzen durch GUI-Verarbeitung
+    	}
+    }
+    
+    public void insert(String table, Connection dbConnection, String...values) { //Die Frage ist welche Daten verwendet werden
+    	try {
+    		if (values == null || values.length == 0)
+    			throw new IllegalArgumentException("Die einzulesenden Daten wurden nicht korrekt übergeben");
+    	Statement statement = dbConnection.createStatement();
+        statement = dbConnection.createStatement();
+        statement.executeUpdate("INSERT INTO Test VALUES (1, 'Hier könnten Daten aus dem Budgetplaner stehen!');");
+        statement.close();
+    	}
+    	catch(Exception e) {
+    		System.out.println(e.getMessage());
+    	}
+    	
+    }
 }
 
 
