@@ -66,22 +66,48 @@ public class BudgetPlanModel
         }
     }
     
-    public Connection initiateDatabase() {
+    public Connection initiateDatabase(String Nutzername, String Password) {
     	try {
     		Class.forName("org.h2.Driver");
-            Connection dbConnection = DriverManager.getConnection("jdbc:h2:~/BudgetPlanerDaten", "Nutzername", "Password");
+            Connection dbConnection = DriverManager.getConnection("jdbc:h2:~/BudgetPlanerDaten"+"_"+Nutzername, Nutzername, Password);
             Statement statement = dbConnection.createStatement();
             String query = "";// "DROP TABLE IF EXISTS " + "Tabellenname"; //Tabellenname ersetzen
            /* statement.execute(query + ";");
             statement.close(); */ //Für Testzwecke
             statement = dbConnection.createStatement();
-            query = "CREATE TABLE IF NOT EXISTS " + "Tabellenname" + " ("
+            query = "CREATE TABLE IF NOT EXISTS " + "Subkategorie" + " (" 
+            		+ "SubP_ID int NOT NULL AUTO_INCREMENT,"
+            		+ "Bezeichnung varchar(50) NOT NULL," //Bezeichnung der Subkategorie
+            		+ "PRIMARY KEY (SubP_ID)"
+            		+ ")";
+            statement.executeUpdate(query + ";");
+            query = "CREATE TABLE IF NOT EXISTS " + "Kategorie" + " (" //Tabellenname = Posten?
+            		+ "Kategorie_ID int NOT NULL AUTO_INCREMENT,"
+            		+ "Bezeichnung varchar(50) NOT NULL," //Bezeichnung der der Kategorie
+            		+ "Subkategorie varchar(50),"
+            		+ "FOREIGN KEY (Subkategorie) REFERENCES Subkategorie(SubP_ID),"
+            		+ "PRIMARY KEY (Kategorie_ID)"
+            		+ ")";
+            statement.executeUpdate(query + ";");
+            query = "CREATE TABLE IF NOT EXISTS " + "Nutzer" + " (" 
+            		+ "User_ID int NOT NULL AUTO_INCREMENT,"
+            		+ "Budget double,"
+            		+ "Passwort varchar(50), "
+            		+ "Name varchar(50) NOT NULL," //Name des Nutzers
+            		+ "PRIMARY KEY (User_ID)"
+            		+ ")";
+            statement.executeUpdate(query + ";");
+            query = "CREATE TABLE IF NOT EXISTS " + "Posten" + " (" //Tabellenname = Posten?
             		+ "ID int NOT NULL AUTO_INCREMENT,"
             		+ "Datum datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),"
-            		+ "Posten varchar(50) NOT NULL,"
+            		+ "Bezeichnung varchar(50) NOT NULL," //Bezeichnung der Position
+            		+ "Preis float NOT NULL," 
             		+ "Kategorie varchar(50)," //Sollte man eigentlich mit Enum machen
             		+ "Subkategorie varchar(50)," //s.o.
             		+ "Anzahl int DEFAULT 1,"
+            		+ "Nutzer varchar(50),"
+            		+ "FOREIGN KEY (Kategorie) REFERENCES Kategorie(Kategorie_ID),"
+            		+ "FOREIGN KEY (Nutzer) REFERENCES Nutzer(User_ID),"
             		+ "PRIMARY KEY (ID)"
             		+ ")";
             statement.executeUpdate(query + ";");
