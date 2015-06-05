@@ -27,8 +27,15 @@ import java.sql.*;
  */
 public class BudgetPlanModel
 {
+	private Connection dbConnection;
 	public BudgetPlanModel() { // Konstruktor
 		
+	}
+	public Connection getConnection() {
+		return this.dbConnection;
+	}
+	public void setConnection(Connection dbConnection) {
+		this.dbConnection = dbConnection;
 	}
     public void testFunktion()
     {
@@ -66,33 +73,38 @@ public class BudgetPlanModel
         }
     }
     
-    public Connection initiateDatabase(String Nutzername, String Password) {
+    public void initiateDatabase(String Nutzername, String Password) {
     	try {
     		Class.forName("org.h2.Driver");
             Connection dbConnection = DriverManager.getConnection("jdbc:h2:~/BudgetPlanerDaten"+"_"+Nutzername, Nutzername, Password);
+            DatabaseMetaData databaseMetaData = dbConnection.getMetaData();
+            ResultSet result = databaseMetaData.getTables(null, null, null, new String[] {"TABLE"});
+            boolean firstUse = true;
+            while(result.next()) {
+            	firstUse = false;
+            	//System.out.println(result.getString("TABLE_NAME") + "-------------");
+            }
             Statement statement = dbConnection.createStatement();
-            String query = "";// "DROP TABLE IF EXISTS " + "Tabellenname"; //Tabellenname ersetzen
-           /* statement.execute(query + ";");
-            statement.close(); */ //Für Testzwecke
+            String query;
             statement = dbConnection.createStatement();
-            query = "CREATE TABLE IF NOT EXISTS " + "Subkategorie" + " (" 
-            		+ "SubP_ID int NOT NULL AUTO_INCREMENT,"
-            		+ "Bezeichnung varchar(50) NOT NULL," //Bezeichnung der Subkategorie
-            		+ "PRIMARY KEY (SubP_ID)"
-            		+ ")";
-            statement.executeUpdate(query + ";");
             query = "CREATE TABLE IF NOT EXISTS " + "Kategorie" + " (" //Tabellenname = Posten?
             		+ "Kategorie_ID int NOT NULL AUTO_INCREMENT,"
             		+ "Bezeichnung varchar(50) NOT NULL," //Bezeichnung der der Kategorie
-            		+ "Subkategorie varchar(50),"
-            		+ "FOREIGN KEY (Subkategorie) REFERENCES Subkategorie(SubP_ID),"
             		+ "PRIMARY KEY (Kategorie_ID)"
+            		+ ")";
+            statement.executeUpdate(query + ";");
+            query = "CREATE TABLE IF NOT EXISTS " + "Subkategorie" + " (" 
+            		+ "SubK_ID int NOT NULL AUTO_INCREMENT,"
+            		+ "Kategorie int NOT NULL,"
+            		+ "Bezeichnung varchar(50) NOT NULL," //Bezeichnung der Subkategorie
+            		+ "FOREIGN KEY (Kategorie) REFERENCES Kategorie(Kategorie_ID),"
+            		+ "PRIMARY KEY (SubK_ID)"
             		+ ")";
             statement.executeUpdate(query + ";");
             query = "CREATE TABLE IF NOT EXISTS " + "Nutzer" + " (" 
             		+ "User_ID int NOT NULL AUTO_INCREMENT,"
-            		+ "Budget double,"
-            		+ "Passwort varchar(50), "
+            		+ "Budget double,"// Kann verändert werden
+            		+ "Passwort varchar(50),"
             		+ "Name varchar(50) NOT NULL," //Name des Nutzers
             		+ "PRIMARY KEY (User_ID)"
             		+ ")";
@@ -101,25 +113,31 @@ public class BudgetPlanModel
             		+ "ID int NOT NULL AUTO_INCREMENT,"
             		+ "Datum datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),"
             		+ "Bezeichnung varchar(50) NOT NULL," //Bezeichnung der Position
-            		+ "Preis float NOT NULL," 
-            		+ "Kategorie varchar(50)," //Sollte man eigentlich mit Enum machen
-            		+ "Subkategorie varchar(50)," //s.o.
+            		+ "Preis double NOT NULL," 
+            		+ "Kategorie int DEFAULT 1," //0 
+            		+ "Subkategorie int Default 1,"
             		+ "Anzahl int DEFAULT 1,"
-            		+ "Nutzer varchar(50),"
+            		+ "Nutzer int,"
+            		+ "FOREIGN KEY (Subkategorie) REFERENCES Subkategorie(SubK_ID),"
             		+ "FOREIGN KEY (Kategorie) REFERENCES Kategorie(Kategorie_ID),"
-            		+ "FOREIGN KEY (Nutzer) REFERENCES Nutzer(User_ID),"
+            		+ "FOREIGN KEY (Nutzer) REFERENCES Nutzer(User_ID) ON DELETE CASCADE," // User nicht löschbar!!!. Wenn Drop Table und neue Initialisierung
             		+ "PRIMARY KEY (ID)"
             		+ ")";
             statement.executeUpdate(query + ";");
             statement.close();
-            return dbConnection;
+            setConnection(dbConnection);
+            if (firstUse) {
+            insert_User(Nutzername, Password, 0.0);
+            insert_Kategorie("Allgemein");
+            insert_Subkategorie("-", "Allgemein");
+            }
+            //System.out.println(firstUse);
     	}
     	catch (Exception e) {
     		System.out.println(e.getMessage());
-    		return null;
     	}
     }
-    public void select(String column_name, String table_name, String condition, Connection dbConnection) { //Datenbankanfrage
+    public void select(String column_name, String table_name, String condition) { //Datenbankanfrage
     	try{
     	Statement statement = dbConnection.createStatement();
     	String query ="SELECT " + column_name + " FROM " + table_name + " WHERE " + condition;
@@ -135,13 +153,106 @@ public class BudgetPlanModel
     	}
     }
     
-    public void insert(String table, Connection dbConnection, String...values) { //Die Frage ist welche Daten verwendet werden
+    public void insert_Kategorie(String Bezeichnung) {
     	try {
-    		if (values == null || values.length == 0)
-    			throw new IllegalArgumentException("Die einzulesenden Daten wurden nicht korrekt übergeben");
     	Statement statement = dbConnection.createStatement();
-        statement = dbConnection.createStatement();
-        statement.executeUpdate("INSERT INTO Test VALUES (1, 'Hier könnten Daten aus dem Budgetplaner stehen!');");
+    	String query = "INSERT INTO Kategorie(Bezeichnung) VALUES('" + Bezeichnung +"')";
+    	statement.executeUpdate(query+";");
+    	statement.close();
+    	}
+    	
+    	catch(Exception e) {
+    		System.out.println(e.getMessage());
+    	}
+    	
+    }
+    public void test() {
+    	try {
+    	Statement statement = dbConnection.createStatement();
+    	String query = "SELECT * FROM Kategorie";
+    	ResultSet ergebnis = statement.executeQuery(query+";");
+    //	while(ergebnis.next()) {
+    		ergebnis.next();
+    		int blub = ergebnis.getInt("Kategorie_ID");
+    		String blab = ergebnis.getString("Bezeichnung");
+    		System.out.println(blub + "--------" + blab);	
+    //	}
+    		
+    	}
+    	catch(Exception e) {
+    		System.out.println(e.getMessage());
+    	}
+    	
+    }
+    public void insert_Subkategorie(String Bezeichnung_Subkategorie, String Bezeichnung_Kategorie) {
+    	try {
+        	Statement statement = dbConnection.createStatement();
+        	String query = "SELECT DISTINCT * FROM Kategorie WHERE '" + Bezeichnung_Kategorie + "' = Bezeichnung";
+        	ResultSet ergebnis = statement.executeQuery(query + ";");
+        	ergebnis.next();
+        	int Kategorie_ID = ergebnis.getInt("Kategorie_ID");
+        	statement.close();
+        	statement = dbConnection.createStatement();
+        	query = "INSERT INTO Subkategorie(Bezeichnung, Kategorie) VALUES('" + Bezeichnung_Subkategorie + "', " + Kategorie_ID + ")";
+        	statement.executeUpdate(query+";");
+        	statement.close();
+        	}
+        	
+        	catch(Exception e) {
+        		System.out.println(e.getMessage());
+        	}    	
+    }
+    
+    public void insert_User(String Name, String Passwort, double Budget) {
+    	try {
+        	Statement statement = dbConnection.createStatement();
+        	String query = "INSERT INTO Nutzer(Budget, Passwort, Name) VALUES("+Budget+", '" + Passwort + "', '" + Name +"')";
+        	statement.executeUpdate(query+";");
+        	statement.close();
+        	}
+        	
+        	catch(Exception e) {
+        		System.out.println(e.getMessage());
+        	}
+    	
+    }
+    
+    public void insert_Posten(String Posten_Bezeichnung, String Kategorie_Bezeichnung, String Subkategorie_Bezeichnung, double Preis, int Anzahl) { //Die Frage ist welche Daten verwendet werden
+    	try {
+    		if (Posten_Bezeichnung == "" || Double.isNaN(Preis))
+    			throw new IllegalArgumentException("Bitte geben Sie einen Posten mit dazugehörigem Preis an.");
+    	Statement statement = dbConnection.createStatement();
+    	int Kategorie_ID;
+    	String query;
+    	ResultSet ergebnis;
+    	if(Kategorie_Bezeichnung != "") {
+    	query = "SELECT DISTINCT Kategorie_ID FROM Kategorie WHERE '" + Kategorie_Bezeichnung + "' = Bezeichnung";
+    	ergebnis = statement.executeQuery(query + ";");
+    	ergebnis.next();
+    	Kategorie_ID = ergebnis.getInt("Kategorie_ID");
+    	}
+    	else
+    		Kategorie_ID = 1;
+    	int SubK_ID;
+    	if (Subkategorie_Bezeichnung != "") {
+    	query = "SELECT DISTINCT SubK_ID FROM Subkategorie WHERE '" + Subkategorie_Bezeichnung + "' = Bezeichnung";
+    	ergebnis = statement.executeQuery(query + ";");
+    	ergebnis.next();
+    	SubK_ID = ergebnis.getInt("SubK_ID");
+    	}
+    	else
+    		SubK_ID = 1; 
+    	query = "Select DISTINCT * FROM Nutzer";
+    	ergebnis = statement.executeQuery(query + ";");
+    	ergebnis.next();
+    	int User_ID = ergebnis.getInt("User_ID");//Sollte nur ein einziger existieren
+    	statement.close();
+    	if (Anzahl <= 0)
+    		Anzahl = 1;
+        statement = dbConnection.createStatement(); //Hier werden alle Daten zu Posten geschrieben
+        query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer)" //Andere Werte werden automatisch belegt.
+        		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + Kategorie_ID + ", " + SubK_ID + ", " + Anzahl + ", " + User_ID + ")";
+        statement.executeUpdate(query+";");
         statement.close();
     	}
     	catch(Exception e) {

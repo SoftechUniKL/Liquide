@@ -11,8 +11,9 @@ public class BudgetPlan {
 //		BudgetPlanModel test = new BudgetPlanModel();
 //		test.testFunktion();
 		BudgetPlanModel magic = new BudgetPlanModel();
-		Connection dbConnection = magic.initiateDatabase("test", "test"); //Tabellen werden erfolgreich erstellt!
-																		//Funktion die User erstellt.
+		magic.initiateDatabase("test", "test"); //Tabellen werden erfolgreich erstellt!
+		magic.insert_Posten("Auto", "", "", 300, 2);																//Funktion die User erstellt.
+	
 	}
 
 }
