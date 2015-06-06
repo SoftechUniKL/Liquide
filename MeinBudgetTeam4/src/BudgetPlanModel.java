@@ -25,9 +25,13 @@ import java.sql.*;
  * Hello world!
  *
  */
+/**
+ * @author Shahin
+ *
+ */
 public class BudgetPlanModel
 {
-	private Connection dbConnection;
+	private Connection dbConnection; //global definiert
 	public BudgetPlanModel() { // Konstruktor
 		
 	}
@@ -37,67 +41,42 @@ public class BudgetPlanModel
 	public void setConnection(Connection dbConnection) {
 		this.dbConnection = dbConnection;
 	}
-    public void testFunktion()
-    {
-        try {
-            Class.forName("org.h2.Driver");
-            Connection dbConnection = DriverManager.getConnection("jdbc:h2:~/h2testdb");
-            Statement statement = dbConnection.createStatement();
-            statement.execute("DROP TABLE IF EXISTS Test;");
-            statement.close();
-            statement = dbConnection.createStatement();
-            statement.executeUpdate("CREATE TABLE Test (Test_ID INTEGER, Message VARCHAR(250));");
-            statement.close();
-
-            statement = dbConnection.createStatement();
-            statement.executeUpdate("INSERT INTO Test VALUES (4711, 'Hello World!');");
-            statement.close();
-            
-            statement = dbConnection.createStatement();
-            statement.executeUpdate("INSERT INTO Test VALUES (1, 'Hier könnten Daten aus dem Budgetplaner stehen!');");
-            statement.close();
-
-            statement = dbConnection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM Test;");
-            while (resultSet.next()) {
-                String msg = resultSet.getString("Message");
-                System.out.println(msg);
-            }
-            statement.close();
-
-            dbConnection.close();
-        } catch (ClassNotFoundException e) {
-            System.out.println("Unable to load the driver class!");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+	public void closeConnection() {
+		try{
+		dbConnection.close();
+		}
+		catch(SQLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+	}
     
     public void initiateDatabase(String Nutzername, String Password) {
     	try {
     		Class.forName("org.h2.Driver");
             Connection dbConnection = DriverManager.getConnection("jdbc:h2:~/BudgetPlanerDaten"+"_"+Nutzername, Nutzername, Password);
             DatabaseMetaData databaseMetaData = dbConnection.getMetaData();
-            ResultSet result = databaseMetaData.getTables(null, null, null, new String[] {"TABLE"});
+            ResultSet result = databaseMetaData.getTables(null, null, null, new String[] {"TABLE"}); //Testen ob Tabelle schon vorhanden
             boolean firstUse = true;
-            while(result.next()) {
-            	firstUse = false;
-            	//System.out.println(result.getString("TABLE_NAME") + "-------------");
+            if(result.next()) { //Bestimung ob erste Benutzung
+            	firstUse = false; 
+            	//Hier Authentifikationsfunktion die Korrektheit des Passwortsp rüft. Wenn falsch, dann return
             }
             Statement statement = dbConnection.createStatement();
             String query;
             statement = dbConnection.createStatement();
             query = "CREATE TABLE IF NOT EXISTS " + "Kategorie" + " (" //Tabellenname = Posten?
             		+ "Kategorie_ID int NOT NULL AUTO_INCREMENT,"
-            		+ "Bezeichnung varchar(50) NOT NULL," //Bezeichnung der der Kategorie
+            		+ "Bezeichnung varchar(50) NOT NULL UNIQUE," //Bezeichnung der der Kategorie
             		+ "PRIMARY KEY (Kategorie_ID)"
             		+ ")";
             statement.executeUpdate(query + ";");
             query = "CREATE TABLE IF NOT EXISTS " + "Subkategorie" + " (" 
             		+ "SubK_ID int NOT NULL AUTO_INCREMENT,"
             		+ "Kategorie int NOT NULL,"
-            		+ "Bezeichnung varchar(50) NOT NULL," //Bezeichnung der Subkategorie
+            		+ "Bezeichnung varchar(50) NOT NULL," //Bezeichnung der Subkategorie, nicht unique. Nur in Kombination mit Kategorie unique
             		+ "FOREIGN KEY (Kategorie) REFERENCES Kategorie(Kategorie_ID),"
+            		+ "UNIQUE KEY SubK_ID (Bezeichnung, Kategorie)," //Da SubK_ID automatisch inkrementiert wird muss man hier mit Bezeichnung arbeiten
             		+ "PRIMARY KEY (SubK_ID)"
             		+ ")";
             statement.executeUpdate(query + ";");
@@ -114,8 +93,8 @@ public class BudgetPlanModel
             		+ "Datum datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),"
             		+ "Bezeichnung varchar(50) NOT NULL," //Bezeichnung der Position
             		+ "Preis double NOT NULL," 
-            		+ "Kategorie int DEFAULT 1," //0 
-            		+ "Subkategorie int Default 1,"
+            		+ "Kategorie int DEFAULT 1," //Weil unten hier die Standartwerte zugeordnet werden
+            		+ "Subkategorie int DEFAULT 1,"
             		+ "Anzahl int DEFAULT 1,"
             		+ "Nutzer int,"
             		+ "FOREIGN KEY (Subkategorie) REFERENCES Subkategorie(SubK_ID),"
@@ -129,15 +108,15 @@ public class BudgetPlanModel
             if (firstUse) {
             insert_User(Nutzername, Password, 0.0);
             insert_Kategorie("Allgemein");
-            insert_Subkategorie("-", "Allgemein");
             }
             //System.out.println(firstUse);
     	}
     	catch (Exception e) {
     		System.out.println(e.getMessage());
+    		e.printStackTrace();
     	}
     }
-    public void select(String column_name, String table_name, String condition) { //Datenbankanfrage
+ /*   public void select(String column_name, String table_name, String condition) { //Datenbankanfrage
     	try{
     	Statement statement = dbConnection.createStatement();
     	String query ="SELECT " + column_name + " FROM " + table_name + " WHERE " + condition;
@@ -151,7 +130,7 @@ public class BudgetPlanModel
     	catch(Exception e) {
     		System.out.println(e.getMessage()); //Ersetzen durch GUI-Verarbeitung
     	}
-    }
+    } */
     
     public void insert_Kategorie(String Bezeichnung) {
     	try {
@@ -159,6 +138,7 @@ public class BudgetPlanModel
     	String query = "INSERT INTO Kategorie(Bezeichnung) VALUES('" + Bezeichnung +"')";
     	statement.executeUpdate(query+";");
     	statement.close();
+    	insert_Subkategorie("-", Bezeichnung); //Damit automatisch die default Subkategorie erstellt wird
     	}
     	
     	catch(Exception e) {
@@ -166,24 +146,7 @@ public class BudgetPlanModel
     	}
     	
     }
-    public void test() {
-    	try {
-    	Statement statement = dbConnection.createStatement();
-    	String query = "SELECT * FROM Kategorie";
-    	ResultSet ergebnis = statement.executeQuery(query+";");
-    //	while(ergebnis.next()) {
-    		ergebnis.next();
-    		int blub = ergebnis.getInt("Kategorie_ID");
-    		String blab = ergebnis.getString("Bezeichnung");
-    		System.out.println(blub + "--------" + blab);	
-    //	}
-    		
-    	}
-    	catch(Exception e) {
-    		System.out.println(e.getMessage());
-    	}
-    	
-    }
+
     public void insert_Subkategorie(String Bezeichnung_Subkategorie, String Bezeichnung_Kategorie) {
     	try {
         	Statement statement = dbConnection.createStatement();
@@ -203,7 +166,7 @@ public class BudgetPlanModel
         	}    	
     }
     
-    public void insert_User(String Name, String Passwort, double Budget) {
+    private void insert_User(String Name, String Passwort, double Budget) {
     	try {
         	Statement statement = dbConnection.createStatement();
         	String query = "INSERT INTO Nutzer(Budget, Passwort, Name) VALUES("+Budget+", '" + Passwort + "', '" + Name +"')";
@@ -215,6 +178,23 @@ public class BudgetPlanModel
         		System.out.println(e.getMessage());
         	}
     	
+    }
+    
+    public void update_User(double Budget) {
+    	try {
+    	Statement statement = dbConnection.createStatement();
+    	String query = "SELECT * FROM Nutzer";
+    	ResultSet ergebnis = statement.executeQuery(query + ";");//Es sollte sowieso nur ein einziger Nutzer existieren
+    	ergebnis.next();
+    	int user_id = ergebnis.getInt("User_ID");
+    	query = "UPDATE Nutzer SET Budget = " + Budget + " WHERE User_ID = " + user_id;
+    	statement.executeUpdate(query + ";");
+    	statement.close();
+    	
+    	}
+    	catch (Exception e) {
+    		System.out.println(e.getMessage());
+    	}
     }
     
     public void insert_Posten(String Posten_Bezeichnung, String Kategorie_Bezeichnung, String Subkategorie_Bezeichnung, double Preis, int Anzahl) { //Die Frage ist welche Daten verwendet werden
@@ -260,6 +240,67 @@ public class BudgetPlanModel
     	}
     	
     }
+
+
+    public String[] return_Kategorien() {
+    	try {
+    	Statement statement = dbConnection.createStatement();
+    	String query = "SELECT COUNT (*) FROM Kategorie";
+    	ResultSet ergebnis = statement.executeQuery(query+";");
+    	ergebnis.next();
+    	int anzahl = ergebnis.getInt(1);
+    /*	if (!(anzahl > 0)) { //Dieser Fall sollte nie vorkommen.
+    		String [] Standard = {"Allgemein"};
+    		return Standard;
+    	} */
+    	String[] Kategorien = new String[anzahl];
+    	int i = 0;
+    	query = "SELECT Bezeichnung FROM Kategorie";
+    	ergebnis = statement.executeQuery(query+";");
+    	while(ergebnis.next())
+    		Kategorien[i++] = ergebnis.getString("Bezeichnung");
+    	statement.close();
+    	return Kategorien;
+    	}
+    	catch (Exception e) {
+    		System.out.println(e.getMessage());
+    		return null;
+    	}
+    }
+    
+    public String[] return_Subkategorien(String Bezeichnung_Kategorie) {
+    	try {
+    		Statement statement = dbConnection.createStatement();
+    		String query = "SELECT COUNT(*) FROM Kategorie, Subkategorie WHERE Kategorie.Bezeichnung = '" + Bezeichnung_Kategorie + "'"
+    				+ " AND Kategorie.Kategorie_ID = Subkategorie.Kategorie";
+    		ResultSet ergebnis = statement.executeQuery(query + ";");
+    		ergebnis.next();
+    		int anzahl = ergebnis.getInt(1);
+    	/*	if (!(anzahl > 0)) {
+    			String [] Standard = {"-"};
+        		return Standard;
+    		} */
+    		String[] Subkategorien = new String[anzahl];
+    		int i = 0;  		
+    		query = "SELECT Subkategorie.Bezeichnung FROM Kategorie, Subkategorie WHERE Kategorie.Bezeichnung = '" + Bezeichnung_Kategorie + "'"
+    				+ " AND Kategorie.Kategorie_ID = Subkategorie.Kategorie";
+    		ergebnis = statement.executeQuery(query + ";");
+    		while(ergebnis.next())
+    			Subkategorien[i++] = ergebnis.getString("Subkategorie.Bezeichnung");
+    		statement.close();
+    		return Subkategorien;
+    		
+    	}
+    	catch(Exception e) {
+    		System.out.println(e.getMessage());
+    		return null;
+    	}
+    	
+    }
+    
+    
+    
+
 }
 
 
