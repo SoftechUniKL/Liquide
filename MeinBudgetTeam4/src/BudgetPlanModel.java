@@ -97,6 +97,7 @@ public class BudgetPlanModel
             		+ "Subkategorie int DEFAULT 1,"
             		+ "Anzahl int DEFAULT 1,"
             		+ "Nutzer int,"
+            		+ "Dauerauftrag BOOLEAN DEFAULT FALSE,"
             		+ "FOREIGN KEY (Subkategorie) REFERENCES Subkategorie(SubK_ID),"
             		+ "FOREIGN KEY (Kategorie) REFERENCES Kategorie(Kategorie_ID),"
             		+ "FOREIGN KEY (Nutzer) REFERENCES Nutzer(User_ID) ON DELETE CASCADE," // User nicht löschbar!!!. Wenn Drop Table und neue Initialisierung
@@ -237,6 +238,7 @@ public class BudgetPlanModel
     	}
     	catch(Exception e) {
     		System.out.println(e.getMessage());
+    		e.printStackTrace();
     	}
     	
     }
@@ -293,6 +295,66 @@ public class BudgetPlanModel
     	}
     	catch(Exception e) {
     		System.out.println(e.getMessage());
+    		return null;
+    	}
+    	
+    }
+    
+    public double getBudget() {
+    	try {
+    		Statement statement = dbConnection.createStatement();
+    		ResultSet ergebnis = statement.executeQuery("Select Budget FROM Nutzer");
+    		ergebnis.next();
+    		double budget = ergebnis.getDouble(1);
+    		statement.close();
+    		return(budget);
+    		
+    	}
+    	catch(Exception e) {
+    		System.out.println(e.getMessage());
+    		e.printStackTrace();
+    		return -1;
+    	}
+    }
+    
+    public void DROP_ALL() {
+    	try {
+    		Statement statement = dbConnection.createStatement();
+    		statement.executeUpdate("DROP ALL OBJECTS;");
+    		statement.close();
+    	}
+    	catch(Exception e) {
+    		System.out.println(e.getMessage());
+    		e.printStackTrace();
+    	}
+    }
+    
+    public ArrayList<Posten> transcribe() {
+    	try {
+    	Statement statement = dbConnection.createStatement(); //Join über Posten, Kategorie und Subkategorie
+    	String query = "SELECT * FROM Posten, Kategorie, Subkategorie WHERE Kategorie.Kategorie_ID = Posten.Kategorie AND "
+    			+ "Kategorie.Kategorie_ID = Subkategorie.Kategorie AND Subkategorie.SubK_ID = Posten.Subkategorie";
+    	ResultSet ergebnis = statement.executeQuery(query + ";");
+    	ArrayList<Posten> alle_Posten = new ArrayList<Posten>();
+    	while(ergebnis.next()) {
+    		Date datum = ergebnis.getDate("Posten.Datum");
+    		String bezeichnung = ergebnis.getString("Posten.Bezeichnung");
+    		int produkt_id = ergebnis.getInt("Posten.ID");
+    		double preis = ergebnis.getDouble("Posten.Preis");
+    		int anzahl = ergebnis.getInt("Posten.Anzahl");
+    		boolean dauerauftrag = ergebnis.getBoolean("Posten.Dauerauftrag");
+    		String kategorie_bezeichnung = ergebnis.getString("Kategorie.Bezeichnung");
+    		int kategorie_id = ergebnis.getInt("Kategorie.Kategorie_ID");
+    		String subkategorie_bezeichnung = ergebnis.getString("Subkategorie.Bezeichnung");
+    		int subkategorie_id = ergebnis.getInt("Subkategorie.SubK_ID");
+    		alle_Posten.add(new Posten(datum, bezeichnung, produkt_id, preis, anzahl, dauerauftrag, kategorie_bezeichnung, kategorie_id, subkategorie_bezeichnung, subkategorie_id));
+    	}
+    	statement.close();
+    	return alle_Posten;
+    	}
+    	catch(Exception e) {
+    		System.out.println(e.getMessage());
+    		e.printStackTrace();
     		return null;
     	}
     	
