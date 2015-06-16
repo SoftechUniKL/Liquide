@@ -1,5 +1,8 @@
+import java.awt.Color;
 import java.awt.FlowLayout;
+
 import javax.swing.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -26,21 +29,29 @@ public class BudgetPlanGUI extends JFrame {
 	 */
 	private JTable table;
 	
-	private JFrame w1;
+	private JCheckBox chb31;
+	
+	private JRadioButton rb41, rb42, rb43, rb44 ;
+	
+	private JFrame w1, w2, w3, w4, w5;
+	
+	private JComboBox cb31, cb32, cb41, cb42;
 	/**
 	 * Scrollelemente, das die Tabelle umfasst
 	 */
-	private JScrollPane scrollpane;
+	private JScrollPane sp21;
+	
+	private JPanel p21;
 	/**
 	 * Schaltflaeche, die beim Klicken einen Dialog anzeigt
 	 */
-	private JButton login, registry, register,back1;
+	private JButton b01, b02, b11, b12, b21, b22, b23, b24, b25, b31, b32, b41, b42;
 	/**
 	 * Modell der Daten
 	 */
-	private JLabel name,pw,nNamel,nPw1l, nPw2l ;
+	private JLabel l01, l02, l11,l12, l13, l21, l22, l31, l32, l33, l34, l35, l41, l42 ;
 	
-	private JTextField eName, nName ;
+	private JTextField eName, nName, tf31, tf32, tf33 ;
 	
 	private JPasswordField ePw, nPw1, nPw2 ;
 	
@@ -68,25 +79,25 @@ public class BudgetPlanGUI extends JFrame {
 
 	// Initialisieren des Fensters
 	protected void initWindow() {
-		login = new JButton("Login");
-	    name = new JLabel ("Name") ;
-	    pw = new JLabel("Passwort");
+		b01 = new JButton("Login");
+	    l01 = new JLabel ("Name") ;
+	    l02 = new JLabel("Passwort");
 		eName = new JTextField() ;
 		ePw = new JPasswordField();
-		registry = new JButton("Registrierung") ;
+		b02 = new JButton("Registrierung") ;
 		
-		registry.setBounds(175,250,150,30);
+		b02.setBounds(175,250,150,30);
 		ePw.setBounds(300,100,100,20);
-		pw.setBounds(300,80,100,20);
-		name.setBounds(100,80,100,20);
+		l02.setBounds(300,80,100,20);
+		l01.setBounds(100,80,100,20);
 		eName.setBounds(100,100,100,20);
-		login.setBounds(175,200,150,30);
+		b01.setBounds(175,200,150,30);
 		
-		getContentPane().add(registry);
-		getContentPane().add(login) ;
+		getContentPane().add(b02);
+		getContentPane().add(b01) ;
 		getContentPane().add(eName) ;
-		getContentPane().add(name) ;
-		getContentPane().add(pw);
+		getContentPane().add(l01) ;
+		getContentPane().add(l02);
 		getContentPane().add(ePw);
 		
 
@@ -125,38 +136,39 @@ public class BudgetPlanGUI extends JFrame {
 	}
 	protected void initWindow1() {
 		w1 = new JFrame();
-		nNamel = new JLabel ("Benutzername") ;
+		l11 = new JLabel ("Benutzername") ;
 		nName = new JTextField();
-		nPw1l = new JLabel ("neues Passwort");
+		l12 = new JLabel ("neues Passwort");
 		nPw1 = new JPasswordField();
-		nPw2l = new JLabel (" Passwort wiederholen");
+		l13 = new JLabel (" Passwort wiederholen");
 		nPw2 = new JPasswordField();
-		register = new JButton("registrieren") ;
-		back1 = new JButton("zurück") ;
+		b11 = new JButton("registrieren") ;
+		b12 = new JButton("zurück") ;
+		
 		
 		
 		w1.setBounds(10,10,500,500) ;
 		w1.setVisible(true);
-		nNamel.setBounds(100,80,100,20);
+		l11.setBounds(100,80,100,20);
 		nName.setBounds(100,100,100,20);
-		nPw1l.setBounds(300,80,100,20);
+		l12.setBounds(300,80,100,20);
 		nPw1.setBounds(300,100,100,20);
-		nPw2l.setBounds(300,140,150,20);
+		l13.setBounds(300,140,150,20);
 		nPw2.setBounds(300,160,100,20);
-		register.setBounds(175,200,150,30);
-		back1.setBounds(400,400,75,20);
+		b11.setBounds(175,200,150,30);
+		b12.setBounds(400,400,75,20);
 		
 		w1.getContentPane().setLayout(null);
-	    w1.getContentPane().add(nNamel);
+	    w1.getContentPane().add(l11);
 		w1.getContentPane().add(nName);
-		w1.getContentPane().add(nPw1l);
+		w1.getContentPane().add(l12);
 		w1.getContentPane().add(nPw1);
-		w1.getContentPane().add(nPw2l);
+		w1.getContentPane().add(l13);
 		w1.getContentPane().add(nPw2);
-		w1.getContentPane().add(register) ;
-		w1.getContentPane().add(back1);
+		w1.getContentPane().add(b11) ;
+		w1.getContentPane().add(b12);
 		
-		register.addActionListener(new ActionListener() {
+		b11.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(w1,
 						"Ihre Registrierung ist erfolgreich abgeschlossen!",
@@ -164,7 +176,7 @@ public class BudgetPlanGUI extends JFrame {
 				w1.dispose();
 			}
 		});
-		back1.addActionListener(new ActionListener() {
+		b12.addActionListener(new ActionListener() {
 			public void actionPerformed( ActionEvent e) {
 				w1.dispose(); 
 		
@@ -175,20 +187,201 @@ public class BudgetPlanGUI extends JFrame {
 		
 		
 	}
+	protected void initWindow2 (){
+		w2 = new JFrame ();
+		b21 = new JButton("neuer Posten");
+		b22 = new JButton("Ausgaben") ;
+		b23 = new JButton("Budgetverwaltung") ;
+		b24 = new JButton("Datenverwaltung") ;
+		b25 = new JButton("Optionen") ;
+		l21 = new JLabel("aktuelles Budget");
+		l22 = new JLabel("Letzte Posten");
+		sp21 = new JScrollPane(); // letzte Posten
+		p21 = new JPanel(); // aktuelles Budget
+		
+		
+		w2.setBounds(10,10,500,500);
+		w2.setVisible(true);
+		b21.setBounds(50,50,150,30);
+		b22.setBounds(50,100,150,30);
+		b23.setBounds(50,150,150,30);
+		b24.setBounds(50,200,150,30);
+		b25.setBounds(50,250,150,30);
+		sp21.setBounds(250,200,200,250);
+		sp21.setBackground(Color.white);
+		l21.setBounds(250,50,150,20);
+		l22.setBounds(250,180,150,20);
+		p21.setBounds(250,70,150,20);
+		p21.setBackground(Color.white);
+		
+		w2.getContentPane().setLayout(null);
+		w2.getContentPane().add(b21);
+		w2.getContentPane().add(b22);
+		w2.getContentPane().add(b23) ;
+		w2.getContentPane().add(b24) ;
+		w2.getContentPane().add(b25) ;
+		w2.setTitle("Hauptmenü");
+		w2.getContentPane().add(sp21);
+		w2.getContentPane().add(l21);
+		w2.getContentPane().add(l22);
+		w2.getContentPane().add(p21);
+		
+		b21.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				w2.dispose();
+				initWindow3();
+			}
+		});
+		b22.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				w2.dispose();
+				initWindow4();
+			}
+		});
+	}
+	protected void initWindow3 (){
+		w3 = new JFrame();
+		cb31 = new JComboBox();
+	    cb32 = new JComboBox();
+		b31 = new JButton("übernehmen");
+		b32 = new JButton("zurück");
+		l31 = new JLabel("Kategorie");
+		l32 = new JLabel("Subkategorie");
+		l33 = new JLabel("Posten");
+		l34 = new JLabel("Preis");
+		l35 = new JLabel("Anzahl");
+		tf31 = new JTextField();
+		tf32 = new JTextField();
+		tf33 = new JTextField();
+		chb31 = new JCheckBox("Dauerauftrag");
+		
+		
+		w3.setBounds(10,10,500,500);
+		w3.setVisible(true);
+		cb31.setBounds(50,70,150,20);
+		cb32.setBounds(50,140,150,20);
+		b31.setBounds(50,400,150,20);
+		b32.setBounds(300,400,150,20);
+		l31.setBounds(50,50,150,20);
+		l32.setBounds(50,120,150,20);
+		l33.setBounds(300,50,150,20);
+		l34.setBounds(300,120,150,20);
+		l35.setBounds(300,190,150,20);
+		tf31.setBounds(300,70,100,20);
+		tf32.setBounds(300,140,100,20);
+		tf33.setBounds(300,210,100,20);
+		chb31.setBounds(50,190,150,20);
+		
+		w3.setTitle("Neuer Posten") ;
+		w3.getContentPane().setLayout(null);
+		w3.getContentPane().add(cb31);
+		w3.getContentPane().add(cb32);
+		w3.getContentPane().add(l31);
+		w3.getContentPane().add(b31);
+		w3.getContentPane().add(b32);
+		w3.getContentPane().add(l32);
+		w3.getContentPane().add(l33);
+		w3.getContentPane().add(l34);
+		w3.getContentPane().add(l35);
+		w3.getContentPane().add(tf31);
+		w3.getContentPane().add(tf32);
+		w3.getContentPane().add(tf33);
+		w3.getContentPane().add(chb31);
+		
+		b31.addActionListener(new ActionListener() {
+			public void actionPerformed( ActionEvent e) {
+				w3.dispose(); 
+				initWindow3();
+			}		
+		});
+		b32.addActionListener(new ActionListener() {
+			public void actionPerformed( ActionEvent e) {
+				w3.dispose(); 
+				initWindow2();
+			}		
+		});
+		
+		
+	}
+	protected void initWindow4() {
+		w4 = new JFrame("Ausgaben");
+		l41 = new JLabel("Jahr") ;
+		l42 = new JLabel("Monat") ;
+		cb41 = new JComboBox();
+		cb42 = new JComboBox();
+		b41 = new JButton("visualisieren");
+		b42 = new JButton("zurück");
+		rb41 = new JRadioButton("Tabellenform");
+		rb42 = new JRadioButton("Pie-Chart");
+		rb43 = new JRadioButton("weitere Visualisierung1"); 
+		rb44 = new JRadioButton("weitere Visualisierung2");
+		ButtonGroup bg41 = new ButtonGroup ();
+		
+		
+		w4.setBounds(10,10,500,500);
+		w4.setVisible(true);
+		l41.setBounds(50,50,100,20);
+		l42.setBounds(300,50,100,20);
+		cb41.setBounds(50,70,100,20);
+		cb42.setBounds(300,70,100,20);
+		b41.setBounds(50,400,150,20);
+		b42.setBounds(300,400,150,20);
+		rb41.setBounds(50,150,150,20);
+		rb42.setBounds(50,200,150,20);
+		rb43.setBounds(50,250,150,20);
+		rb44.setBounds(50,300,150,20);
+		bg41.add(rb41);
+		bg41.add(rb42);
+		bg41.add(rb43);
+		bg41.add(rb44);
+		
+		w4.getContentPane().setLayout(null);
+		w4.getContentPane().add(l41) ;
+		w4.getContentPane().add(l42) ;
+		w4.getContentPane().add(cb41) ;
+		w4.getContentPane().add(cb42) ;
+		w4.getContentPane().add(b41) ;
+		w4.getContentPane().add(b42) ;
+		w4.getContentPane().add(rb41);
+		w4.getContentPane().add(rb42);
+		w4.getContentPane().add(rb43);
+		w4.getContentPane().add(rb44);
+		
+		b41.addActionListener(new ActionListener() {
+			public void actionPerformed( ActionEvent e) {
+				initWindow5();
+			}		
+		});
+		b42.addActionListener(new ActionListener() {
+			public void actionPerformed( ActionEvent e) {
+				w4.dispose(); 
+				initWindow2();
+			}		
+		});
+	
+	}
+	protected void initWindow5(){ // Fenster mit Visualisierung zum austoben
+		w5 = new JFrame("Visualisierung");
+		
+		w5.setBounds(10,10,500,500);
+		w5.setVisible(true);
+		
+		w5.getContentPane().setLayout(null);
+		
+	}
 
 	// Verhalten hinzufuegen
 	public void addBehavior() {
 		// registriere den ActionListener fuer den Button als anonyme Klasse
-		login.addActionListener(new ActionListener() {
+		b01.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(BudgetPlanGUI.this,
-						"Sie sollten Ihre Finanzplanung ueberdenken!",
-						"Hinweis", JOptionPane.PLAIN_MESSAGE);
+				dispose();
+				initWindow2();
 			}
 
 		});
-		registry.addActionListener(new ActionListener() {
+		b02.addActionListener(new ActionListener() {
 			public void actionPerformed( ActionEvent e) {
 				initWindow1(); // Initialisierung des Frameinhalts
 		
