@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TilePane fx:id="loginPane" alignment="CENTER" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LoginScreen_Controller">
+   <children>
+      <VBox alignment="CENTER">
+         <children>
+            <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="600.0" prefWidth="600.0">
+               <children>
+                  <Label layoutX="226.0" layoutY="342.0" prefHeight="27.0" prefWidth="149.0" style="&#10;" text="Benutzername:" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false" AnchorPane.bottomAnchor="231.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="342.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="227.0" layoutY="415.0" prefHeight="27.0" prefWidth="149.0" text="Passwort:" textAlignment="CENTER" textFill="#9f9f9f" AnchorPane.bottomAnchor="158.0" AnchorPane.leftAnchor="227.0" AnchorPane.rightAnchor="224.0" AnchorPane.topAnchor="415.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <PasswordField layoutX="226.0" layoutY="449.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Passwort" AnchorPane.bottomAnchor="126.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="449.0" />
+                  <TextField layoutX="226.0" layoutY="378.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Benutzername" AnchorPane.bottomAnchor="197.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="378.0" />
+                  <Button fx:id="registrationButton_login" layoutX="99.0" layoutY="515.0" mnemonicParsing="false" onAction="#buttonAction_registrationButton_login" prefHeight="52.0" prefWidth="125.0" text="Registrieren" textFill="#9f9f9f" AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="515.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="signInButton" layoutX="362.0" layoutY="515.0" mnemonicParsing="false" onAction="#buttonAction_signInButton" prefHeight="52.0" prefWidth="125.0" text="Anmelden" textFill="#9f9f9f" AnchorPane.bottomAnchor="33.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="515.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</TilePane>
