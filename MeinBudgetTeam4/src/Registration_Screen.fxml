@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<TilePane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegistrationScreen_Controller">
+   <children>
+      <VBox alignment="CENTER">
+         <children>
+            <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="600.0" prefWidth="600.0">
+               <children>
+                  <Label layoutX="227.0" layoutY="287.0" prefHeight="27.0" prefWidth="149.0" style="&#10;" text="Benutzername:" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false" AnchorPane.bottomAnchor="286.0" AnchorPane.leftAnchor="227.0" AnchorPane.rightAnchor="224.0" AnchorPane.topAnchor="287.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="226.0" layoutY="352.0" prefHeight="27.0" prefWidth="149.0" text="Passwort:" textAlignment="CENTER" textFill="#9f9f9f" AnchorPane.bottomAnchor="221.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="352.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <PasswordField layoutX="226.0" layoutY="379.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Passwort" AnchorPane.bottomAnchor="196.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="379.0" />
+                  <TextField layoutX="226.0" layoutY="314.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Benutzername" AnchorPane.bottomAnchor="261.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="314.0" />
+                  <Button fx:id="registrationButton" layoutX="239.0" layoutY="514.0" mnemonicParsing="false" onAction="#ButtonAction_registrationButton" prefHeight="52.0" prefWidth="125.0" text="Registrieren" textFill="#9f9f9f" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="239.0" AnchorPane.topAnchor="514.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Label layoutX="226.0" layoutY="414.0" text="Passwort wiederholen:" textAlignment="CENTER" textFill="#9f9f9f" AnchorPane.bottomAnchor="159.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="196.0" AnchorPane.topAnchor="414.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <PasswordField layoutX="226.0" layoutY="441.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Passwort" AnchorPane.bottomAnchor="134.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="441.0" />
+                  <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#ButtonAction_backButton" prefHeight="34.0" prefWidth="35.0" AnchorPane.bottomAnchor="534.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
+                     <graphic>
+                        <ImageView fitHeight="44.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@UniversalBackButton.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  
+                  </Button>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</TilePane>
