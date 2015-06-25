@@ -1,3 +1,5 @@
+
+
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
@@ -9,7 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-public class RegistrationScreen_Controller {
+public class RegistrationScreenController {
 
     @FXML
     private Button registrationButton;

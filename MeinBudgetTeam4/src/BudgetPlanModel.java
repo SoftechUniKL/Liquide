@@ -1,6 +1,10 @@
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.InvalidParameterSpecException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -50,11 +54,64 @@ public class BudgetPlanModel
 			e.printStackTrace();
 		}
 	}
+/**
+ * Für einen neuen Nutzer wird eine Datenbank mit seinem Profil mit Nutzernamen und zugehörigem Passwort angelegt. Wenn die Datenbank bereits existieren sollte wird eine Exception geworfen.
+ * 
+ * @param username Benutzername des des Kontos des Anwenders.
+ * @param password Passwort zu dem dazugehörigen Nutzerkonto.
+ * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+ * @throws NoSuchAlgorithmException Wird geworfen, wenn Kryptographiealgorithmus nicht gefunden wird.
+ * @throws InvalidKeySpecException Wird geworfen, wenn die eingegebene Zeichenkette nicht valide ist.
+ * @throws ClassNotFoundException Wird geworfen, wenn Datenbankklasse nicht gefunden wird.
+ */
+	public void registerUser(String username, String password) throws SQLException, NoSuchAlgorithmException, InvalidKeySpecException, ClassNotFoundException  {
+		PasswordHash hasher = new PasswordHash();
+		String hashedPassword = hasher.createHash(password);
+		Class.forName("org.h2.Driver");
+		Connection dbConnection = DriverManager.getConnection("jdbc:h2:~/BudgetPlanerDaten"+"_"+username+";IFEXISTS=FALSE", username, password);
+		Statement statement = dbConnection.createStatement();
+		String query = "CREATE TABLE IF NOT EXISTS " + "Nutzer" + " (" 
+         		+ "User_ID int NOT NULL AUTO_INCREMENT,"
+         		+ "Budget double,"// Kann verändert werden
+         		+ "Passwort varchar(50),"
+         		+ "Name varchar(50) NOT NULL," //Name des Nutzers
+         		+ "PRIMARY KEY (User_ID)"
+         		+ ")";
+		statement.executeQuery(query);
+		insert_User(username, hashedPassword, 0.0);
+		
+	}
+	
+	/**
+	 * Der Benutzer wird validiert.<br>
+	 * Kontrolliert ob das eingegebene Passwort richtig ist oder der Nutzer bereits in der Datenbank existiert. Wirft ansonsten eine Exception.
+	 * @param username Benutzername des des Kontos des Anwenders.
+	 * @param password Passwort zu dem dazugehörigen Nutzerkonto.
+	 * @throws NoSuchAlgorithmException  Wird geworfen, wenn Kryptographiealgorithmus nicht gefunden wird.
+	 * @throws InvalidKeySpecException Wird geworfen, wenn die eingegebene Zeichenkette nicht valide ist.
+	 * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+	 * @throws InvalidParameterSpecException Wird geworfen, wenn das eingegebene Passwort nicht mit dem in der Datenbank hinterlegten übereinstimmt.
+	 * @throws ClassNotFoundException Wird geworfen, wenn Datenbankklasse nicht gefunden wird.
+	 */
+	
+	private void validateUser(String username, String password) throws NoSuchAlgorithmException, InvalidKeySpecException, SQLException, InvalidParameterSpecException, ClassNotFoundException {
+		Class.forName("org.h2.Driver");
+		PasswordHash hasher = new PasswordHash();
+		String hashedPassword = hasher.createHash(password);
+		Connection dbConnection = DriverManager.getConnection("jdbc:h2:~/BudgetPlanerDaten"+"_"+username+";IFEXISTS=TRUE", username, password);
+		Statement statement = dbConnection.createStatement();
+		String query = "SELECT Passwort FROM Nutzer";
+		ResultSet ergebnis = statement.executeQuery(query+";");
+    	ergebnis.next(); //Sollte nur 1 Nutzer existieren
+    	password = ergebnis.getString(1);
+    	if(hashedPassword != password)
+    		throw new InvalidParameterSpecException("Das eingegebene Passwort war falsch.");
+	}
     
-    public void initiateDatabase(String Nutzername, String Password) {
-    	try {
+    public void initiateDatabase(String username, String password) throws ClassNotFoundException, SQLException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidParameterSpecException {
+    		validateUser(username, password);
     		Class.forName("org.h2.Driver");
-            Connection dbConnection = DriverManager.getConnection("jdbc:h2:~/BudgetPlanerDaten"+"_"+Nutzername, Nutzername, Password);
+            Connection dbConnection = DriverManager.getConnection("jdbc:h2:~/BudgetPlanerDaten"+"_"+username+";IFEXISTS=TRUE", username, password);
             DatabaseMetaData databaseMetaData = dbConnection.getMetaData();
             ResultSet result = databaseMetaData.getTables(null, null, null, new String[] {"TABLE"}); //Testen ob Tabelle schon vorhanden
             boolean firstUse = true;
@@ -107,31 +164,17 @@ public class BudgetPlanModel
             statement.close();
             setConnection(dbConnection);
             if (firstUse) {
-            insert_User(Nutzername, Password, 0.0);
+            insert_User(username, password, 0.0);
             insert_Kategorie("Allgemein");
             }
-            //System.out.println(firstUse);
-    	}
-    	catch (Exception e) {
-    		System.out.println(e.getMessage());
-    		e.printStackTrace();
-    	}
     }
- /*   public void select(String column_name, String table_name, String condition) { //Datenbankanfrage
-    	try{
-    	Statement statement = dbConnection.createStatement();
-    	String query ="SELECT " + column_name + " FROM " + table_name + " WHERE " + condition;
-    	ResultSet resultSet = statement.executeQuery(query + ";");
-    	while(resultSet.next()) {
-    		String output = resultSet.getString(column_name);
-    		System.out.println(output); //Ersetzen durch GUI bzw. ändern in return
-    	}
-        statement.close();
-    	}
-    	catch(Exception e) {
-    		System.out.println(e.getMessage()); //Ersetzen durch GUI-Verarbeitung
-    	}
-    } */
+    
+    /**
+     * Fügt dem internen Datenmodell diese neue Kategorie hinzu.
+     * 
+     * @param Bezeichnung Bezeichnung der Kategorie
+     * 
+     */
     
     public void insert_Kategorie(String Bezeichnung) {
     	try {
@@ -147,6 +190,12 @@ public class BudgetPlanModel
     	}
     	
     }
+    
+    /**
+     * Erstell zu einer zugehörigen Hauptkategorie eine neue Subkategorie.
+     * @param Bezeichnung_Subkategorie Die Bezeichnung der zu erstellenden Subkategorie.
+     * @param Bezeichnung_Kategorie Die Bezeichnung der bereits existierenden Kategorie.
+     */
 
     public void insert_Subkategorie(String Bezeichnung_Subkategorie, String Bezeichnung_Kategorie) {
     	try {
@@ -167,10 +216,17 @@ public class BudgetPlanModel
         	}    	
     }
     
-    private void insert_User(String Name, String Passwort, double Budget) {
+    /**
+     * Ein neuer Benutzer wird angelegt. 
+     * @param name Der Name des Benutzerts.
+     * @param password Das verschlüsselte Passwort des benutzers.
+     * @param budget Das initiale Budget.
+     */
+    
+    private void insert_User(String name, String password, double budget) {
     	try {
         	Statement statement = dbConnection.createStatement();
-        	String query = "INSERT INTO Nutzer(Budget, Passwort, Name) VALUES("+Budget+", '" + Passwort + "', '" + Name +"')";
+        	String query = "INSERT INTO Nutzer(Budget, Passwort, Name) VALUES("+budget+", '" + password + "', '" + name +"')";
         	statement.executeUpdate(query+";");
         	statement.close();
         	}
@@ -180,7 +236,10 @@ public class BudgetPlanModel
         	}
     	
     }
-    
+    /**
+     * Das Budget für den Nutzer wird aktualisiert beziehungsweise gesetzt.
+     * @param Budget Das Budget des Nutzers.
+     */
     public void update_User(double Budget) {
     	try {
     	Statement statement = dbConnection.createStatement();
@@ -197,7 +256,14 @@ public class BudgetPlanModel
     		System.out.println(e.getMessage());
     	}
     }
-    
+    /**
+     * Ein neuer Posten wird in die Datenbank eingefügt.
+     * @param Posten_Bezeichnung Bezeichnung des einzufügenden Postens.
+     * @param Kategorie_Bezeichnung Bezeichnung der zugehörigen Kategorie. Muss bereits in Posten-Tabelle existieren.
+     * @param Subkategorie_Bezeichnung Bezeichnung der zur Hauptkategorie zugehörigen Subkategorie. Muss bereits in Subkategorie-Tabelle existieren.
+     * @param Preis Preis des entsprechenden Postens für eine Einheit.
+     * @param Anzahl Anzahl dieses Postens.
+     */
     public void insert_Posten(String Posten_Bezeichnung, String Kategorie_Bezeichnung, String Subkategorie_Bezeichnung, double Preis, int Anzahl) { //Die Frage ist welche Daten verwendet werden
     	try {
     		if (Posten_Bezeichnung == "" || Double.isNaN(Preis))
@@ -243,6 +309,10 @@ public class BudgetPlanModel
     	
     }
 
+    /**
+     * Gibt alle Kategorien zurück.
+     * @return Gibt String-Array mit allen Kategorien zurück.
+     */
 
     public String[] return_Kategorien() {
     	try {
@@ -269,6 +339,11 @@ public class BudgetPlanModel
     		return null;
     	}
     }
+    /**
+     * Gibt Subkategorien zurück.
+     * @param Bezeichnung_Kategorie Bezeichnung der Kategorie zu der die Subkategorien zurückgegeben werden sollen.
+     * @return String-Array mit allen Subkategorien zu der zugehörigen Hauptkategorie.
+     */
     
     public String[] return_Subkategorien(String Bezeichnung_Kategorie) {
     	try {
@@ -300,6 +375,10 @@ public class BudgetPlanModel
     	
     }
     
+    /**
+     * Gibt Höhe des Gesamt Budgetszurück.
+     * @return Double des Budgets 
+     */
     public double getBudget() {
     	try {
     		Statement statement = dbConnection.createStatement();
@@ -317,6 +396,9 @@ public class BudgetPlanModel
     	}
     }
     
+    /**
+     * Löscht alles.
+     */
     public void DROP_ALL() {
     	try {
     		Statement statement = dbConnection.createStatement();
@@ -328,7 +410,11 @@ public class BudgetPlanModel
     		e.printStackTrace();
     	}
     }
-    
+    /**
+     * Liest Datenbank aus und überträgt sie in eine ArrayList. Es werden das Datum, die Bezeichnung, die Id, die Anzahl
+     * ob es sich um einen Dauerauftrag handelt, die Bezeichnung der Kategorie, die Id der Kategorie, die Bezeichnung der Subkategorie und die Id der Subkategorie in die Objekte der ArrayList geschrieben.
+     * @return  Gibt eine ArrayList bestehend aus Objekten des Typs Posten mit den Informationen zurück.
+     */
     public ArrayList<Posten> transcribe() {
     	try {
     	Statement statement = dbConnection.createStatement(); //Join über Posten, Kategorie und Subkategorie
@@ -365,41 +451,3 @@ public class BudgetPlanModel
 
 }
 
-
-
-
-
-
-/*public class BudgetPlanModel {
-	List<Posten> ausgaben;
-
-	public BudgetPlanModel() {
-		this.ausgaben = new ArrayList<Posten>();
-		try {
-			// Zeilenweises Einlesen der Daten
-			CSVReader reader = new CSVReader(new FileReader("data/budget.csv"));
-			String[] nextLine;
-			while ((nextLine = reader.readNext()) != null) {
-				DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.GERMAN);
-				Date datum = df.parse(nextLine[0]);
-				String bezeichnung = nextLine[1];
-				double betrag = Double.parseDouble(nextLine[2]);
-				ausgaben.add(new Posten(datum, bezeichnung, betrag));
-			}
-			reader.close();
-
-		} catch (FileNotFoundException e) {
-			System.err
-					.println("Die Datei data/budget.csv wurde nicht gefunden!");
-			System.exit(1);
-		} catch (IOException e) {
-			System.err
-					.println("Probleme beim Oeffnen der Datei data/budget.csv!");
-			System.exit(1);
-		} catch (ParseException e) {
-			System.err
-					.println("Formatfehler: Die Datei konnte nicht eingelesen werden!");
-			System.exit(1);
-		}
-	}
-} */

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<TilePane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegistrationScreen_Controller">
+<TilePane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegistrationScreenController">
    <children>
       <VBox alignment="CENTER">
          <children>
@@ -23,8 +23,8 @@
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <PasswordField layoutX="226.0" layoutY="379.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Passwort" AnchorPane.bottomAnchor="196.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="379.0" />
                   <TextField layoutX="226.0" layoutY="314.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Benutzername" AnchorPane.bottomAnchor="261.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="314.0" />
+                  <PasswordField layoutX="226.0" layoutY="379.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Passwort" AnchorPane.bottomAnchor="196.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="379.0" />
                   <Button fx:id="registrationButton" layoutX="239.0" layoutY="514.0" mnemonicParsing="false" onAction="#ButtonAction_registrationButton" prefHeight="52.0" prefWidth="125.0" text="Registrieren" textFill="#9f9f9f" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="239.0" AnchorPane.topAnchor="514.0">
                      <cursor>
                         <Cursor fx:constant="HAND" />
@@ -43,7 +43,7 @@
                      <graphic>
                         <ImageView fitHeight="44.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@UniversalBackButton.png" />
+                              <Image url="@../data/UniversalBackButton.png" />
                            </image>
                         </ImageView>
                      </graphic>

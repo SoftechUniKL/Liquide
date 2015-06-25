@@ -1,3 +1,5 @@
+
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,7 +26,7 @@ import javafx.stage.Stage;
  */
 
 
-public class LoginScreen_Controller   {
+public class LoginScreenController   {
 	
 	@FXML
 	private TilePane loginPane;
@@ -44,7 +46,7 @@ public class LoginScreen_Controller   {
         Parent root;
         stage=(Stage) registrationButton_login.getScene().getWindow();
     	//loginPane = (Pane)FXMLLoader.load(getClass().getResource("Registration_Screen.fxml"));
-        root = FXMLLoader.load(getClass().getResource("Registration_Screen.fxml"));
+        root = FXMLLoader.load(getClass().getResource("RegistrationScreen.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
