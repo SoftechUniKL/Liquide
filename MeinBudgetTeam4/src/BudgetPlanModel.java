@@ -25,34 +25,27 @@ import com.opencsv.CSVReader;
 
 import java.sql.*;
 import java.sql.*;
+
 /**
- * Hello world!
- *
- */
-/**
- * @author Shahin
+ * 
+ * Die Klasse BudgetPlanModel, die alle Funktionen beinhaltet, um Daten aus der Datenbank auszulesen oder diese einzufügen.
+ * @author Shahin Yousfi
  *
  */
 public class BudgetPlanModel
 {
-	private Connection dbConnection; //global definiert
+	private static Connection dbConnection; //global definiert
 	public BudgetPlanModel() { // Konstruktor
 		
 	}
-	public Connection getConnection() {
-		return this.dbConnection;
+	public  Connection getConnection() {
+		return BudgetPlanModel.dbConnection;
 	}
 	public void setConnection(Connection dbConnection) {
-		this.dbConnection = dbConnection;
+		BudgetPlanModel.dbConnection = dbConnection;
 	}
-	public void closeConnection() {
-		try{
-		dbConnection.close();
-		}
-		catch(SQLException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
+	public void closeConnection() throws SQLException {
+		BudgetPlanModel.dbConnection.close();	
 	}
 /**
  * Für einen neuen Nutzer wird eine Datenbank mit seinem Profil mit Nutzernamen und zugehörigem Passwort angelegt. Wenn die Datenbank bereits existieren sollte wird eine Exception geworfen.
@@ -60,26 +53,18 @@ public class BudgetPlanModel
  * @param username Benutzername des des Kontos des Anwenders.
  * @param password Passwort zu dem dazugehörigen Nutzerkonto.
  * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
- * @throws NoSuchAlgorithmException Wird geworfen, wenn Kryptographiealgorithmus nicht gefunden wird.
- * @throws InvalidKeySpecException Wird geworfen, wenn die eingegebene Zeichenkette nicht valide ist.
- * @throws ClassNotFoundException Wird geworfen, wenn Datenbankklasse nicht gefunden wird.
+ * @throws ClassNotFoundException Wird geworfen, wenn Datenbankklasse nicht gefunden wird. 
  */
-	public void registerUser(String username, String password) throws SQLException, NoSuchAlgorithmException, InvalidKeySpecException, ClassNotFoundException  {
-		PasswordHash hasher = new PasswordHash();
-		String hashedPassword = hasher.createHash(password);
+	public void registerUser(String username, String password) throws SQLException, ClassNotFoundException  {
+//		PasswordHash hasher = new PasswordHash();
+//		String hashedPassword = hasher.createHash(password); //Passwort wird von H2 bei anlegen der Datenbank mit salt gehasht. Eigenes Hashing ist damit obsolet.
 		Class.forName("org.h2.Driver");
-		Connection dbConnection = DriverManager.getConnection("jdbc:h2:~/BudgetPlanerDaten"+"_"+username+";IFEXISTS=FALSE", username, password);
-		Statement statement = dbConnection.createStatement();
-		String query = "CREATE TABLE IF NOT EXISTS " + "Nutzer" + " (" 
-         		+ "User_ID int NOT NULL AUTO_INCREMENT,"
-         		+ "Budget double,"// Kann verändert werden
-         		+ "Passwort varchar(50),"
-         		+ "Name varchar(50) NOT NULL," //Name des Nutzers
-         		+ "PRIMARY KEY (User_ID)"
-         		+ ")";
-		statement.executeQuery(query);
-		insert_User(username, hashedPassword, 0.0);
-		
+		Connection dbConnection = DriverManager.getConnection("jdbc:h2:file:./data/dbProfile/BudgetPlanerDaten"+"_"+username, username, password);
+		password = null; //Vorsichtshalber überschreiben der Variable
+		setConnection(dbConnection);
+		closeConnection();
+		//Die Verbindung wird nur aufgebaut, um Datenbank anzulegen. Danach wieder geschlossen. Tabelle für User muss hier nicht angelegt werden, da Authentifikation über DriverManager geschieht.
+
 	}
 	
 	/**
@@ -87,38 +72,36 @@ public class BudgetPlanModel
 	 * Kontrolliert ob das eingegebene Passwort richtig ist oder der Nutzer bereits in der Datenbank existiert. Wirft ansonsten eine Exception.
 	 * @param username Benutzername des des Kontos des Anwenders.
 	 * @param password Passwort zu dem dazugehörigen Nutzerkonto.
-	 * @throws NoSuchAlgorithmException  Wird geworfen, wenn Kryptographiealgorithmus nicht gefunden wird.
-	 * @throws InvalidKeySpecException Wird geworfen, wenn die eingegebene Zeichenkette nicht valide ist.
 	 * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
-	 * @throws InvalidParameterSpecException Wird geworfen, wenn das eingegebene Passwort nicht mit dem in der Datenbank hinterlegten übereinstimmt.
 	 * @throws ClassNotFoundException Wird geworfen, wenn Datenbankklasse nicht gefunden wird.
 	 */
 	
-	private void validateUser(String username, String password) throws NoSuchAlgorithmException, InvalidKeySpecException, SQLException, InvalidParameterSpecException, ClassNotFoundException {
+	private void validateUser(String username, String password) throws SQLException,  ClassNotFoundException {
 		Class.forName("org.h2.Driver");
-		PasswordHash hasher = new PasswordHash();
-		String hashedPassword = hasher.createHash(password);
-		Connection dbConnection = DriverManager.getConnection("jdbc:h2:~/BudgetPlanerDaten"+"_"+username+";IFEXISTS=TRUE", username, password);
-		Statement statement = dbConnection.createStatement();
-		String query = "SELECT Passwort FROM Nutzer";
-		ResultSet ergebnis = statement.executeQuery(query+";");
-    	ergebnis.next(); //Sollte nur 1 Nutzer existieren
-    	password = ergebnis.getString(1);
-    	if(hashedPassword != password)
-    		throw new InvalidParameterSpecException("Das eingegebene Passwort war falsch.");
+		Connection dbConnection = DriverManager.getConnection("jdbc:h2:file:./data/dbProfile/BudgetPlanerDaten"+"_"+username+";IFEXISTS=TRUE", username, password);
+		password = null;
+		setConnection(dbConnection); //Wenn davor keine Exception alles OK. Dann soll diese Verbindung für kompletten Programmaufruf aktiv sein.
 	}
+	
+	/**
+	 * Die Datenbank wird initialisiert. Davor wird der Benutzer validiert. Bei Fehlern wird eine entsprechende Exception geworfen.
+	 * 
+	 * @param username Benutzername des des Kontos des Anwenders.
+	 * @param password Passwort zu dem dazugehörigen Nutzerkonto.
+	 * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+	 * @throws ClassNotFoundException Wird geworfen, wenn Datenbankklasse nicht gefunden wird.
+	 */
     
-    public void initiateDatabase(String username, String password) throws ClassNotFoundException, SQLException, NoSuchAlgorithmException, InvalidKeySpecException, InvalidParameterSpecException {
+    public void initiateDatabase(String username, String password) throws ClassNotFoundException, SQLException {
     		validateUser(username, password);
-    		Class.forName("org.h2.Driver");
-            Connection dbConnection = DriverManager.getConnection("jdbc:h2:~/BudgetPlanerDaten"+"_"+username+";IFEXISTS=TRUE", username, password);
+    		password = null;
             DatabaseMetaData databaseMetaData = dbConnection.getMetaData();
             ResultSet result = databaseMetaData.getTables(null, null, null, new String[] {"TABLE"}); //Testen ob Tabelle schon vorhanden
             boolean firstUse = true;
             if(result.next()) { //Bestimung ob erste Benutzung
             	firstUse = false; 
-            	//Hier Authentifikationsfunktion die Korrektheit des Passwortsp rüft. Wenn falsch, dann return
             }
+            if (firstUse) {
             Statement statement = dbConnection.createStatement();
             String query;
             statement = dbConnection.createStatement();
@@ -137,10 +120,9 @@ public class BudgetPlanModel
             		+ "PRIMARY KEY (SubK_ID)"
             		+ ")";
             statement.executeUpdate(query + ";");
-            query = "CREATE TABLE IF NOT EXISTS " + "Nutzer" + " (" 
+            query = "CREATE TABLE IF NOT EXISTS " + "Nutzer" + " (" //Wenn man User-Journey beachtet ist dieser Teil redundant.
             		+ "User_ID int NOT NULL AUTO_INCREMENT,"
             		+ "Budget double,"// Kann verändert werden
-            		+ "Passwort varchar(50),"
             		+ "Name varchar(50) NOT NULL," //Name des Nutzers
             		+ "PRIMARY KEY (User_ID)"
             		+ ")";
@@ -162,9 +144,7 @@ public class BudgetPlanModel
             		+ ")";
             statement.executeUpdate(query + ";");
             statement.close();
-            setConnection(dbConnection);
-            if (firstUse) {
-            insert_User(username, password, 0.0);
+            insert_User(username,  0.0);
             insert_Kategorie("Allgemein");
             }
     }
@@ -173,21 +153,16 @@ public class BudgetPlanModel
      * Fügt dem internen Datenmodell diese neue Kategorie hinzu.
      * 
      * @param Bezeichnung Bezeichnung der Kategorie
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
      * 
      */
     
-    public void insert_Kategorie(String Bezeichnung) {
-    	try {
+    public void insert_Kategorie(String Bezeichnung) throws SQLException {
     	Statement statement = dbConnection.createStatement();
     	String query = "INSERT INTO Kategorie(Bezeichnung) VALUES('" + Bezeichnung +"')";
     	statement.executeUpdate(query+";");
     	statement.close();
     	insert_Subkategorie("-", Bezeichnung); //Damit automatisch die default Subkategorie erstellt wird
-    	}
-    	
-    	catch(Exception e) {
-    		System.out.println(e.getMessage());
-    	}
     	
     }
     
@@ -195,10 +170,10 @@ public class BudgetPlanModel
      * Erstell zu einer zugehörigen Hauptkategorie eine neue Subkategorie.
      * @param Bezeichnung_Subkategorie Die Bezeichnung der zu erstellenden Subkategorie.
      * @param Bezeichnung_Kategorie Die Bezeichnung der bereits existierenden Kategorie.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
      */
 
-    public void insert_Subkategorie(String Bezeichnung_Subkategorie, String Bezeichnung_Kategorie) {
-    	try {
+    public void insert_Subkategorie(String Bezeichnung_Subkategorie, String Bezeichnung_Kategorie) throws SQLException {
         	Statement statement = dbConnection.createStatement();
         	String query = "SELECT DISTINCT * FROM Kategorie WHERE '" + Bezeichnung_Kategorie + "' = Bezeichnung";
         	ResultSet ergebnis = statement.executeQuery(query + ";");
@@ -208,12 +183,7 @@ public class BudgetPlanModel
         	statement = dbConnection.createStatement();
         	query = "INSERT INTO Subkategorie(Bezeichnung, Kategorie) VALUES('" + Bezeichnung_Subkategorie + "', " + Kategorie_ID + ")";
         	statement.executeUpdate(query+";");
-        	statement.close();
-        	}
-        	
-        	catch(Exception e) {
-        		System.out.println(e.getMessage());
-        	}    	
+        	statement.close();   	
     }
     
     /**
@@ -221,27 +191,22 @@ public class BudgetPlanModel
      * @param name Der Name des Benutzerts.
      * @param password Das verschlüsselte Passwort des benutzers.
      * @param budget Das initiale Budget.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
      */
     
-    private void insert_User(String name, String password, double budget) {
-    	try {
+    private void insert_User(String name, double budget) throws SQLException {
         	Statement statement = dbConnection.createStatement();
-        	String query = "INSERT INTO Nutzer(Budget, Passwort, Name) VALUES("+budget+", '" + password + "', '" + name +"')";
+        	String query = "INSERT INTO Nutzer(Budget, Name) VALUES("+budget+", '" + name +"')";
         	statement.executeUpdate(query+";");
         	statement.close();
-        	}
-        	
-        	catch(Exception e) {
-        		System.out.println(e.getMessage());
-        	}
     	
     }
     /**
      * Das Budget für den Nutzer wird aktualisiert beziehungsweise gesetzt.
      * @param Budget Das Budget des Nutzers.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
      */
-    public void update_User(double Budget) {
-    	try {
+    public void update_User(double Budget) throws SQLException {
     	Statement statement = dbConnection.createStatement();
     	String query = "SELECT * FROM Nutzer";
     	ResultSet ergebnis = statement.executeQuery(query + ";");//Es sollte sowieso nur ein einziger Nutzer existieren
@@ -250,11 +215,6 @@ public class BudgetPlanModel
     	query = "UPDATE Nutzer SET Budget = " + Budget + " WHERE User_ID = " + user_id;
     	statement.executeUpdate(query + ";");
     	statement.close();
-    	
-    	}
-    	catch (Exception e) {
-    		System.out.println(e.getMessage());
-    	}
     }
     /**
      * Ein neuer Posten wird in die Datenbank eingefügt.
@@ -263,9 +223,9 @@ public class BudgetPlanModel
      * @param Subkategorie_Bezeichnung Bezeichnung der zur Hauptkategorie zugehörigen Subkategorie. Muss bereits in Subkategorie-Tabelle existieren.
      * @param Preis Preis des entsprechenden Postens für eine Einheit.
      * @param Anzahl Anzahl dieses Postens.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
      */
-    public void insert_Posten(String Posten_Bezeichnung, String Kategorie_Bezeichnung, String Subkategorie_Bezeichnung, double Preis, int Anzahl) { //Die Frage ist welche Daten verwendet werden
-    	try {
+    public void insert_Posten(String Posten_Bezeichnung, String Kategorie_Bezeichnung, String Subkategorie_Bezeichnung, double Preis, int Anzahl) throws SQLException { //Die Frage ist welche Daten verwendet werden
     		if (Posten_Bezeichnung == "" || Double.isNaN(Preis))
     			throw new IllegalArgumentException("Bitte geben Sie einen Posten mit dazugehörigem Preis an.");
     	Statement statement = dbConnection.createStatement();
@@ -301,21 +261,17 @@ public class BudgetPlanModel
         		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + Kategorie_ID + ", " + SubK_ID + ", " + Anzahl + ", " + User_ID + ")";
         statement.executeUpdate(query+";");
         statement.close();
-    	}
-    	catch(Exception e) {
-    		System.out.println(e.getMessage());
-    		e.printStackTrace();
-    	}
+    	
     	
     }
 
     /**
      * Gibt alle Kategorien zurück.
      * @return Gibt String-Array mit allen Kategorien zurück.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
      */
 
-    public String[] return_Kategorien() {
-    	try {
+    public String[] return_Kategorien() throws SQLException {
     	Statement statement = dbConnection.createStatement();
     	String query = "SELECT COUNT (*) FROM Kategorie";
     	ResultSet ergebnis = statement.executeQuery(query+";");
@@ -333,20 +289,16 @@ public class BudgetPlanModel
     		Kategorien[i++] = ergebnis.getString("Bezeichnung");
     	statement.close();
     	return Kategorien;
-    	}
-    	catch (Exception e) {
-    		System.out.println(e.getMessage());
-    		return null;
-    	}
+    	
     }
     /**
      * Gibt Subkategorien zurück.
      * @param Bezeichnung_Kategorie Bezeichnung der Kategorie zu der die Subkategorien zurückgegeben werden sollen.
      * @return String-Array mit allen Subkategorien zu der zugehörigen Hauptkategorie.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
      */
     
-    public String[] return_Subkategorien(String Bezeichnung_Kategorie) {
-    	try {
+    public String[] return_Subkategorien(String Bezeichnung_Kategorie) throws SQLException {
     		Statement statement = dbConnection.createStatement();
     		String query = "SELECT COUNT(*) FROM Kategorie, Subkategorie WHERE Kategorie.Bezeichnung = '" + Bezeichnung_Kategorie + "'"
     				+ " AND Kategorie.Kategorie_ID = Subkategorie.Kategorie";
@@ -365,22 +317,16 @@ public class BudgetPlanModel
     		while(ergebnis.next())
     			Subkategorien[i++] = ergebnis.getString("Subkategorie.Bezeichnung");
     		statement.close();
-    		return Subkategorien;
-    		
-    	}
-    	catch(Exception e) {
-    		System.out.println(e.getMessage());
-    		return null;
-    	}
+    		return Subkategorien;   
     	
     }
     
     /**
      * Gibt Höhe des Gesamt Budgetszurück.
      * @return Double des Budgets 
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
      */
-    public double getBudget() {
-    	try {
+    public double getBudget() throws SQLException {
     		Statement statement = dbConnection.createStatement();
     		ResultSet ergebnis = statement.executeQuery("Select Budget FROM Nutzer");
     		ergebnis.next();
@@ -388,35 +334,25 @@ public class BudgetPlanModel
     		statement.close();
     		return(budget);
     		
-    	}
-    	catch(Exception e) {
-    		System.out.println(e.getMessage());
-    		e.printStackTrace();
-    		return -1;
-    	}
+    	
     }
     
     /**
      * Löscht alles.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
      */
-    public void DROP_ALL() {
-    	try {
+    public void DROP_ALL() throws SQLException {
     		Statement statement = dbConnection.createStatement();
     		statement.executeUpdate("DROP ALL OBJECTS;");
     		statement.close();
-    	}
-    	catch(Exception e) {
-    		System.out.println(e.getMessage());
-    		e.printStackTrace();
-    	}
     }
     /**
      * Liest Datenbank aus und überträgt sie in eine ArrayList. Es werden das Datum, die Bezeichnung, die Id, die Anzahl
      * ob es sich um einen Dauerauftrag handelt, die Bezeichnung der Kategorie, die Id der Kategorie, die Bezeichnung der Subkategorie und die Id der Subkategorie in die Objekte der ArrayList geschrieben.
      * @return  Gibt eine ArrayList bestehend aus Objekten des Typs Posten mit den Informationen zurück.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
      */
-    public ArrayList<Posten> transcribe() {
-    	try {
+    public ArrayList<Posten> transcribe() throws SQLException {
     	Statement statement = dbConnection.createStatement(); //Join über Posten, Kategorie und Subkategorie
     	String query = "SELECT * FROM Posten, Kategorie, Subkategorie WHERE Kategorie.Kategorie_ID = Posten.Kategorie AND "
     			+ "Kategorie.Kategorie_ID = Subkategorie.Kategorie AND Subkategorie.SubK_ID = Posten.Subkategorie";
@@ -437,14 +373,8 @@ public class BudgetPlanModel
     	}
     	statement.close();
     	return alle_Posten;
-    	}
-    	catch(Exception e) {
-    		System.out.println(e.getMessage());
-    		e.printStackTrace();
-    		return null;
-    	}
-    	
     }
+    	
     
     
     

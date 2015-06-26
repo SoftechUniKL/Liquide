@@ -3,6 +3,10 @@
  * Anwendung BudgetPlan
  * 
  */
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.InvalidParameterSpecException;
 import java.sql.*;
 import java.util.*;
 
@@ -16,8 +20,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class BudgetPlan extends Application {
-	public static void main(String[] args) {
+	public static void main(String[] args)  {
 		launch();
+		
 	/*	BudgetPlanModel budget = new BudgetPlanModel(); // Modell
 		new BudgetPlanGUI(budget); // View und Controller
 		Application.launch();
@@ -53,23 +58,28 @@ public class BudgetPlan extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) {
-		try {
-			primaryStage.setTitle("Liquide wie Friede");
-			Pane myPane = (Pane)FXMLLoader.load(getClass().getResource("LoginScreen.fxml"));
-			Scene myScene = new Scene(myPane);
-			primaryStage.setScene(myScene);
-			primaryStage.show();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+	public void start(Stage primaryStage) throws IOException {
+		
+		LoginView login = new LoginView();
+		login.startUp(primaryStage);
+//		try {
+//			primaryStage.setTitle("Liquide wie Friede");
+//			Pane myPane = (Pane)FXMLLoader.load(getClass().getResource("LoginScreen.fxml"));
+//			Scene myScene = new Scene(myPane);
+//			primaryStage.setScene(myScene);
+//			primaryStage.show();
+//			
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		}
 	}
 	/**
-	 * @see: https://docs.oracle.com/javafx/2/api/javafx/application/Application.html
+	 * @see: <a href=https://docs.oracle.com/javafx/2/api/javafx/application/Application.html>Oracle Dokumentation</a>
 	 */
 	@Override
-	public void stop() { 
-		//Hier Verbindung schließen
+	public void stop() {
+		//Hier könnte man Verbindungen schließen. Da H2 aber bereits einen Shutdown-Hook implementiert hat, sollte dies nicht nötig sein.
+		System.exit(0); //Sollte nicht nötig sein aber: Wenn Application geschlossen wird, also stop() aufgerufen wird, soll JVM beendet werden, damit Shutdown-Hook von H2 ornungsgemäß aktiviert wird.
 	}
 
 }
