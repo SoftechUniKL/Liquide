@@ -13,7 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class RegistrationScreenController {
 
@@ -51,8 +53,6 @@ public class RegistrationScreenController {
 	        LoginView login = new LoginView();
 	        login.startUp(stage);
 	        login.succesfulRegistration(u, p);
-	        // TODO Hier sollten eigentlich Parameter an den LoginScreenController übergeben werden, dass dieser existierenden ELemente verändern kann.
-	        //Idee: Controller für einzelnen Button verändern.
 		} catch (ClassNotFoundException | SQLException | IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
@@ -66,7 +66,5 @@ public class RegistrationScreenController {
         Stage stage=(Stage) backButton.getScene().getWindow();
         LoginView login = new LoginView();
         login.startUp(stage);
-
-    }
-
+        }
 }

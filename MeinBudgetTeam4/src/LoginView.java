@@ -39,9 +39,15 @@ public class LoginView implements Observer {
 	}
 	
 	public void succesfulRegistration(String username, String password) throws IOException {
-		System.out.println(username);
 		primaryStage.setTitle("Liquide wie Friede - Willkommen " + username);
+		Stage stage = primaryStage;
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
+		stage.setScene(new Scene((Pane) loader.load()));
+        LoginScreenController loginC = loader.<LoginScreenController>getController();
+        loginC.succesfulRegistration(username, password);
+        stage.show();
 	}
+	
 	
 
 

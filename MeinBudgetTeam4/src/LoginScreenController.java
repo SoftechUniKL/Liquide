@@ -61,7 +61,7 @@ public class LoginScreenController   {
     	System.out.println("Ich bin der Button mit der id: registrationButton_login " + statusLabel.getText());
         Stage stage=(Stage) registrationButton_login.getScene().getWindow();
         RegistrationView registration = new RegistrationView();
-        registration.startUp(stage);
+       registration.startUp(stage);
     }
     
     @FXML
@@ -83,6 +83,16 @@ public class LoginScreenController   {
 			System.out.println(e.getMessage());
 		}
 
+    }
+    
+    
+    void succesfulRegistration(String username, String password) {
+    	System.out.println("Ich wurder aus der LoginScreenController Klasse aufgerufen!" );
+    	statusLabel.setText("Ihre Registrierung war erfolgreich");
+    	statusLabel.setTextFill(Color.web("green"));
+    	usernameInput.setText(username);
+    	passwordInput.setText(password);
+    	
     }
     
    

@@ -46,7 +46,10 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="226.0" layoutY="463.0" prefHeight="27.0" prefWidth="149.0" text="Test" />
+                  <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="226.0" layoutY="463.0" prefHeight="27.0" prefWidth="149.0" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Label>
                   <ProgressIndicator fx:id="progressIndicator" layoutX="275.0" layoutY="515.0" visible="false" />
                </children>
             </AnchorPane>
