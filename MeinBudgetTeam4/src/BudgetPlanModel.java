@@ -105,7 +105,7 @@ public class BudgetPlanModel
             Statement statement = dbConnection.createStatement();
             String query;
             statement = dbConnection.createStatement();
-            query = "CREATE TABLE IF NOT EXISTS " + "Kategorie" + " (" //Tabellenname = Posten?
+            query = "CREATE TABLE IF NOT EXISTS " + "Kategorie" + " ("
             		+ "Kategorie_ID int NOT NULL AUTO_INCREMENT,"
             		+ "Bezeichnung varchar(50) NOT NULL UNIQUE," //Bezeichnung der der Kategorie
             		+ "PRIMARY KEY (Kategorie_ID)"
@@ -136,9 +136,10 @@ public class BudgetPlanModel
             		+ "Subkategorie int DEFAULT 1,"
             		+ "Anzahl int DEFAULT 1,"
             		+ "Nutzer int,"
-            		+ "Dauerauftrag BOOLEAN DEFAULT FALSE,"
+            		+ "Dauerauftrag INT DEFAULT 0," //Gibt den Turnus des Dauerauftrags in Monaten an. Normale Posten werden nicht wiederholt verrechnet.
+            		+ "Kommentar varchar(50) DEFAULT ' ',"
             		+ "FOREIGN KEY (Subkategorie) REFERENCES Subkategorie(SubK_ID),"
-            		+ "FOREIGN KEY (Kategorie) REFERENCES Kategorie(Kategorie_ID),"
+            		+ "FOREIGN KEY (Kategorie) REFERENCES Kategorie(Kategorie_ID) ON DELETE RESTRICT," //Kategorie darf erst gelöscht werden wenn es keine Artikel dieser Kategorie mehr gibt.
             		+ "FOREIGN KEY (Nutzer) REFERENCES Nutzer(User_ID) ON DELETE CASCADE," // User nicht löschbar!!!. Wenn Drop Table und neue Initialisierung
             		+ "PRIMARY KEY (ID)"
             		+ ")";
@@ -223,16 +224,18 @@ public class BudgetPlanModel
      * @param Subkategorie_Bezeichnung Bezeichnung der zur Hauptkategorie zugehörigen Subkategorie. Muss bereits in Subkategorie-Tabelle existieren.
      * @param Preis Preis des entsprechenden Postens für eine Einheit.
      * @param Anzahl Anzahl dieses Postens.
+     * @param Kommentar Ein Kommentar zum zugehörigen Artikel. Nicht mehr als 100 Zeichen.
+     * @param Dauerauftrag Gibt an ob es sich um einen Dauerauftrag handelt. Die genau Zahl gibt den Turnus an.
      * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
      */
-    public void insert_Posten(String Posten_Bezeichnung, String Kategorie_Bezeichnung, String Subkategorie_Bezeichnung, double Preis, int Anzahl) throws SQLException { //Die Frage ist welche Daten verwendet werden
-    		if (Posten_Bezeichnung == "" || Double.isNaN(Preis))
+    public void insert_Posten(String Posten_Bezeichnung, String Kategorie_Bezeichnung, String Subkategorie_Bezeichnung, double Preis, int Anzahl, String Kommentar, int Dauerauftrag) throws SQLException { //Die Frage ist welche Daten verwendet werden
+    		if (Posten_Bezeichnung.isEmpty() || Double.isNaN(Preis))
     			throw new IllegalArgumentException("Bitte geben Sie einen Posten mit dazugehörigem Preis an.");
     	Statement statement = dbConnection.createStatement();
     	int Kategorie_ID;
     	String query;
     	ResultSet ergebnis;
-    	if(Kategorie_Bezeichnung != "") {
+    	if(!(Kategorie_Bezeichnung.isEmpty())) {
     	query = "SELECT DISTINCT Kategorie_ID FROM Kategorie WHERE '" + Kategorie_Bezeichnung + "' = Bezeichnung";
     	ergebnis = statement.executeQuery(query + ";");
     	ergebnis.next();
@@ -241,8 +244,8 @@ public class BudgetPlanModel
     	else
     		Kategorie_ID = 1;
     	int SubK_ID;
-    	if (Subkategorie_Bezeichnung != "") {
-    	query = "SELECT DISTINCT SubK_ID FROM Subkategorie WHERE '" + Subkategorie_Bezeichnung + "' = Bezeichnung";
+    	if (!(Subkategorie_Bezeichnung.isEmpty())) {
+    	query = "SELECT DISTINCT SubK_ID FROM Subkategorie WHERE '" + Subkategorie_Bezeichnung + "' = Bezeichnung AND " + Kategorie_ID + " = Kategorie"; //Da Subkategoriebezeichnung nicht unique sein muss
     	ergebnis = statement.executeQuery(query + ";");
     	ergebnis.next();
     	SubK_ID = ergebnis.getInt("SubK_ID");
@@ -252,18 +255,49 @@ public class BudgetPlanModel
     	query = "Select DISTINCT * FROM Nutzer";
     	ergebnis = statement.executeQuery(query + ";");
     	ergebnis.next();
-    	int User_ID = ergebnis.getInt("User_ID");//Sollte nur ein einziger existieren
+    	int User_ID = ergebnis.getInt("User_ID");//Sollte nur ein einziger existieren, könnte daher auch über DEFAULT 1 gelöst werden.
     	statement.close();
     	if (Anzahl <= 0)
     		Anzahl = 1;
         statement = dbConnection.createStatement(); //Hier werden alle Daten zu Posten geschrieben
-        query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer)" //Andere Werte werden automatisch belegt.
-        		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + Kategorie_ID + ", " + SubK_ID + ", " + Anzahl + ", " + User_ID + ")";
+        query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag)" //Andere Werte werden automatisch belegt.
+        		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + Kategorie_ID + ", " + SubK_ID + ", " + Anzahl + ", " + User_ID +", '" + Kommentar +"', " + Dauerauftrag + ")";
         statement.executeUpdate(query+";");
         statement.close();
     	
     	
     }
+    /**
+     * Ein neuer Posten wird in die Datenbank eingefügt.
+     * @param Posten_Bezeichnung Bezeichnung des einzufügenden Postens.
+     * @param kategorieId Die ID der zum Posten zugehörigen Kategorie.
+     * @param subKategorieId Die ID der zur Kategorie zugehörigen Subkategorie.
+     * @param Preis Preis des entsprechenden Postens für eine Einheit.
+     * @param Anzahl Anzahl dieses Postens.
+     * @param Kommentar Ein Kommentar zum zugehörigen Artikel. Nicht mehr als 100 Zeichen.
+     * @param Dauerauftrag Gibt an ob es sich um einen Dauerauftrag handelt. Die genau Zahl gibt den Turnus an.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+     */
+    
+    public void insert_Posten(String Posten_Bezeichnung, int kategorieId, int subKategorieId, double Preis, int Anzahl, String Kommentar, int Dauerauftrag) throws SQLException { //Die Frage ist welche Daten verwendet werden
+		if (Posten_Bezeichnung.isEmpty() || Double.isNaN(Preis))
+			throw new IllegalArgumentException("Bitte geben Sie einen Posten mit dazugehörigem Preis an.");
+	Statement statement = dbConnection.createStatement();
+	String query = "Select DISTINCT * FROM Nutzer";
+	ResultSet ergebnis = statement.executeQuery(query + ";");
+	ergebnis.next();
+	int User_ID = ergebnis.getInt("User_ID");//Sollte nur ein einziger existieren, könnte daher auch über DEFAULT 1 gelöst werden.
+	statement.close();
+	if (Anzahl <= 0)
+		Anzahl = 1;
+    statement = dbConnection.createStatement(); //Hier werden alle Daten zu Posten geschrieben
+    query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag)" //Andere Werte werden automatisch belegt.
+    		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + kategorieId + ", " + subKategorieId + ", " + Anzahl + ", " + User_ID +", '" + Kommentar +"', " + Dauerauftrag + ")";
+    statement.executeUpdate(query+";");
+    statement.close();
+	
+	
+}
 
     /**
      * Gibt alle Kategorien zurück.
@@ -347,6 +381,97 @@ public class BudgetPlanModel
     		statement.close();
     }
     /**
+     * Löscht einen bestimmten Posten aus der Datenbank.
+     * @param postenId Die ID des zu löschenden Postens.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+     */
+    public void deletePosten(int postenId) throws SQLException {
+    	String query = "DELETE FROM Posten WHERE ID = " + postenId;
+    	Statement statement = dbConnection.createStatement();
+    	statement.executeUpdate(query + ";");
+    	statement.close();	
+    }
+    /**
+     * Löscht eine Kategorie. Kategorie kann nur gelöscht werden, wenn kein Posten diese referenziert. Subkategorien dieser Kategorie werden kaskadierend gelöscht.
+     * @param kategorieId Die ID der Kategorie.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+     */
+    public void deleteKategorie(int kategorieId) throws SQLException {
+    	String query = "DELETE FROM Kategorie WHERE Kategorie_ID = " + kategorieId;
+    	Statement statement = dbConnection.createStatement();
+    	statement.executeUpdate(query + ";");
+    	statement.close();
+    }
+    /**
+     * Löscht eine Kategorie. Kategorie kann nur gelöscht werden, wenn kein Posten diese referenziert. Subkategorien dieser Kategorie werden kaskadierend gelöscht.
+     * @param kategorieBezeichnung Die Bezeichnung der zu löschenden Kategorie.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+     */
+    public void deleteKategorie(String kategorieBezeichnung) throws SQLException {
+    	Statement statement = dbConnection.createStatement();
+    	String query ="SELECT Kategorie_ID FROM Kategorie WHERE '" + kategorieBezeichnung + "' = Bezeichnung";
+    	ResultSet ergebnis;
+    	ergebnis = statement.executeQuery(query + ";");
+    	ergebnis.next();
+    	int kategorieId = ergebnis.getInt("Kategorie_ID");
+    	query = "DELETE FROM Kategorie WHERE Kategorie_ID = " + kategorieId;
+    	statement.executeUpdate(query + ";");
+    	statement.close();
+    }
+    /**
+     * Löscht eine bestimmte Subkategorie.
+     * @param subKategorieId Die ID der Subkategorie.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+     */
+    
+    public void deleteSubkategorie(int subKategorieId) throws SQLException {
+    	String query = "DELETE FROM Subkategorie WHERE SubK_ID = " + subKategorieId;
+    	Statement statement = dbConnection.createStatement();
+    	statement.executeUpdate(query + ";");
+    	statement.close();
+    }
+    /**
+     * Löscht eine bestimmte Subkategorie.
+     * @param subKategorieBezeichnung Die Bezeichnung der Subkategorie.
+     * @param kategorieId Id der zugehörigen Hautkategorie.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+     */
+    public void deleteSubkategorie(String subKategorieBezeichnung, int kategorieId) throws SQLException {
+    	Statement statement = dbConnection.createStatement();
+    	String query ="SELECT DISTINCT SubK_ID FROM Subkategorie WHERE '" + subKategorieBezeichnung + "' = Bezeichnung AND " + kategorieId + " = Kategorie";
+    	ResultSet ergebnis;
+    	ergebnis = statement.executeQuery(query + ";");
+    	ergebnis.next();
+    	int subKategorieId = ergebnis.getInt("Kategorie_ID");
+    	query = "DELETE FROM Subkategorie WHERE SubK_ID = " + subKategorieId;
+    	statement.executeUpdate(query + ";");
+    	statement.close();
+    }
+    /**
+     * Löscht alle Posten auf die eine "ist-gleich"-Beziehung zutrifft unter Berücksichtigung der Parameter. Bsp.: Lösche alle Posten bei denen "Bezeichnung = Milch" gilt.
+     * @param condition Die zu erfüllende Kategorie. Muss als Spalte in Kategorie-Tabelle existieren.
+     * @param attribute Das Attribut, das condition entsprechen soll.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+     */
+    public void deletePostenCondition(String condition, String attribute) throws SQLException {
+    	String query = "DELETE FROM Posten WHERE " + condition + " = '" + attribute + "'";
+    	Statement statement = dbConnection.createStatement();
+    	statement.executeUpdate(query + ";");
+    	statement.close();	
+    }
+    /**
+     * Löscht alle Posten auf die eine "ist-gleich"-Beziehung zutrifft unter Berücksichtigung der Parameter. Bsp.: Lösche alle Posten bei denen "Dauerauftrag = 5" gilt.
+     * @param condition Die zu erfüllende Kategorie. Muss als Spalte in Kategorie-Tabelle existieren.
+     * @param attribute Das Attribut, das condition entsprechen soll.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+     */
+    public void deletePostenCondition(String condition, int attribute) throws SQLException {
+    	String query = "DELETE FROM Posten WHERE " + condition + " = " + attribute;
+    	Statement statement = dbConnection.createStatement();
+    	statement.executeUpdate(query + ";");
+    	statement.close();	
+    }
+    /**
      * Liest Datenbank aus und überträgt sie in eine ArrayList. Es werden das Datum, die Bezeichnung, die Id, die Anzahl
      * ob es sich um einen Dauerauftrag handelt, die Bezeichnung der Kategorie, die Id der Kategorie, die Bezeichnung der Subkategorie und die Id der Subkategorie in die Objekte der ArrayList geschrieben.
      * @return  Gibt eine ArrayList bestehend aus Objekten des Typs Posten mit den Informationen zurück.
@@ -364,12 +489,13 @@ public class BudgetPlanModel
     		int produkt_id = ergebnis.getInt("Posten.ID");
     		double preis = ergebnis.getDouble("Posten.Preis");
     		int anzahl = ergebnis.getInt("Posten.Anzahl");
-    		boolean dauerauftrag = ergebnis.getBoolean("Posten.Dauerauftrag");
+    		int dauerauftrag = ergebnis.getInt("Posten.Dauerauftrag");
     		String kategorie_bezeichnung = ergebnis.getString("Kategorie.Bezeichnung");
     		int kategorie_id = ergebnis.getInt("Kategorie.Kategorie_ID");
     		String subkategorie_bezeichnung = ergebnis.getString("Subkategorie.Bezeichnung");
     		int subkategorie_id = ergebnis.getInt("Subkategorie.SubK_ID");
-    		alle_Posten.add(new Posten(datum, bezeichnung, produkt_id, preis, anzahl, dauerauftrag, kategorie_bezeichnung, kategorie_id, subkategorie_bezeichnung, subkategorie_id));
+    		String kommentar = ergebnis.getString("Kategorie.Kommentar");
+    		alle_Posten.add(new Posten(datum, bezeichnung, produkt_id, preis, anzahl, dauerauftrag, kategorie_bezeichnung, kategorie_id, subkategorie_bezeichnung, subkategorie_id, kommentar));
     	}
     	statement.close();
     	return alle_Posten;

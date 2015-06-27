@@ -2,7 +2,10 @@
 import java.util.Date;
 
 /**
- * Posten in der Budgetplanung
+ * Posten mit den zugehörigen Attributen.
+ * 
+ * @author Shahin
+ * *
  */
 public class Posten {
 	/**
@@ -22,7 +25,7 @@ public class Posten {
 	//Anzahl des gekauften Postens
 	private int anzahl;
 	//Dauerauftrag ja oder nein
-	private boolean dauerauftrag;
+	private int dauerauftrag;
 	
 	private String kategorie_bezeichnung;
 	
@@ -32,29 +35,27 @@ public class Posten {
 	
 	private int subkategorie_id;
 	
-
-	/**
-	 * Konstruktor
-	 * 
-	 * @param datum
-	 *            Datum, wann der Posten verbucht wurde
-	 * @param bezeichnung
-	 *            Kurze Beschreibung
-	 * @param betrag
-	 *            Hoehe des Postens
-	 */
-/*	public Posten(Date datum, String bezeichnung, double preis) {
-		this.bezeichnung = bezeichnung;
-		this.datum = datum;
-		this.preis = preis;
-	} */
-	 
+	private String kommentar;
 	
-
+	/**
+	 * 
+	 * Konstruktor über den alle Daten an den Posten überreicht werden
+	 * @param datum Das Datum zu dem der Posten eingepflegt wurde.
+	 * @param bezeichnung Bezeichnung des Postens.
+	 * @param produkt_ID Die ID des Postens. Ist einmalig.
+	 * @param preis Der Preis pro Einheit.
+	 * @param anzahl Die Anzahl der gekauften Posten.
+	 * @param dauerauftrag Gibt an ob es sich um einen Dauerauftrag handelt. Die Zahl bestimmt den Turnus. 0 entspricht einem einmaligen Kauf.
+	 * @param kategorie_bezeichnung Die Bezeichnung der Kategorie.
+	 * @param kategorie_id Die ID der Kategorie. Ist einmalig.
+	 * @param subkategorie_bezeichnung Die Bezeichnung der Subkategorie.
+	 * @param subkategorie_id Die ID der Subkategorie. Ist einmalig.
+	 * @param kommentar Ein Kommentar zu der Position. Darf nicht 100 Zeichen übersteigen.
+	 */
 	public Posten(Date datum, String bezeichnung, int produkt_ID, double preis,
-			int anzahl, boolean dauerauftrag, String kategorie_bezeichnung,
+			int anzahl, int dauerauftrag, String kategorie_bezeichnung,
 			int kategorie_id, String subkategorie_bezeichnung,
-			int subkategorie_id) {
+			int subkategorie_id, String kommentar) {
 		super();
 		this.datum = datum;
 		this.bezeichnung = bezeichnung;
@@ -66,6 +67,7 @@ public class Posten {
 		this.kategorie_id = kategorie_id;
 		this.subkategorie_bezeichnung = subkategorie_bezeichnung;
 		this.subkategorie_id = subkategorie_id;
+		this.kommentar = kommentar;
 	}
 
 	public Date getDatum() {
@@ -88,11 +90,11 @@ public class Posten {
 		this.anzahl = anzahl;
 	}
 
-	public boolean isDauerauftrag() {
+	public int isDauerauftrag() {
 		return dauerauftrag;
 	}
 
-	public void setDauerauftrag(boolean dauerauftrag) {
+	public void setDauerauftrag(int dauerauftrag) {
 		this.dauerauftrag = dauerauftrag;
 	}
 
@@ -134,5 +136,13 @@ public class Posten {
 
 	public void setProdukt_ID(int produkt_ID) {
 		this.produkt_ID = produkt_ID;
+	}
+
+	public String getKommentar() {
+		return kommentar;
+	}
+
+	public void setKommentar(String kommentar) {
+		this.kommentar = kommentar;
 	}
 }
