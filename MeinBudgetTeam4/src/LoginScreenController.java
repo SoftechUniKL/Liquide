@@ -5,6 +5,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -95,6 +97,36 @@ public class LoginScreenController   {
     	
     }
     
+    void addListeners() {
+    	usernameInput.textProperty().addListener(new ChangeListener<String> () {
+    		@Override
+    		public void changed(ObservableValue<? extends String> observable, String oldUser, String newUser) {
+    			System.out.println("oldValue: " + oldUser + " --- newValue: " + newUser);
+    			check();
+    		}
+    	});
+    	passwordInput.textProperty().addListener(new ChangeListener<String> () {
+    		@Override
+    		public void changed(ObservableValue<? extends String> observable, String oldPass, String newPass) {
+    			System.out.println("pw --> oldValue: " + oldPass + " --- newValue: " + oldPass);
+    			check();
+    		}
+    	});
+    }
+    
+    private void check() {
+    	if(usernameInput.getText().trim().isEmpty() || passwordInput.getText().trim().isEmpty()) {
+    		statusLabel.setText("Eingaben falsch");
+    		statusLabel.setTextFill(Color.web("red"));
+    		signInButton.setDisable(true);
+    	}
+    	else {
+    		statusLabel.setText("Gültige Eingabe");
+    		statusLabel.setTextFill(Color.web("green"));
+    		signInButton.setDisable(false);
+    	}
+    		
+    }
    
     
 
