@@ -26,8 +26,7 @@ public class LoginView implements Observer {
 		LoginView.primaryStage = primaryStage;
 	}
 
-	public void startUp(Stage primaryStage) throws IOException {
-		setPrimaryStage(primaryStage);
+	public void startUp() throws IOException {
 		primaryStage.setTitle("Liquide wie Friede");
 		Pane myPane = (Pane)FXMLLoader.load(getClass().getResource("LoginScreen.fxml"));
 		Scene myScene = new Scene(myPane);

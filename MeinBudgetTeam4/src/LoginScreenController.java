@@ -61,12 +61,12 @@ public class LoginScreenController   {
     	System.out.println("Ich bin der Button mit der id: registrationButton_login " + statusLabel.getText());
         Stage stage=(Stage) registrationButton_login.getScene().getWindow();
         RegistrationView registration = new RegistrationView();
-       registration.startUp(stage);
+        registration.setPrimaryStage(stage);
+        registration.startUp();
     }
     
     @FXML
-    void buttonAction_signInButton(ActionEvent event) {
-    	System.out.println("Ich bin ein Anmeldebutton");
+    void buttonAction_signInButton(ActionEvent event) throws IOException {
     	try {
     	BudgetPlanModel model = new BudgetPlanModel();
     	String u = usernameInput.getText();
@@ -79,8 +79,8 @@ public class LoginScreenController   {
     	//progressIndicator.setStyle(" -fx-progress-color: red;");
 		model.initiateDatabase(u, p);
 		} catch (ClassNotFoundException | SQLException | IllegalArgumentException e) {
-			// TODO Angemessene Fehlerbehandlung
-			System.out.println(e.getMessage());
+			alertView alertV = new alertView();
+			alertV.startUp(e);
 		}
 
     }

@@ -61,7 +61,8 @@ public class BudgetPlan extends Application {
 	public void start(Stage primaryStage) throws IOException {
 		
 		LoginView login = new LoginView();
-		login.startUp(primaryStage);
+		login.setPrimaryStage(primaryStage);
+		login.startUp();
 //		try {
 //			primaryStage.setTitle("Liquide wie Friede");
 //			Pane myPane = (Pane)FXMLLoader.load(getClass().getResource("LoginScreen.fxml"));

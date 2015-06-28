@@ -8,7 +8,17 @@ import javafx.stage.Stage;
 
 public class RegistrationView {
 	
-	public void startUp(Stage primaryStage) throws IOException { 
+	private static Stage primaryStage;
+	
+	public static Stage getPrimaryStage() {
+		return primaryStage;
+	}
+
+	public static void setPrimaryStage(Stage primaryStage) {
+		RegistrationView.primaryStage = primaryStage;
+	}
+
+	public void startUp() throws IOException { 
 		Pane myPane = (Pane)FXMLLoader.load(getClass().getResource("RegistrationScreen.fxml"));
 		Scene myScene = new Scene(myPane);
 		primaryStage.setScene(myScene);

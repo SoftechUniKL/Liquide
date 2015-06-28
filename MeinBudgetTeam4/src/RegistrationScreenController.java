@@ -39,6 +39,7 @@ public class RegistrationScreenController {
 
     @FXML
     void ButtonAction_registrationButton(ActionEvent event) throws IOException { //Registrierung des Nutzers
+    	try {
     	BudgetPlanModel model = new BudgetPlanModel();
     	String u = usernameInput.getText();
     	String p = passwordInput.getText();
@@ -47,15 +48,13 @@ public class RegistrationScreenController {
     		throw new IllegalArgumentException("Bitte füllen Sie alle Felder aus.");
     	if(!(p.equals(p2)))
 			throw new IllegalArgumentException("Bitte geben Sie zweimal das selbe Passwort an");
-    	try {
 			model.registerUser(u, p);
-	        Stage stage=(Stage) registrationButton.getScene().getWindow();
 	        LoginView login = new LoginView();
-	        login.startUp(stage);
+	        login.startUp();
 	        login.succesfulRegistration(u, p);
 		} catch (ClassNotFoundException | SQLException | IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
+			alertView alertV = new alertView();
+			alertV.startUp(e);
 		}
 
     }
@@ -63,8 +62,12 @@ public class RegistrationScreenController {
     @FXML
     void ButtonAction_backButton(ActionEvent event) throws IOException { //Rückkehr zum Hauptfenster
     	System.out.println("Ich bin der Back-Button");
-        Stage stage=(Stage) backButton.getScene().getWindow();
         LoginView login = new LoginView();
-        login.startUp(stage);
+        try {
+			login.startUp();
+		} catch (IOException e) {
+			alertView alertV = new alertView();
+			alertV.startUp(e);
+		}
         }
 }
