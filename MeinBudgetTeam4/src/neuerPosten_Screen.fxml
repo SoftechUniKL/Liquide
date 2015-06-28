@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane fx:id="neuerPosten_pane" prefHeight="600.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <children>
+      <Label layoutX="100.0" layoutY="100.0" text="Kategorie" />
+      <ComboBox layoutX="100.0" layoutY="125.0" prefWidth="150.0" />
+      <Label layoutX="100.0" layoutY="175.0" text="Subkategorie" />
+      <ComboBox layoutX="100.0" layoutY="200.0" prefWidth="150.0" />
+      <Label layoutX="350.0" layoutY="100.0" text="Posten" />
+      <Label layoutX="350.0" layoutY="175.0" text="Anzahl" />
+      <TextField layoutX="350.0" layoutY="125.0" />
+      <TextField layoutX="350.0" layoutY="200.0" />
+      <Label layoutX="350.0" layoutY="250.0" text="Preis" />
+      <TextField layoutX="350.0" layoutY="275.0" />
+      <Button fx:id="übernehmen_button" layoutX="101.0" layoutY="500.0" mnemonicParsing="false" onAction="#bA_übernehmen" prefHeight="50.0" prefWidth="125.0" text="übernehmen" />
+      <CheckBox layoutX="100.0" layoutY="450.0" mnemonicParsing="false" text="Dauerauftrag" />
+      <Button fx:id="zurück_neuerPosten_button" layoutX="375.0" layoutY="500.0" mnemonicParsing="false" onAction="#bA_zurück_neuerPosten" prefHeight="50.0" prefWidth="125.0" text="zurück" />
+   </children>
+</AnchorPane>
