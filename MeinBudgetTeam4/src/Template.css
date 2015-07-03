@@ -1,0 +1,21 @@
+TilePane {
+	-fx-background-image: url("../data/background_small.png");
+	-fx-background-position: center center;
+	-fx-background-size: 100%; 
+	-fx-background-repeat: stretch;
+}
+
+Label {
+	-fx-font: 20px "System";
+	-fx-text-fill: rgba(40, 40, 40, 0.9);
+/* 	-fx-font-weight: bold; */
+}
+
+#backButton {
+	-fx-border-radius: 100.0%;
+	-fx-background-color: rgba(0,0,0,0); 
+}
+
+#backImg {
+	-fx-opacity: 1.0;
+}

@@ -3,59 +3,67 @@
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.scene.*?>
+<?import java.net.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<TilePane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegistrationScreenController">
+<StackPane fx:id="registrationStackPane" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="RegistrationScreenController">
    <children>
-      <VBox alignment="CENTER">
+      <TilePane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="650.0" prefWidth="400.0">
          <children>
-            <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="600.0" prefWidth="600.0">
+            <VBox alignment="CENTER">
                <children>
-                  <Label layoutX="226.0" layoutY="252.0" prefHeight="27.0" prefWidth="149.0" style="&#10;" text="Benutzername:" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false" AnchorPane.bottomAnchor="321.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="252.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="225.0" layoutY="317.0" prefHeight="27.0" prefWidth="149.0" text="Passwort:" textAlignment="CENTER" textFill="#9f9f9f" AnchorPane.bottomAnchor="256.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="317.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="usernameInput" layoutX="225.0" layoutY="279.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Benutzername" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="279.0" />
-                  <PasswordField fx:id="passwordInput" layoutX="225.0" layoutY="344.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Passwort" AnchorPane.bottomAnchor="231.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="344.0" />
-                  <Label layoutX="225.0" layoutY="379.0" text="Passwort wiederholen:" textAlignment="CENTER" textFill="#9f9f9f" AnchorPane.bottomAnchor="194.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="197.0" AnchorPane.topAnchor="379.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <PasswordField fx:id="passwordTwoInput" layoutX="225.0" layoutY="406.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Passwort" AnchorPane.bottomAnchor="169.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="406.0" />
-                  <Button fx:id="registrationButton" layoutX="239.0" layoutY="514.0" mnemonicParsing="false" onAction="#ButtonAction_registrationButton" prefHeight="52.0" prefWidth="125.0" text="Registrieren" textFill="#9f9f9f" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="239.0" AnchorPane.topAnchor="514.0" >
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="backButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#ButtonAction_backButton" prefHeight="34.0" prefWidth="35.0" AnchorPane.bottomAnchor="534.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
-                     <graphic>
-                        <ImageView fitHeight="44.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../data/UniversalBackButton.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  
-                  </Button>
-                  <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="225.0" layoutY="462.0" prefHeight="25.0" prefWidth="149.0" />
+                  <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="600.0" prefWidth="600.0">
+                     <children>
+                        <Label layoutX="226.0" layoutY="252.0" prefHeight="27.0" prefWidth="149.0" style="&#10;" text="Benutzername:" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false" AnchorPane.bottomAnchor="321.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="252.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="225.0" layoutY="317.0" prefHeight="27.0" prefWidth="149.0" text="Passwort:" textAlignment="CENTER" textFill="#9f9f9f" AnchorPane.bottomAnchor="256.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="317.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="usernameInput" layoutX="225.0" layoutY="279.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Benutzername" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="279.0" />
+                        <PasswordField fx:id="passwordInput" layoutX="225.0" layoutY="344.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Passwort" AnchorPane.bottomAnchor="231.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="344.0" />
+                        <Label layoutX="225.0" layoutY="379.0" text="Passwort wiederholen:" textAlignment="CENTER" textFill="#9f9f9f" AnchorPane.bottomAnchor="194.0" AnchorPane.leftAnchor="225.0" AnchorPane.topAnchor="379.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <PasswordField fx:id="passwordTwoInput" layoutX="225.0" layoutY="406.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Passwort" AnchorPane.bottomAnchor="169.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="406.0" />
+                        <Button fx:id="registrationButton" disable="true" layoutX="239.0" layoutY="514.0" mnemonicParsing="false" onAction="#ButtonAction_registrationButton" prefHeight="52.0" prefWidth="125.0" text="Registrieren" textFill="#9f9f9f" AnchorPane.bottomAnchor="34.0" AnchorPane.leftAnchor="239.0" AnchorPane.topAnchor="514.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                        <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="225.0" layoutY="462.0" prefHeight="30.0" AnchorPane.bottomAnchor="111.0" AnchorPane.topAnchor="462.0" />
+                        <Button fx:id="backButton" layoutY="-23.0" mnemonicParsing="false" onAction="#ButtonAction_backButton" prefHeight="43.0" prefWidth="51.0">
+                           <graphic>
+                              <ImageView fx:id="backImg" fitHeight="38.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../data/UniversalBackButton.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        
+                                                                              </Button>
+                     </children>
+                  </AnchorPane>
                </children>
-            </AnchorPane>
+            </VBox>
          </children>
-      </VBox>
+               <stylesheets>
+          <URL value="@Template.css" />
+        </stylesheets>
+      </TilePane>
    </children>
-</TilePane>
+</StackPane>

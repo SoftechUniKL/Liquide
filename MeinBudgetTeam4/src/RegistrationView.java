@@ -19,10 +19,13 @@ public class RegistrationView {
 	}
 
 	public void startUp() throws IOException { 
-		Pane myPane = (Pane)FXMLLoader.load(getClass().getResource("RegistrationScreen.fxml"));
-		Scene myScene = new Scene(myPane);
-		primaryStage.setScene(myScene);
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("RegistrationScreen.fxml"));
+		primaryStage.setScene(new Scene((Pane) loader.load()));
+		RegistrationScreenController registrationC = loader.<RegistrationScreenController>getController();
+		registrationC.addListeners();
+		//primaryStage.setScene(myScene);
 		primaryStage.show();
+		registrationC.createAnimation();
 	}
 
 }

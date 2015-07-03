@@ -3,6 +3,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.*?>
+<?import java.net.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.scene.shape.*?>
@@ -12,48 +13,57 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<TilePane fx:id="loginPane" alignment="CENTER" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LoginScreenController">
+
+<StackPane fx:id="loginStackPane" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LoginScreenController">
    <children>
-      <VBox alignment="CENTER">
+      <TilePane fx:id="loginPane" alignment="CENTER" prefHeight="650.0" prefWidth="400.0">
          <children>
-            <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="600.0" prefWidth="600.0">
+            <VBox alignment="CENTER">
                <children>
-                  <Label layoutX="225.0" layoutY="300.0" prefHeight="27.0" prefWidth="149.0" style="&#10;" text="Benutzername:" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false" AnchorPane.bottomAnchor="273.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="300.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="226.0" layoutY="373.0" prefHeight="27.0" prefWidth="149.0" text="Passwort:" textAlignment="CENTER" textFill="#9f9f9f" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="373.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="usernameInput" layoutX="225.0" layoutY="336.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Benutzername" AnchorPane.bottomAnchor="239.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="336.0" />
-                  <PasswordField fx:id="passwordInput" layoutX="225.0" layoutY="407.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Passwort" AnchorPane.bottomAnchor="168.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="407.0" />
-                  <Button fx:id="registrationButton_login" layoutX="99.0" layoutY="515.0" mnemonicParsing="false" onAction="#buttonAction_registrationButton_login" prefHeight="52.0" prefWidth="125.0" text="Registrieren" textFill="#9f9f9f" AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="515.0">
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="signInButton" disable="true" layoutX="362.0" layoutY="515.0" mnemonicParsing="false" onAction="#buttonAction_signInButton" prefHeight="52.0" prefWidth="125.0" text="Anmelden" textFill="#9f9f9f" AnchorPane.bottomAnchor="33.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="515.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="226.0" layoutY="463.0" prefHeight="27.0" prefWidth="149.0" textAlignment="CENTER" wrapText="true">
-                     <font>
-                        <Font size="18.0" />
-                     </font></Label>
-                  <ProgressIndicator fx:id="progressIndicator" layoutX="275.0" layoutY="515.0" visible="false" />
+                  <AnchorPane maxHeight="-1.0" maxWidth="-1.0">
+                     <children>
+                        <Label layoutX="225.0" layoutY="300.0" prefHeight="27.0" prefWidth="149.0" style="&#10;" text="Benutzername:" textAlignment="CENTER" textFill="#9f9f9f" wrapText="false" AnchorPane.bottomAnchor="273.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="300.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="226.0" layoutY="373.0" prefHeight="27.0" prefWidth="149.0" text="Passwort:" textAlignment="CENTER" textFill="#9f9f9f" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="225.0" AnchorPane.topAnchor="373.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="usernameInput" layoutX="225.0" layoutY="336.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Benutzername" AnchorPane.bottomAnchor="239.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="336.0" />
+                        <PasswordField fx:id="passwordInput" layoutX="225.0" layoutY="407.0" prefHeight="25.0" prefWidth="149.0" promptText="Ihr Passwort" AnchorPane.bottomAnchor="168.0" AnchorPane.leftAnchor="225.0" AnchorPane.rightAnchor="226.0" AnchorPane.topAnchor="407.0" />
+                        <Button fx:id="registrationButton_login" layoutX="99.0" layoutY="515.0" mnemonicParsing="false" onAction="#buttonAction_registrationButton_login" prefHeight="52.0" prefWidth="125.0" text="Registrieren" textFill="#9f9f9f" AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="515.0">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="signInButton" disable="true" layoutX="362.0" layoutY="515.0" mnemonicParsing="false" onAction="#buttonAction_signInButton" prefHeight="52.0" prefWidth="125.0" text="Anmelden" textFill="#9f9f9f" AnchorPane.bottomAnchor="33.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="515.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                        <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="226.0" layoutY="463.0" prefHeight="30.0" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="110.0" AnchorPane.topAnchor="463.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <ProgressIndicator fx:id="progressIndicator" layoutX="275.0" layoutY="515.0" visible="false" />
+                     </children>
+                  </AnchorPane>
                </children>
-            </AnchorPane>
+            </VBox>
          </children>
-      </VBox>
+            <stylesheets>
+          <URL value="@Template.css" />
+        </stylesheets>
+      </TilePane>
    </children>
-</TilePane>
+</StackPane>

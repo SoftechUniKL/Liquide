@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,7 +11,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -18,6 +22,7 @@ public class LoginView implements Observer {
 	
 	private static Stage primaryStage;
 	
+	private static boolean changed;
 //	private LoginScreenController loginC;
 	
 	public Stage getPrimaryStage() {
@@ -28,7 +33,7 @@ public class LoginView implements Observer {
 		LoginView.primaryStage = primaryStage;
 	}
 
-	public void startUp() throws IOException {
+	public void startUp() {
 //		primaryStage.setTitle("Liquide wie Friede");
 //		//Pane myPane = (Pane)FXMLLoader.load(getClass().getResource("LoginScreen.fxml"));
 //		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
@@ -38,30 +43,76 @@ public class LoginView implements Observer {
 //		primaryStage.getIcons().add(new Image("file:data/Coin.png")); //Details: http://docs.oracle.com/javafx/2/api/javafx/scene/image/Image.html
 //		primaryStage.show();
 		initiate();
+	//	resizeListener();
 		
 	}
 	
-	public void succesfulRegistration(String username, String password) throws IOException {
-		initiate();
+	public void succesfulRegistration(String username, String password) {
 		primaryStage.setTitle("Liquide wie Friede - Willkommen " + username);
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
-		primaryStage.setScene(new Scene((Pane) loader.load()));
+		try {
+			primaryStage.setScene(new Scene((Pane) loader.load()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         LoginScreenController loginC = loader.<LoginScreenController>getController();
+        loginC.addListeners();
         loginC.succesfulRegistration(username, password);
-       // stage.show();
 	}
 	
-	private void initiate() throws IOException {
+	private void initiate() {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
-		primaryStage.setScene(new Scene((Pane) loader.load()));
+		try {
+			primaryStage.setScene(new Scene((Pane) loader.load()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		primaryStage.setTitle("Liquide wie Friede");
 		LoginScreenController loginC = loader.<LoginScreenController>getController();
-		System.out.println("test");
 		loginC.addListeners();
-		primaryStage.setResizable(false);
 		primaryStage.getIcons().add(new Image("file:data/Coin.png"));
+		//primaryStage.setResizable(false);
 		primaryStage.show();
+		loginC.createAnimation(); //Animation wird hinzugefügt
 		
+	}
+
+	
+	public void resizeListener() {
+		
+	primaryStage.heightProperty().addListener(new ChangeListener<Number> () {
+		@Override
+		public void changed(ObservableValue<? extends Number> observable, Number oldHeight, Number newHeight) {
+			if(changed) {
+			changed = false;
+			primaryStage.setWidth((double) newHeight * (400.0/650.0));
+			}
+			else
+				changed = true;
+			System.out.println("HeightListener:" + oldHeight + "-----" + newHeight + "changed: " + changed);
+		}
+	});
+	primaryStage.widthProperty().addListener(new ChangeListener<Number> () {
+		@Override
+		public void changed(ObservableValue<? extends Number> observable, Number oldWidth, Number newWidth) {
+			if(changed) {
+				changed = false;
+			primaryStage.setHeight((double)newWidth * (650.0/400.0));
+			}
+			else
+				changed = true;
+			System.out.println("WidthListener:" + oldWidth + "-----" + newWidth + "changed: " + changed);
+		}
+	});
+	
+	}
+	
+	void resize() {
+	primaryStage.minHeightProperty().bind(LoginView.primaryStage.getScene().widthProperty().multiply(2.0));
+	primaryStage.minWidthProperty().bind(LoginView.primaryStage.getScene().heightProperty().divide(2));
+	System.out.println("geht");
 	}
 	
 	

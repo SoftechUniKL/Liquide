@@ -18,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class BudgetPlan extends Application {
 	public static void main(String[] args)  {
@@ -61,6 +62,7 @@ public class BudgetPlan extends Application {
 	public void start(Stage primaryStage) throws IOException {
 		
 		LoginView login = new LoginView();
+		primaryStage.initStyle(StageStyle.UNIFIED);
 		login.setPrimaryStage(primaryStage);
 		login.startUp();
 //		try {
