@@ -46,7 +46,7 @@ public class LoginView implements Observer {
 		primaryStage.setTitle("Liquide wie Friede - Willkommen " + username);
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
 		primaryStage.setScene(new Scene((Pane) loader.load()));
-        LoginScreenController loginC = loader.<LoginScreenController>getController();
+        restlicheController loginC = loader.<restlicheController>getController();
         loginC.succesfulRegistration(username, password);
        // stage.show();
 	}
@@ -55,7 +55,7 @@ public class LoginView implements Observer {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
 		primaryStage.setScene(new Scene((Pane) loader.load()));
 		primaryStage.setTitle("Liquide wie Friede");
-		LoginScreenController loginC = loader.<LoginScreenController>getController();
+		restlicheController loginC = loader.<restlicheController>getController();
 		System.out.println("test");
 		loginC.addListeners();
 		primaryStage.setResizable(false);
