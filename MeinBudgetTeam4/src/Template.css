@@ -8,7 +8,7 @@ TilePane {
 Label {
 	-fx-font: 20px "System";
 	-fx-text-fill: rgba(40, 40, 40, 0.9);
-/* 	-fx-font-weight: bold; */
+ 	-fx-font-weight: bold; 
 }
 
 #backButton {
@@ -19,3 +19,4 @@ Label {
 #backImg {
 	-fx-opacity: 1.0;
 }
+

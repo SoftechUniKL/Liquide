@@ -43,6 +43,7 @@ public class LoginView implements Observer {
 //		primaryStage.getIcons().add(new Image("file:data/Coin.png")); //Details: http://docs.oracle.com/javafx/2/api/javafx/scene/image/Image.html
 //		primaryStage.show();
 		initiate();
+	//	resize();
 	//	resizeListener();
 		
 	}
@@ -58,6 +59,7 @@ public class LoginView implements Observer {
 		}
         LoginScreenController loginC = loader.<LoginScreenController>getController();
         loginC.addListeners();
+        loginC.createAnimation();
         loginC.succesfulRegistration(username, password);
 	}
 	
@@ -73,7 +75,7 @@ public class LoginView implements Observer {
 		LoginScreenController loginC = loader.<LoginScreenController>getController();
 		loginC.addListeners();
 		primaryStage.getIcons().add(new Image("file:data/Coin.png"));
-		//primaryStage.setResizable(false);
+		primaryStage.setResizable(false);
 		primaryStage.show();
 		loginC.createAnimation(); //Animation wird hinzugefügt
 		
@@ -110,8 +112,8 @@ public class LoginView implements Observer {
 	}
 	
 	void resize() {
-	primaryStage.minHeightProperty().bind(LoginView.primaryStage.getScene().widthProperty().multiply(2.0));
-	primaryStage.minWidthProperty().bind(LoginView.primaryStage.getScene().heightProperty().divide(2));
+	primaryStage.minHeightProperty().bind(LoginView.primaryStage.getScene().widthProperty().multiply(400/650));
+	primaryStage.minWidthProperty().bind(LoginView.primaryStage.getScene().heightProperty().multiply(650/400));
 	System.out.println("geht");
 	}
 	

@@ -59,7 +59,7 @@ public class BudgetPlan extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws IOException {
+	public void start(Stage primaryStage) {
 		
 		LoginView login = new LoginView();
 		primaryStage.initStyle(StageStyle.UNIFIED);

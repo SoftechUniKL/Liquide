@@ -18,9 +18,14 @@ public class RegistrationView {
 		RegistrationView.primaryStage = primaryStage;
 	}
 
-	public void startUp() throws IOException { 
+	public void startUp()  { 
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("RegistrationScreen.fxml"));
-		primaryStage.setScene(new Scene((Pane) loader.load()));
+		try {
+			primaryStage.setScene(new Scene((Pane) loader.load()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		RegistrationScreenController registrationC = loader.<RegistrationScreenController>getController();
 		registrationC.addListeners();
 		//primaryStage.setScene(myScene);
