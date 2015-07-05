@@ -34,7 +34,7 @@ import java.sql.*;
  */
 public class BudgetPlanModel
 {
-	private static Connection dbConnection; //global definiert
+    private	static Connection dbConnection; //global definiert
 	public BudgetPlanModel() { // Konstruktor
 		
 	}

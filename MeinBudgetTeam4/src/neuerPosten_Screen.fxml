@@ -5,10 +5,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="neuerPosten_pane" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="restlicheController">
+<AnchorPane fx:id="neuerPosten_pane" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="neuerPostenScreenController">
    <children>
       <Label layoutX="100.0" layoutY="100.0" text="Kategorie" />
-      <ComboBox fx:id="kategoerieInput_neuerPosten" layoutX="100.0" layoutY="125.0" onAction="#bA_neuerPosten_menue" prefWidth="150.0" />
+      <ComboBox fx:id="kategoerieInput_neuerPosten" layoutX="100.0" layoutY="125.0" onAction="#cbA_kategorieInput_neuerPosten" prefWidth="150.0" />
       <Label layoutX="100.0" layoutY="175.0" text="Subkategorie" />
       <ComboBox fx:id="subkategorieInput_neuerPosten" layoutX="100.0" layoutY="200.0" prefWidth="150.0" />
       <Label layoutX="350.0" layoutY="100.0" text="Posten" />
@@ -22,6 +22,7 @@
       <Button fx:id="zurück_neuerPosten_button" layoutX="375.0" layoutY="500.0" mnemonicParsing="false" onAction="#bA_zurück_neuerPosten" prefHeight="50.0" prefWidth="125.0" text="zurück" />
       <ComboBox fx:id="dauerauftragInput_neuerposten" layoutX="100.0" layoutY="275.0" prefWidth="150.0" />
       <Label layoutX="350.0" layoutY="325.0" text="Kommentar (optional)" />
-      <TextArea fx:id="kommentarInput_neuerPosten" layoutX="350.0" layoutY="350.0" prefHeight="125.0" prefWidth="150.0" />
+      <TextArea fx:id="kommentarInput_neuerPosten" layoutX="350.0" layoutY="350.0" prefHeight="50.0" prefWidth="150.0" />
+      <Label fx:id="übernehmen_label_neuerPosten" layoutX="200.0" layoutY="450.0" prefWidth="200.0" />
    </children>
 </AnchorPane>

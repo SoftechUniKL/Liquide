@@ -28,16 +28,9 @@ import javafx.fxml.Initializable;
 
 public class restlicheController {
 	// ab hier LoginScreenController @author Shahin
-	BudgetPlanModel model = new BudgetPlanModel();
-	public String user ;
 	
-	public void setUser(String user){
-		this.user = user;
-	}
-	public String getUser(){
-		return user;
-		
-	}
+	
+	
 	
     
 	@FXML
@@ -71,7 +64,6 @@ public class restlicheController {
     	try {
     	BudgetPlanModel model = new BudgetPlanModel();
         String u = usernameInput.getText();
-        setUser(usernameInput.getText());
         String p = passwordInput.getText();
     	if(u.isEmpty() || p.isEmpty()) {
     		throw new IllegalArgumentException("Bitt füllen Sie beide Felder aus.");
@@ -91,7 +83,7 @@ public class restlicheController {
          restlicheViews.Menue menü = new restlicheViews.Menue();
          menü.setPrimaryStage(stage);
          menü.startUp_menue();
-         setUser("lala");
+         
          
     }
     
@@ -153,68 +145,19 @@ public class restlicheController {
 
     @FXML
     private Button budgetverwaltung_menue;
-
+    
     @FXML
     private Button neuerPosten_button_menue;
     
-    @FXML
-    private Button zurück_neuerPosten_button;
+
 
     @FXML
-    private  ComboBox<String> kategoerieInput_neuerPosten = new ComboBox <String>   () ;
-  /* public  void initialize() throws ClassNotFoundException, SQLException{
-	   model.registerUser("b", "123");
-   	   model.initiateDatabase("b", "123");
-    	
-    	kategoerieInput_neuerPosten.getItems().addAll(model.return_Kategorien());
-    	kategorieInputCb.getItems().addAll(model.return_Kategorien());
-    	System.out.println("init");
-    }*/
-   
-   
-    
-   
-    	
-    
-
-    
-
-    @FXML
-    private TextArea kommentarInput_neuerPosten;
-
-    @FXML
-    private ComboBox<String> dauerauftragInput_neuerposten = new ComboBox <String> ();
-    
-
-    @FXML
-    private TextField postenInput_neuerPosten;
-
-    @FXML
-    private AnchorPane neuerPosten_pane;
-
-    @FXML
-    private ComboBox<?> subkategorieInput_neuerPosten;
-
-    @FXML
-    private TextField preisInput_neuerPosten;
-
-    @FXML
-    private TextField anzahlInput_neuerPosten;
-
-    @FXML
-    private Button übernehmen_button;
-
-    @FXML
-    void bA_neuerPosten_menue(ActionEvent event) throws IOException {
+    void bA_neuerPosten_menue(ActionEvent event) throws IOException, SQLException {
     	 Stage stage=(Stage)neuerPosten_button_menue.getScene().getWindow();
          restlicheViews.neuerPosten newPost = new restlicheViews.neuerPosten();
          newPost.setPrimaryStage(stage);
          newPost.startUp_neuerPosten();
-         
-         System.out.println(getUser());
-     
-         
-         
+   
          
     }
 
@@ -229,11 +172,12 @@ public class restlicheController {
     }
 
     @FXML
-    void bA_datenverwaltung_menue(ActionEvent event) throws IOException {
+    void bA_datenverwaltung_menue(ActionEvent event) throws IOException, SQLException {
     	Stage stage=(Stage)datenverwaltung_button_menue.getScene().getWindow();
         restlicheViews.datenverwaltung dv = new restlicheViews.datenverwaltung();
         dv.setPrimaryStage(stage);
         dv.startUp_datenverwaltung();
+       
 
     }
 
@@ -241,80 +185,8 @@ public class restlicheController {
     void bA_optionen_menue(ActionEvent event) {
 
     }
-    
-    @FXML
-    void bA_übernehmen(ActionEvent event) {
-
-    }
-
-    @FXML
-    void bA_zurück_neuerPosten(ActionEvent event) {
+   
   
-    	
-
-    }
-    @FXML
-    void cbc_dauerauftragWechsel_neuerPosten(ActionEvent event) {
-    	dauerauftragInput_neuerposten.getItems().addAll("bla");
-
-    }
-    // ab hier folgt der Controller der datenverwaltung
-    @FXML
-    private Button kategorieLöschen_button_datenverwaltung;
-
-    @FXML
-    private Button zurück_button_datenverwaltung;
-
-    @FXML
-    private ComboBox<String> kategorieInputCb = new ComboBox <String> ();
-
-    @FXML
-    private Button subKategorieErstellen_button_datenverwaltung;
-
-    @FXML
-    private TextField subKategorieInput;
-
-    @FXML
-    private Button subKategorieLöschen_button_datenverwaltung;
-
-    @FXML
-    private Button kategorieErstellen_button_datenverwaltung;
-
-    @FXML
-    private TextField kategorieInput_datenverwaltung;
-
-    @FXML
-    void bA_kategorieLöschen_datenverwaltung(ActionEvent event) {
-
-    }
-
-    @FXML
-    void bA_kategorieErstellen_datenverwaltung(ActionEvent event) throws ClassNotFoundException,SQLException {
-    	
-    	
-    	model.insert_Kategorie(kategorieInput_datenverwaltung.getText());
-    	//initialize();
-    	kategorieInput_datenverwaltung.setText(null);
-
-    }
-
-    @FXML
-    void bA_subKategorieErstellen_datenverwaltung(ActionEvent event) {
-
-    }
-
-    @FXML
-    void bA_subKategorieLöschen_datenverwaltung(ActionEvent event) {
-
-    }
-
-    @FXML
-    void bA_zurück_datenverwaltung(ActionEvent event) {
-
-    }
-    
-    
-    
 
 }
 
