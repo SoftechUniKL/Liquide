@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
 
-import org.apache.commons.math3.distribution.NormalDistribution;
 
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
