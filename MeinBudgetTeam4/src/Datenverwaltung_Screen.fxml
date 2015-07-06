@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DatenVerwaltungScreenController">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="KategorieLöschen_button_Datenverwaltung" layoutX="400.0" layoutY="112.0" mnemonicParsing="false" onAction="#bA_KategorieLöschen_Datenverwaltung" prefHeight="50.0" prefWidth="150.0" text="Kategorie löschen" />
+            <Button fx:id="KategorieErstellen_button_Datenverwaltung" layoutX="400.0" layoutY="37.0" mnemonicParsing="false" onAction="#bA_KategorieErstellen_Datenverwaltung" prefHeight="50.0" prefWidth="150.0" text="Kategorie erstellen" />
+            <Label layoutX="150.0" layoutY="37.0" text="Kategorie" />
+            <TextField fx:id="KategorieInput_Datenverwaltung" layoutX="150.0" layoutY="62.0" onAction="#tfA_KategorieInput_Datenverwaltung" />
+            <Label layoutX="150.0" layoutY="112.0" text="Kategorie" />
+            <ComboBox fx:id="KategorieInputKl_Datenverwaltung" layoutX="150.0" layoutY="137.0" onAction="#cbA_KategorieInputKl_Datenverwaltung" prefWidth="150.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="subKategorieErstellen_button_Datenverwaltung" layoutX="400.0" layoutY="37.0" mnemonicParsing="false" onAction="#bA_subKategorieErstellen_Datenverwaltung" prefHeight="50.0" prefWidth="150.0" text="Subkategorie erstellen" />
+            <Button fx:id="subKategorieLöschen_button_Datenverwaltung" layoutX="400.0" layoutY="112.0" mnemonicParsing="false" onAction="#bA_subKategorieLöschen_Datenverwaltung" prefHeight="50.0" prefWidth="150.0" text="Subkategorie löschen" />
+            <Label layoutX="33.0" layoutY="37.0" text="Kategorie" />
+            <Label layoutX="216.0" layoutY="37.0" text="Subkategorie" />
+            <ComboBox fx:id="KategorieInputSe_Datenverwaltung" layoutX="33.0" layoutY="62.0" onAction="#cbA_KategorieInputSe_Datenverwaltung" prefWidth="150.0" />
+            <TextField fx:id="subKategorieInput_Datenverwaltung" layoutX="213.0" layoutY="62.0" onAction="#tfA_subKategorieInput_Datenverwaltung" />
+            <ComboBox fx:id="KategorieInputSl_Datenverwaltung" layoutX="33.0" layoutY="137.0" onAction="#cbA_KategorieInputSl_Datenverwaltung" prefWidth="150.0" />
+            <ComboBox fx:id="subkategorieInputSl_Datenverwaltung" layoutX="213.0" layoutY="137.0" onAction="#cbA_SubkategorieInputSl_Datenverwaltung" prefWidth="150.0" />
+            <Label layoutX="33.0" layoutY="112.0" text="Kategorie" />
+            <Label layoutX="213.0" layoutY="112.0" text="Subkategorie" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="zurück_button_Datenverwaltung" layoutX="488.0" layoutY="88.0" mnemonicParsing="false" onAction="#bA_zurück_Datenverwaltung" text="zurück" />
+            <Label fx:id="Info_Datenverwaltung" alignment="CENTER" layoutX="150.0" layoutY="87.0" prefHeight="25.0" prefWidth="300.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

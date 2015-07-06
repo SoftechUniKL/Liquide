@@ -7,11 +7,16 @@ import static org.junit.Assert.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,13 +41,24 @@ public class BudgetPlanModelTest {
 		e.printStackTrace();
 	}
 	}
+/*	
+	@After
+	public void tearDown() throws Exception //Wird nach jedem einzelnen Test aufgerufen. Da die Zugriffszeiten von Java allerdings schneller sind als die von H2 wird DB ggf. noch benutzt, weshab ein Löschen erfolglos ist.
+	{
+		Path path1 = Paths.get("./data/dbProfile/BudgetPlanerDaten_test.mv.db");
+		Path path2 = Paths.get("./data/dbProfile/BudgetPlanerDaten_test.trace.db");
+	   Files.delete(path1);
+	   Files.delete(path2);
+	}
+	*/
 
 	/**
 	 * Test method for {@link BudgetPlanModel#BudgetPlanModel()}.
 	 */
 	@Test
 	public void testBudgetPlanModel() {
-		fail("Not yet implemented");
+		//Leerer Konstruktor nicht testbar
+		//fail("Not yet implemented");
 	}
 	
 	/**
@@ -50,7 +66,6 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testSetConnection() {
-		assertNull(testModel.getConnection());
 		testModel.setConnection(dbTestConnection);
 		assertEquals(testModel.getConnection(), dbTestConnection);
 	}
@@ -171,7 +186,17 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testInsert_Subkategorie() {
-		fail("Not yet implemented");
+		try {
+		testModel.registerUser("test", "test");
+		testModel.initiateDatabase("test", "test");
+		testModel.insert_Subkategorie("TestSubkategorie", "Allgemein");
+		String[] testWerte = {"-", "TestSubkategorie"};
+		assertEquals(Arrays.toString(testModel.return_Subkategorien("Allgemein")), Arrays.toString(testWerte));
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 	/**
@@ -179,15 +204,34 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testUpdate_User() {
-		fail("Not yet implemented");
+		try {
+		testModel.registerUser("test", "test");
+		testModel.initiateDatabase("test", "test");
+		assertEquals(0.0, testModel.getBudget(),0.0); //Da Budget auf keiner Kalkulation basiert ist Epsilon 0.0
+		testModel.update_User(117.117);
+		assertEquals(117.117, testModel.getBudget(), 0.0);
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
+		
 	}
 
 	/**
 	 * Test method for {@link BudgetPlanModel#insert_Posten(java.lang.String, java.lang.String, java.lang.String, double, int, java.lang.String, int)}.
 	 */
 	@Test
-	public void testInsert_PostenStringStringStringDoubleIntStringInt() {
-		fail("Not yet implemented");
+	public void testInsert_PostenStringStringStringDoubleIntStringInt() { 
+		try {
+			testModel.registerUser("test", "test");
+			testModel.initiateDatabase("test", "test");
+			testModel.insert_Posten("TestPosten", "Allgemein", "-", 42.42, 3, "Ich bin ein Testposten", 3);
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 	/**
@@ -195,7 +239,15 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testInsert_PostenStringIntIntDoubleIntStringInt() {
-		fail("Not yet implemented");
+		try {
+			testModel.registerUser("test", "test");
+			testModel.initiateDatabase("test", "test");
+			testModel.insert_Posten("Testposten", 1	, 1, 24.24, 9, "Auch ich bin ein Testposten", 1);
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 	/**
@@ -203,7 +255,16 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testReturn_Kategorien() {
-		fail("Not yet implemented");
+		try {
+		testModel.registerUser("test", "test");
+		testModel.initiateDatabase("test", "test");
+		assertNotNull(testModel.return_Kategorien());
+		assertEquals(Arrays.toString(testModel.return_Kategorien()), "[Allgemein]");
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 	/**
@@ -211,7 +272,16 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testReturn_Subkategorien() {
-		fail("Not yet implemented");
+		try {
+			testModel.registerUser("test", "test");
+			testModel.initiateDatabase("test", "test");
+			assertNotNull(testModel.return_Subkategorien("Allgemein"));
+			assertEquals(Arrays.toString(testModel.return_Subkategorien("Allgemein")), "[-]");
+			} catch (ClassNotFoundException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				fail("Exception thrown");
+			}
 	}
 
 	/**
@@ -219,31 +289,81 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testGetBudget() {
-		fail("Not yet implemented");
+		try {
+			testModel.registerUser("test", "test");
+			testModel.initiateDatabase("test", "test");
+			assertNotNull(testModel.getBudget());
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 	/**
 	 * Test method for {@link BudgetPlanModel#DROP_ALL()}.
 	 */
-	@Test
-	public void testDROP_ALL() {
-		fail("Not yet implemented");
+	@Test (expected=SQLException.class)
+	public void testDROP_ALL() throws SQLException {
+		try {
+			testModel.registerUser("test", "test");
+			testModel.initiateDatabase("test", "test");
+			testModel.DROP_ALL();
+			testModel.getBudget();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 	/**
 	 * Test method for {@link BudgetPlanModel#deletePosten(int)}.
 	 */
 	@Test
-	public void testDeletePosten() {
-		fail("Not yet implemented");
+	public void testDeletePosten() { //Problem: Großer Haufen von Interdependenzen...
+		try {
+			testModel.registerUser("test", "test");
+			testModel.initiateDatabase("test", "test");
+			testModel.insert_Posten("TestLoeschen", 1, 1, 17.17, 2, "Dieser Testposten soll erfolgreich gelöscht werden", 1);
+			ArrayList<Posten> testPosten = testModel.transcribe();
+			int prevSize = testPosten.size();
+			int id;
+			for(int i = 0; i < prevSize; i++) {
+				if(testPosten.get(i).getBezeichnung().equals("TestLoeschen")) {
+					id = testPosten.get(i).getProdukt_ID();
+					testModel.deletePosten(id);
+				}
+			}
+			testPosten = testModel.transcribe();
+			int postSize = testPosten.size();
+			assertFalse(prevSize == postSize); //TODO: Hier wird eigentlich nur getestet, ob gelöscht wird. nicht was
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 	/**
 	 * Test method for {@link BudgetPlanModel#deleteKategorie(int)}.
 	 */
 	@Test
-	public void testDeleteKategorieInt() {
-		fail("Not yet implemented");
+	public void testDeleteKategorieInt() throws SQLException {
+		try {
+			testModel.registerUser("test", "test");
+			testModel.initiateDatabase("test", "test");
+			testModel.insert_Kategorie("KategorieLöschen");
+			String[] prevKategorie = testModel.return_Kategorien();
+			testModel.deleteKategorie(2); //Wegen Auto-Increment ist bei 1 die Kategorie "Allgemein"
+			String[] postKategorie = testModel.return_Kategorien();
+			assertFalse(Arrays.toString(postKategorie).equals(Arrays.toString(prevKategorie)));
+			assertTrue(Arrays.toString(postKategorie).equals("[Allgemein]"));			
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 	/**
@@ -251,7 +371,20 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testDeleteKategorieString() {
-		fail("Not yet implemented");
+		try {
+			testModel.registerUser("test", "test");
+			testModel.initiateDatabase("test", "test");
+			testModel.insert_Kategorie("TestKategorie");
+			String[] prevKategorie = testModel.return_Kategorien();
+			testModel.deleteKategorie("TestKategorie");
+			String[] postKategorie = testModel.return_Kategorien();
+			assertTrue(Arrays.toString(postKategorie).equals("[Allgemein]"));
+			assertFalse(Arrays.toString(prevKategorie).equals(Arrays.toString(postKategorie)));
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 	/**
@@ -259,7 +392,21 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testDeleteSubkategorieInt() {
-		fail("Not yet implemented");
+		try {
+			testModel.registerUser("test", "test");
+			testModel.initiateDatabase("test", "test");
+			testModel.insert_Subkategorie("SubkategorieLöschen", "Allgemein");
+			String[] prevSubkategorie = testModel.return_Subkategorien("Allgemein");
+			testModel.deleteSubkategorie(2);
+			String[] postSubkategorie = testModel.return_Subkategorien("Allgemein");
+		//	assertTrue(Arrays.toString(postSubkategorie).equals("[-]")); //Problem: In anderem Test wurde bereits eine Subkategorie eingefügt, weshalb dieses assert nicht aufgeht
+			assertFalse(Arrays.toString(prevSubkategorie).equals(Arrays.toString(postSubkategorie)));
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 	/**
@@ -267,7 +414,19 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testDeleteSubkategorieStringInt() {
-		fail("Not yet implemented");
+		try {
+			testModel.registerUser("test", "test");
+			testModel.initiateDatabase("test", "test");
+			testModel.insert_Subkategorie("SubkategorieLöschenInt", "Allgemein");
+			String[] prevSubkategorie = testModel.return_Subkategorien("Allgemein");
+			testModel.deleteSubkategorie("SubkategorieLöschenInt", 1);
+			String[] postSubkategorie = testModel.return_Subkategorien("Allgemein");
+			assertFalse(Arrays.toString(prevSubkategorie).equals(Arrays.toString(postSubkategorie)));
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 	/**
@@ -275,7 +434,21 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testDeletePostenConditionStringString() {
-		fail("Not yet implemented");
+		try {
+			testModel.registerUser("test", "test");
+			testModel.initiateDatabase("test", "test");
+			testModel.insert_Posten("TestpostenCondition", "Allgemein", "-", 12, 2, "Testposten für delete mit Condition", 3);
+			testModel.insert_Posten("TestpostenCondition", "Allgemein", "-", 12, 2, "Testposten für delete mit Condition", 3);
+			testModel.insert_Posten("TestpostenNoCondition", "Allgemein", "-", 12, 2, "Testposten für delete mit Condition", 3);
+			int prevSize = testModel.transcribe().size();
+			testModel.deletePostenCondition("Bezeichnung", "TestpostenCondition");
+			int postSize = testModel.transcribe().size();
+			assertFalse(prevSize == postSize);
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 	/**
@@ -283,7 +456,21 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testDeletePostenConditionStringInt() {
-		fail("Not yet implemented");
+		try {
+			testModel.registerUser("test", "test");
+			testModel.initiateDatabase("test", "test");
+			testModel.insert_Posten("TestpostenInt", "Allgemein", "-", 12, 2, "Testposten für delete mit Condition", 3);
+			testModel.insert_Posten("TestpostenInt", "Allgemein", "-", 12, 2, "Testposten für delete mit Condition", 3);
+			testModel.insert_Posten("TestpostenInt", "Allgemein", "-", 12, 2, "Testposten für delete mit Condition", 3);
+			int prevSize = testModel.transcribe().size();
+			testModel.deletePostenCondition("Kategorie", 1);
+			int postSize = testModel.transcribe().size();
+			assertFalse(prevSize == postSize);
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 	/**
@@ -291,7 +478,16 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testTranscribe() {
-		fail("Not yet implemented");
+		try {
+			testModel.registerUser("test", "test");
+			testModel.initiateDatabase("test", "test");
+			testModel.insert_Posten("Testposten", 1, 1, 12, 2, "Testposten für transcribe", 3);
+			assertNotNull(testModel.transcribe());
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
 	}
 
 }

@@ -34,7 +34,7 @@ import java.sql.*;
  */
 public class BudgetPlanModel
 {
-	private static Connection dbConnection; //global definiert
+    private	static Connection dbConnection; //global definiert
 	public BudgetPlanModel() { // Konstruktor
 		
 	}
@@ -115,7 +115,7 @@ public class BudgetPlanModel
             		+ "SubK_ID int NOT NULL AUTO_INCREMENT,"
             		+ "Kategorie int NOT NULL,"
             		+ "Bezeichnung varchar(50) NOT NULL," //Bezeichnung der Subkategorie, nicht unique. Nur in Kombination mit Kategorie unique
-            		+ "FOREIGN KEY (Kategorie) REFERENCES Kategorie(Kategorie_ID),"
+            		+ "FOREIGN KEY (Kategorie) REFERENCES Kategorie(Kategorie_ID) ON DELETE CASCADE,"
             		+ "UNIQUE KEY SubK_ID (Bezeichnung, Kategorie)," //Da SubK_ID automatisch inkrementiert wird muss man hier mit Bezeichnung arbeiten
             		+ "PRIMARY KEY (SubK_ID)"
             		+ ")";
@@ -442,7 +442,7 @@ public class BudgetPlanModel
     	ResultSet ergebnis;
     	ergebnis = statement.executeQuery(query + ";");
     	ergebnis.next();
-    	int subKategorieId = ergebnis.getInt("Kategorie_ID");
+    	int subKategorieId = ergebnis.getInt("SubK_ID");
     	query = "DELETE FROM Subkategorie WHERE SubK_ID = " + subKategorieId;
     	statement.executeUpdate(query + ";");
     	statement.close();
@@ -494,7 +494,7 @@ public class BudgetPlanModel
     		int kategorie_id = ergebnis.getInt("Kategorie.Kategorie_ID");
     		String subkategorie_bezeichnung = ergebnis.getString("Subkategorie.Bezeichnung");
     		int subkategorie_id = ergebnis.getInt("Subkategorie.SubK_ID");
-    		String kommentar = ergebnis.getString("Kategorie.Kommentar");
+    		String kommentar = ergebnis.getString("Posten.Kommentar");
     		alle_Posten.add(new Posten(datum, bezeichnung, produkt_id, preis, anzahl, dauerauftrag, kategorie_bezeichnung, kategorie_id, subkategorie_bezeichnung, subkategorie_id, kommentar));
     	}
     	statement.close();

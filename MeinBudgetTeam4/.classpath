@@ -7,12 +7,6 @@
 	<classpathentry kind="lib" path="lib/jfreechart-1.0.19.jar"/>
 	<classpathentry kind="lib" path="lib/h2-1.4.187.jar"/>
 	<classpathentry kind="con" path="org.eclipse.fx.ide.jdt.core.JAVAFX_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/commons-math3-3.5-javadoc.jar"/>
-	<classpathentry kind="lib" path="lib/commons-math3-3.5.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:file:/D:/Dokumente/Informatik/Java/Programmierprojekt/Liquide/MeinBudgetTeam4/lib/commons-math3-3.5-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
