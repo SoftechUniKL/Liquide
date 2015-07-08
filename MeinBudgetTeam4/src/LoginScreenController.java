@@ -5,7 +5,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
 
-
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
 import javafx.animation.Animation.Status;
@@ -86,9 +85,10 @@ public class LoginScreenController {
 /**
  * Wenn der Button zum einloggen betätigt wird, wird versucht eine Verbindung zur Datenbank aufzubauen.
  * @param event
+ * @throws IOException 
  */
 	@FXML
-	void buttonAction_signInButton(ActionEvent event) {
+	void buttonAction_signInButton(ActionEvent event) throws IOException  {
 		try {
 			task.cancel();
 			String u = usernameInput.getText();
@@ -101,12 +101,17 @@ public class LoginScreenController {
 			BudgetPlanModel model = new BudgetPlanModel();
 			model.initiateDatabase(u, p);
 			colorChangeTask.cancel();
+			Stage stage=(Stage) signInButton.getScene().getWindow();
+	        restlicheViews.Menue menü = new restlicheViews.Menue();
+	        menü.setPrimaryStage(stage);
+	        menü.startUp_menue();
 			// colorChangeTask.cancel();
 		} catch (ClassNotFoundException | SQLException | IllegalArgumentException e) {
 			colorChangeTask.cancel();
 			alertView alertV = new alertView();
 			alertV.startUp(e);
 		}
+	
 
 	}
 /**
@@ -124,7 +129,7 @@ public class LoginScreenController {
 /**
  * ChangeListener und KeyListener werden den Textfeldern hinzugefügt.
  */
-	void addListeners() {
+	void addListeners()  {
 		usernameInput.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldUser, String newUser) {
@@ -139,10 +144,15 @@ public class LoginScreenController {
 		});
 		passwordInput.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
-			public void handle(KeyEvent ke) {
+			public void handle(KeyEvent ke)  {
 				if (ke.getCode().equals(KeyCode.ENTER)) {
 					if (!signInButton.isDisabled()) {
-						buttonAction_signInButton(new ActionEvent());
+						try {
+							buttonAction_signInButton(new ActionEvent());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 
 				}

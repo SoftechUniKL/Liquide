@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EinkommenScreenController">
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Label layoutX="91.0" layoutY="46.0" text="Einzahlung" />
+            <TextField fx:id="EinzahlungInput" layoutX="91.0" layoutY="69.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <RadioButton fx:id="einmalig_rb_Einkommen" layoutX="110.0" layoutY="56.0" mnemonicParsing="false" text="einmalige Zahlung" />
+            <RadioButton fx:id="monatlich_rb_Einkommen" layoutX="110.0" layoutY="132.0" mnemonicParsing="false" text="monatliches Einkommen(falls nicht variabel)" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="übernehmen_Button_Einkommen" layoutX="76.0" layoutY="100.0" mnemonicParsing="false" onAction="#bA_übernehmen_Einkommen" prefHeight="50.0" prefWidth="150.0" text="übernehmen" />
+            <Button fx:id="zurück_Button_Einkommen" layoutX="383.0" layoutY="100.0" mnemonicParsing="false" onAction="#bA_zurück_Einkommen" prefHeight="50.0" prefWidth="150.0" text="zurück" />
+            <Label fx:id="Info_Einkommen" layoutX="286.0" layoutY="64.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

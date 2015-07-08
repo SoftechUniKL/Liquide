@@ -69,6 +69,24 @@ public static class neuerPosten   {
   		}
     	  
       }
+      public static class einkommen {
+    	  private static Stage primaryStage;
+  		public static  Stage getPrimaryStage() {
+  			return primaryStage;
+  		}
+  		public static   void setPrimaryStage(Stage primaryStage) {
+  			Menue.primaryStage = primaryStage;
+  		}
+  		public void startUp_datenverwaltung() throws IOException {
+  			Pane myPane = (Pane)FXMLLoader.load(getClass().getResource("Einkommen_Screen.fxml"));
+  			Scene myScene = new Scene(myPane);
+  			Menue.primaryStage.setScene(myScene);
+  			Menue.primaryStage.show();	
+  			
+  			
+  		}
+    	  
+      }
 
 
 	

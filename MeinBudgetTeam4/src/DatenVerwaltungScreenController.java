@@ -61,7 +61,7 @@ public class DatenVerwaltungScreenController {
 
     @FXML
     void bA_KategorieLöschen_Datenverwaltung(ActionEvent event) throws SQLException {
-    	model.deleteKategorie(KategorieInput_Datenverwaltung.getText());
+    	model.deleteKategorie(KategorieInputKl_Datenverwaltung.getValue());
     	KategorieInputKl_Datenverwaltung.getItems().clear();
     	KategorieInputSe_Datenverwaltung.getItems().clear();
     	KategorieInputSl_Datenverwaltung.getItems().clear();
@@ -82,6 +82,7 @@ public class DatenVerwaltungScreenController {
     	KategorieInputSe_Datenverwaltung.getItems().addAll(KategorieInput_Datenverwaltung.getText());
     	KategorieInputSl_Datenverwaltung.getItems().addAll(KategorieInput_Datenverwaltung.getText());
     	Info_Datenverwaltung.setText("Ihre Kategorie wurde erfolgreich erstellt");
+    	KategorieInput_Datenverwaltung.setText(null);
     	}
     	}
     	catch (IllegalArgumentException e) {
@@ -114,6 +115,8 @@ public class DatenVerwaltungScreenController {
         		model.insert_Subkategorie(subKategorieInput_Datenverwaltung.getText(), KategorieInputSe_Datenverwaltung.getValue());
             	subkategorieInputSl_Datenverwaltung.getItems().addAll(subKategorieInput_Datenverwaltung.getText());
             	Info_Datenverwaltung.setText("Ihre Subkategorie wurde erfolgreich angelegt");
+            	subKategorieInput_Datenverwaltung.setText(null);
+            	
         	}
         	}
         	catch (IllegalArgumentException e) {

@@ -9,15 +9,17 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="menue_pane_menue" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="restlicheController">
+<AnchorPane fx:id="menue_pane_menue" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MenüScreenController">
    <children>
-      <Button fx:id="neuerPosten_button_menue" layoutX="100.0" layoutY="100.0" mnemonicParsing="false" onAction="#bA_neuerPosten_menue" prefHeight="50.0" prefWidth="125.0" text="neuer Posten" />
+      <Button fx:id="neuerPosten_button_menue" layoutX="100.0" layoutY="50.0" mnemonicParsing="false" onAction="#bA_neuerPosten_menue" prefHeight="50.0" prefWidth="125.0" text="neuer Posten" />
       <Button fx:id="ausgaben_button_menue" layoutX="100.0" layoutY="175.0" mnemonicParsing="false" onAction="#bA_ausgaben_menue" prefHeight="50.0" prefWidth="125.0" text="Ausgaben" />
       <Button fx:id="budgetverwaltung_button_menue" layoutX="100.0" layoutY="325.0" mnemonicParsing="false" onAction="#bA_budgetverwaltung_menue" prefHeight="50.0" prefWidth="125.0" text="Budgetverwaltung" />
       <Button fx:id="datenverwaltung_button_menue" layoutX="100.0" layoutY="250.0" mnemonicParsing="false" onAction="#bA_datenverwaltung_menue" prefHeight="50.0" prefWidth="125.0" text="Datenverwealtung" />
-      <Button fx:id="optionen_button_menue" layoutX="100.0" layoutY="400.0" mnemonicParsing="false" onAction="#bA_optionen_menue" prefHeight="50.0" prefWidth="125.0" text="Optionen" />
+      <Button fx:id="optionen_button_menue" layoutX="100.0" layoutY="471.0" mnemonicParsing="false" onAction="#bA_optionen_menue" prefHeight="50.0" prefWidth="125.0" text="Optionen" />
       <Pane blendMode="DIFFERENCE" layoutX="262.0" layoutY="262.0" prefHeight="300.0" prefWidth="300.0" />
       <Label layoutX="368.0" layoutY="225.0" text="letzte Ausgaben:" />
       <Label layoutX="368.0" layoutY="100.0" text="aktuelles Budget" />
+      <Button fx:id="Einkommen_Button_Menü" layoutX="100.0" layoutY="117.0" mnemonicParsing="false" onAction="#bA_Einkommen_Menü" prefHeight="50.0" prefWidth="125.0" text="Einkommen" />
+      <Label fx:id="aktuellesBudgetOutput_Menü" layoutX="368.0" layoutY="125.0" />
    </children>
 </AnchorPane>
