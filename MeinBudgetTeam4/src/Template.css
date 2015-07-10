@@ -7,8 +7,13 @@ TilePane {
 
 Label {
 	-fx-font: 20px "System";
-	-fx-text-fill: rgba(40, 40, 40, 0.9);
+	-fx-text-fill: rgba(255, 255, 255, 0.8);
  	-fx-font-weight: bold; 
+}
+
+Label .text {
+	-fx-stroke: rgba(40, 40, 40, 1.0);
+	-fx-stroke-width: 0.7px;
 }
 
 #backButton {
