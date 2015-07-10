@@ -16,7 +16,7 @@
 
 <StackPane fx:id="loginStackPane" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LoginScreenController">
    <children>
-      <TilePane fx:id="loginPane" alignment="CENTER" prefHeight="650.0" prefWidth="400.0">
+      <TilePane fx:id="loginPane" alignment="CENTER"  prefHeight="650.0" prefWidth="400.0">
          <children>
             <VBox alignment="CENTER">
                <children>

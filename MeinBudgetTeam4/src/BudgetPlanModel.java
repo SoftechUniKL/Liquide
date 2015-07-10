@@ -159,10 +159,13 @@ public class BudgetPlanModel
      */
     
     public void insert_Kategorie(String Bezeichnung) throws SQLException {
-    	Statement statement = dbConnection.createStatement();
-    	String query = "INSERT INTO Kategorie(Bezeichnung) VALUES('" + Bezeichnung +"')";
-    	statement.executeUpdate(query+";");
-    	statement.close();
+    	//Statement statement = dbConnection.createStatement();
+    	PreparedStatement pStatement = dbConnection.prepareStatement("INSERT INTO Kategorie(Bezeichnung) VALUES(?)");
+    	pStatement.setString(1, Bezeichnung);
+    	pStatement.executeUpdate();
+//    	String query = "INSERT INTO Kategorie(Bezeichnung) VALUES('" + Bezeichnung +"')";
+//    	statement.executeUpdate(query+";");
+//    	statement.close();
     	insert_Subkategorie("-", Bezeichnung); //Damit automatisch die default Subkategorie erstellt wird
     	
     }
@@ -267,6 +270,46 @@ public class BudgetPlanModel
     	
     	
     }
+    
+    public void insert_Posten(String Posten_Bezeichnung, String Kategorie_Bezeichnung, String Subkategorie_Bezeichnung, double Preis, int Anzahl, String Kommentar, int Dauerauftrag, Date datum) throws SQLException { //Die Frage ist welche Daten verwendet werden
+		if (Posten_Bezeichnung.isEmpty() || Double.isNaN(Preis))
+			throw new IllegalArgumentException("Bitte geben Sie einen Posten mit dazugehörigem Preis an.");
+	Statement statement = dbConnection.createStatement();
+	int Kategorie_ID;
+	String query;
+	ResultSet ergebnis;
+	if(!(Kategorie_Bezeichnung.isEmpty())) {
+	query = "SELECT DISTINCT Kategorie_ID FROM Kategorie WHERE '" + Kategorie_Bezeichnung + "' = Bezeichnung";
+	ergebnis = statement.executeQuery(query + ";");
+	ergebnis.next();
+	Kategorie_ID = ergebnis.getInt("Kategorie_ID");
+	}
+	else
+		Kategorie_ID = 1;
+	int SubK_ID;
+	if (!(Subkategorie_Bezeichnung.isEmpty())) {
+	query = "SELECT DISTINCT SubK_ID FROM Subkategorie WHERE '" + Subkategorie_Bezeichnung + "' = Bezeichnung AND " + Kategorie_ID + " = Kategorie"; //Da Subkategoriebezeichnung nicht unique sein muss
+	ergebnis = statement.executeQuery(query + ";");
+	ergebnis.next();
+	SubK_ID = ergebnis.getInt("SubK_ID");
+	}
+	else
+		SubK_ID = 1; 
+	query = "Select DISTINCT * FROM Nutzer";
+	ergebnis = statement.executeQuery(query + ";");
+	ergebnis.next();
+	int User_ID = ergebnis.getInt("User_ID");//Sollte nur ein einziger existieren, könnte daher auch über DEFAULT 1 gelöst werden.
+	statement.close();
+	if (Anzahl <= 0)
+		Anzahl = 1;
+    statement = dbConnection.createStatement(); //Hier werden alle Daten zu Posten geschrieben
+    query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag, Datum)" //Andere Werte werden automatisch belegt.
+    		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + Kategorie_ID + ", " + SubK_ID + ", " + Anzahl + ", " + User_ID +", '" + Kommentar +"', " + Dauerauftrag +",  " + datum + ")";
+    statement.executeUpdate(query+";");
+    statement.close();
+	
+	
+}
     /**
      * Ein neuer Posten wird in die Datenbank eingefügt.
      * @param Posten_Bezeichnung Bezeichnung des einzufügenden Postens.
@@ -294,9 +337,25 @@ public class BudgetPlanModel
     query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag)" //Andere Werte werden automatisch belegt.
     		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + kategorieId + ", " + subKategorieId + ", " + Anzahl + ", " + User_ID +", '" + Kommentar +"', " + Dauerauftrag + ")";
     statement.executeUpdate(query+";");
-    statement.close();
-	
-	
+    statement.close();	
+}
+    
+    public void insert_Posten(String Posten_Bezeichnung, int kategorieId, int subKategorieId, double Preis, int Anzahl, String Kommentar, int Dauerauftrag, Date datum) throws SQLException { //Die Frage ist welche Daten verwendet werden
+		if (Posten_Bezeichnung.isEmpty() || Double.isNaN(Preis))
+			throw new IllegalArgumentException("Bitte geben Sie einen Posten mit dazugehörigem Preis an.");
+	Statement statement = dbConnection.createStatement();
+	String query = "Select DISTINCT * FROM Nutzer";
+	ResultSet ergebnis = statement.executeQuery(query + ";");
+	ergebnis.next();
+	int User_ID = ergebnis.getInt("User_ID");//Sollte nur ein einziger existieren, könnte daher auch über DEFAULT 1 gelöst werden.
+	statement.close();
+	if (Anzahl <= 0)
+		Anzahl = 1;
+    statement = dbConnection.createStatement(); //Hier werden alle Daten zu Posten geschrieben
+    query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag, Datum)" //Andere Werte werden automatisch belegt.
+    		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + kategorieId + ", " + subKategorieId + ", " + Anzahl + ", " + User_ID +", '" + Kommentar +"', " + Dauerauftrag + ", " + datum +")";
+    statement.executeUpdate(query+";");
+    statement.close();	
 }
 
     /**
@@ -440,6 +499,26 @@ public class BudgetPlanModel
     	Statement statement = dbConnection.createStatement();
     	String query ="SELECT DISTINCT SubK_ID FROM Subkategorie WHERE '" + subKategorieBezeichnung + "' = Bezeichnung AND " + kategorieId + " = Kategorie";
     	ResultSet ergebnis;
+    	ergebnis = statement.executeQuery(query + ";");
+    	ergebnis.next();
+    	int subKategorieId = ergebnis.getInt("SubK_ID");
+    	query = "DELETE FROM Subkategorie WHERE SubK_ID = " + subKategorieId;
+    	statement.executeUpdate(query + ";");
+    	statement.close();
+    }
+    /**
+     * Löscht eine bestimmte Subkategorie.
+     * @param subKategorieBezeichnung Die Bezeichnung der Subkategorie.
+     * @param kategorieBezeichnung Bezeichnung der zugehörigen Hautkategorie.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+     */
+    public void deleteSubkategorie(String subKategorieBezeichnung, String kategorieBezeichnung) throws SQLException {
+    	Statement statement = dbConnection.createStatement();
+    	String query = "SELECT DISTINCT Kategorie_ID FROM Kategorie WHERE '" + kategorieBezeichnung + "' = Bezeichnung";
+    	ResultSet ergebnis = statement.executeQuery(query + ";");
+    	ergebnis.next();
+    	int kategorieId = ergebnis.getInt("Kategorie_ID");
+    	query ="SELECT DISTINCT SubK_ID FROM Subkategorie WHERE '" + subKategorieBezeichnung + "' = Bezeichnung AND " + kategorieId + " = Kategorie";
     	ergebnis = statement.executeQuery(query + ";");
     	ergebnis.next();
     	int subKategorieId = ergebnis.getInt("SubK_ID");
