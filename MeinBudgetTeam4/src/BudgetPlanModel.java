@@ -161,7 +161,7 @@ public class BudgetPlanModel
     public void insert_Kategorie(String Bezeichnung) throws SQLException {
     	//Statement statement = dbConnection.createStatement();
     	PreparedStatement pStatement = dbConnection.prepareStatement("INSERT INTO Kategorie(Bezeichnung) VALUES(?)");
-    	pStatement.setString(1, Bezeichnung);
+    	pStatement.setString(1, Bezeichnung); //Um Injection zu verhindern
     	pStatement.executeUpdate();
 //    	String query = "INSERT INTO Kategorie(Bezeichnung) VALUES('" + Bezeichnung +"')";
 //    	statement.executeUpdate(query+";");
@@ -184,10 +184,13 @@ public class BudgetPlanModel
         	ergebnis.next();
         	int Kategorie_ID = ergebnis.getInt("Kategorie_ID");
         	statement.close();
-        	statement = dbConnection.createStatement();
-        	query = "INSERT INTO Subkategorie(Bezeichnung, Kategorie) VALUES('" + Bezeichnung_Subkategorie + "', " + Kategorie_ID + ")";
-        	statement.executeUpdate(query+";");
-        	statement.close();   	
+        	//statement = dbConnection.createStatement();
+        	PreparedStatement pStatement = dbConnection.prepareStatement("INSERT INTO Subkategorie(Bezeichnung, Kategorie) VALUES( ? , " + Kategorie_ID + ")");
+        	pStatement.setString(1, Bezeichnung_Subkategorie);
+        	pStatement.executeUpdate();
+        	//query = "INSERT INTO Subkategorie(Bezeichnung, Kategorie) VALUES('" + Bezeichnung_Subkategorie + "', " + Kategorie_ID + ")";
+        	//statement.executeUpdate(query+";");
+        	//statement.close();   	
     }
     
     /**
@@ -216,9 +219,12 @@ public class BudgetPlanModel
     	ResultSet ergebnis = statement.executeQuery(query + ";");//Es sollte sowieso nur ein einziger Nutzer existieren
     	ergebnis.next();
     	int user_id = ergebnis.getInt("User_ID");
-    	query = "UPDATE Nutzer SET Budget = " + Budget + " WHERE User_ID = " + user_id;
-    	statement.executeUpdate(query + ";");
+//    	query = "UPDATE Nutzer SET Budget = " + Budget + " WHERE User_ID = " + user_id;
+//    	statement.executeUpdate(query + ";");
     	statement.close();
+    	PreparedStatement pStatement = dbConnection.prepareStatement("UPDATE Nutzer SET Budget = ? WHERE User_ID = " + user_id);
+    	pStatement.setDouble(1, Budget); //sollte eigentlich nicht nötig sein, da double
+    	pStatement.executeUpdate();
     }
     /**
      * Ein neuer Posten wird in die Datenbank eingefügt.
@@ -262,13 +268,16 @@ public class BudgetPlanModel
     	statement.close();
     	if (Anzahl <= 0)
     		Anzahl = 1;
-        statement = dbConnection.createStatement(); //Hier werden alle Daten zu Posten geschrieben
-        query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag)" //Andere Werte werden automatisch belegt.
-        		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + Kategorie_ID + ", " + SubK_ID + ", " + Anzahl + ", " + User_ID +", '" + Kommentar +"', " + Dauerauftrag + ")";
-        statement.executeUpdate(query+";");
-        statement.close();
-    	
-    	
+//        statement = dbConnection.createStatement(); //Hier werden alle Daten zu Posten geschrieben
+//        query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag)" //Andere Werte werden automatisch belegt.
+//        		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + Kategorie_ID + ", " + SubK_ID + ", " + Anzahl + ", " + User_ID +", '" + Kommentar +"', " + Dauerauftrag + ")";
+//        statement.executeUpdate(query+";");
+//        statement.close();
+    	PreparedStatement pStatement = dbConnection.prepareStatement("INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag) "
+    			+ "VALUES( ?, " + Preis + ", " + Kategorie_ID + ", " + SubK_ID + ", " + Anzahl + ", " + User_ID +", ?, " + Dauerauftrag + ")");
+    	pStatement.setString(1, Posten_Bezeichnung);
+    	pStatement.setString(2, Kommentar);
+    	pStatement.executeUpdate();
     }
     
     public void insert_Posten(String Posten_Bezeichnung, String Kategorie_Bezeichnung, String Subkategorie_Bezeichnung, double Preis, int Anzahl, String Kommentar, int Dauerauftrag, Date datum) throws SQLException { //Die Frage ist welche Daten verwendet werden
@@ -302,11 +311,16 @@ public class BudgetPlanModel
 	statement.close();
 	if (Anzahl <= 0)
 		Anzahl = 1;
-    statement = dbConnection.createStatement(); //Hier werden alle Daten zu Posten geschrieben
-    query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag, Datum)" //Andere Werte werden automatisch belegt.
-    		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + Kategorie_ID + ", " + SubK_ID + ", " + Anzahl + ", " + User_ID +", '" + Kommentar +"', " + Dauerauftrag +",  " + datum + ")";
-    statement.executeUpdate(query+";");
-    statement.close();
+//    statement = dbConnection.createStatement(); //Hier werden alle Daten zu Posten geschrieben
+//    query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag, Datum)" //Andere Werte werden automatisch belegt.
+//    		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + Kategorie_ID + ", " + SubK_ID + ", " + Anzahl + ", " + User_ID +", '" + Kommentar +"', " + Dauerauftrag +",  " + datum + ")";
+//    statement.executeUpdate(query+";");
+//    statement.close();
+	PreparedStatement pStatement = dbConnection.prepareStatement("INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag, Datum)" //Andere Werte werden automatisch belegt.
+    		+ " VALUES(?, " + Preis + ", " + Kategorie_ID + ", " + SubK_ID + ", " + Anzahl + ", " + User_ID +", ?, " + Dauerauftrag +",  " + datum + ")");
+	pStatement.setString(1, Posten_Bezeichnung);
+	pStatement.setString(2, Kommentar);
+	pStatement.executeUpdate();
 	
 	
 }
@@ -333,11 +347,16 @@ public class BudgetPlanModel
 	statement.close();
 	if (Anzahl <= 0)
 		Anzahl = 1;
-    statement = dbConnection.createStatement(); //Hier werden alle Daten zu Posten geschrieben
-    query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag)" //Andere Werte werden automatisch belegt.
-    		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + kategorieId + ", " + subKategorieId + ", " + Anzahl + ", " + User_ID +", '" + Kommentar +"', " + Dauerauftrag + ")";
-    statement.executeUpdate(query+";");
-    statement.close();	
+//    statement = dbConnection.createStatement(); //Hier werden alle Daten zu Posten geschrieben
+//    query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag)" //Andere Werte werden automatisch belegt.
+//    		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + kategorieId + ", " + subKategorieId + ", " + Anzahl + ", " + User_ID +", '" + Kommentar +"', " + Dauerauftrag + ")";
+//    statement.executeUpdate(query+";");
+//    statement.close();
+	PreparedStatement pStatement = dbConnection.prepareStatement("INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag)" //Andere Werte werden automatisch belegt.
+    		+ " VALUES(?, " + Preis + ", " + kategorieId + ", " + subKategorieId + ", " + Anzahl + ", " + User_ID +",  ? , " + Dauerauftrag + ")");
+	pStatement.setString(1, Posten_Bezeichnung);
+	pStatement.setString(2, Kommentar);
+	pStatement.executeUpdate();
 }
     
     public void insert_Posten(String Posten_Bezeichnung, int kategorieId, int subKategorieId, double Preis, int Anzahl, String Kommentar, int Dauerauftrag, Date datum) throws SQLException { //Die Frage ist welche Daten verwendet werden
@@ -351,11 +370,16 @@ public class BudgetPlanModel
 	statement.close();
 	if (Anzahl <= 0)
 		Anzahl = 1;
-    statement = dbConnection.createStatement(); //Hier werden alle Daten zu Posten geschrieben
-    query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag, Datum)" //Andere Werte werden automatisch belegt.
-    		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + kategorieId + ", " + subKategorieId + ", " + Anzahl + ", " + User_ID +", '" + Kommentar +"', " + Dauerauftrag + ", " + datum +")";
-    statement.executeUpdate(query+";");
-    statement.close();	
+//    statement = dbConnection.createStatement(); //Hier werden alle Daten zu Posten geschrieben
+//    query = "INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag, Datum)" //Andere Werte werden automatisch belegt.
+//    		+ " VALUES('"+Posten_Bezeichnung+"', " + Preis + ", " + kategorieId + ", " + subKategorieId + ", " + Anzahl + ", " + User_ID +", '" + Kommentar +"', " + Dauerauftrag + ", " + datum +")";
+//    statement.executeUpdate(query+";");
+//    statement.close();
+    PreparedStatement pStatement = dbConnection.prepareStatement("INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag, Datum)" //Andere Werte werden automatisch belegt.
+    		+ " VALUES(?, " + Preis + ", " + kategorieId + ", " + subKategorieId + ", " + Anzahl + ", " + User_ID +", '?', " + Dauerauftrag + ", " + datum +")");
+	pStatement.setString(1, Posten_Bezeichnung);
+	pStatement.setString(2, Kommentar);
+	pStatement.executeUpdate();
 }
 
     /**
