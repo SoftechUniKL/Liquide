@@ -138,7 +138,7 @@ public class BudgetPlanModel
             		+ "Nutzer int,"
             		+ "Dauerauftrag INT DEFAULT 0," //Gibt den Turnus des Dauerauftrags in Monaten an. Normale Posten werden nicht wiederholt verrechnet.
             		+ "Kommentar varchar(50) DEFAULT ' ',"
-            		+ "FOREIGN KEY (Subkategorie) REFERENCES Subkategorie(SubK_ID),"
+            		+ "FOREIGN KEY (Subkategorie) REFERENCES Subkategorie(SubK_ID) ON DELETE RESTRICT,"
             		+ "FOREIGN KEY (Kategorie) REFERENCES Kategorie(Kategorie_ID) ON DELETE RESTRICT," //Kategorie darf erst gelöscht werden wenn es keine Artikel dieser Kategorie mehr gibt.
             		+ "FOREIGN KEY (Nutzer) REFERENCES Nutzer(User_ID) ON DELETE CASCADE," // User nicht löschbar!!!. Wenn Drop Table und neue Initialisierung
             		+ "PRIMARY KEY (ID)"
