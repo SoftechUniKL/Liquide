@@ -76,7 +76,7 @@ public class RegistrationScreenController {
 	        login.startUp();
 	        login.succesfulRegistration(u, p);
 		} catch (ClassNotFoundException | SQLException | IllegalArgumentException e) {
-			alertView alertV = new alertView();
+			AlertView alertV = new AlertView();
 			alertV.startUp(e);
 		}
     	task.cancel();

@@ -105,10 +105,10 @@ public class LoginScreenController {
 	        restlicheViews.Menue menü = new restlicheViews.Menue();
 	        menü.setPrimaryStage(stage);
 	        menü.startUp_menue();
-			// colorChangeTask.cancel();
+			 colorChangeTask.cancel();
 		} catch (ClassNotFoundException | SQLException | IllegalArgumentException e) {
 			colorChangeTask.cancel();
-			alertView alertV = new alertView();
+			AlertView alertV = new AlertView();
 			alertV.startUp(e);
 		}
 	

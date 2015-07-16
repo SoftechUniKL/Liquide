@@ -17,7 +17,7 @@ import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class LoginView implements Observer {
+public class LoginView {
 	
 	
 	private static Stage primaryStage;
@@ -81,7 +81,7 @@ public class LoginView implements Observer {
 		
 	}
 
-	
+/*	
 	public void resizeListener() {
 		
 	primaryStage.heightProperty().addListener(new ChangeListener<Number> () {
@@ -127,5 +127,6 @@ public class LoginView implements Observer {
 		// TODO Auto-generated method stub
 		
 	}
+	*/
 
 }
