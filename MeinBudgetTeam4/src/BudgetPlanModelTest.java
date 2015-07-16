@@ -5,11 +5,13 @@
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -31,17 +33,32 @@ public class BudgetPlanModelTest {
 	//private static Connection dbTestConnection;
 	
 	static BudgetPlanModel testModel = new BudgetPlanModel();
+	/**
+	 * Vordefinierte Datenbankdaten die mithilfe der H2-Konsole erstellt wurden werden kopiert.
+	 * 
+	 * Allgemein: Bleibt bestehen. Subkategorien werden gelöscht.
+	 * TestKategorie1: wird gelöscht
+	 * Testkategorie2: wird gelöscht
+	 * TestKategorie3: wird nie gelöscht. Muss immer enthalten sein.
+	 */
 	
 	@BeforeClass
 	public static void setup()
 	{
 	   try {
-		testModel.registerUser("test", "test");
+		   Path src = Paths.get("./data/dbProfile/BudgetPlanerTestDaten.mv.db");
+		   Path out = Paths.get("./data/dbProfile/BudgetPlanerDaten_test.mv.db");
+		   Files.copy(src, out, StandardCopyOption.REPLACE_EXISTING);
+		//testModel.registerUser("test", "test");
 		testModel.initiateDatabase("test", "test");
 	} catch (SQLException | ClassNotFoundException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 		fail("SQL Exception thrown");
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		fail("IOException");
 	}
 	}
 	
@@ -50,11 +67,6 @@ public class BudgetPlanModelTest {
 	{
 		testModel.DROP_ALL();
 		testModel.closeConnection();
-		System.gc();
-		Path path1 = Paths.get("./data/dbProfile/BudgetPlanerDaten_test.mv.db");
-		Path path2 = Paths.get("./data/dbProfile/BudgetPlanerDaten_test.trace.db");
-	   Files.delete(path1);
-	   Files.delete(path2);
 	}
 
 
@@ -72,7 +84,7 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testSetConnection() {
-	//	testModel.setConnection(dbTestConnection);
+	//	wird implizit getestet
 	//	assertEquals(testModel.getConnection(), dbTestConnection);
 	}
 	
@@ -89,22 +101,7 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testCloseConnection() {
-//		testModel.setConnection(dbTestConnection);
-//		try {
-//			testModel.closeConnection();
-//			testModel.setConnection(dbTestConnection);
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			fail("SQL Exception thrown");
-//		}
-//		try {
-//			assertTrue(testModel.getConnection().isClosed());
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			fail("SQL Exception thrown");
-//		}
+		//Muss nicht getestet werden, da sich im Zweifel H2 um das Connection-Management kümmert
 	}
 
 	/**
@@ -160,10 +157,13 @@ public class BudgetPlanModelTest {
 	@Test
 	public void testInsert_Kategorie() {
 		try {
-			testModel.insert_Kategorie("TestKategorie");
-			String[] testWerte = {"Allgemein", "TestKategorie"};
-			String a[] = testModel.return_Kategorien();
-			assertEquals(Arrays.toString(a), Arrays.toString(testWerte));
+			String newKateg = "Testkategorie";
+			String[] prevKateg = testModel.return_Kategorien();
+			testModel.insert_Kategorie(newKateg);
+			String[] postKateg = testModel.return_Kategorien();
+			assertTrue(prevKateg.length != postKateg.length);
+			assertFalse(newKateg.equals(postKateg));
+			assertTrue(Arrays.asList(testModel.return_Kategorien()).contains(newKateg));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -177,9 +177,10 @@ public class BudgetPlanModelTest {
 	@Test
 	public void testInsert_Subkategorie() {
 		try {
-		testModel.insert_Subkategorie("TestSubkategorie", "Allgemein");
-		String[] testWerte = {"-", "TestSubkategorie"};
-		assertEquals(Arrays.toString(testModel.return_Subkategorien("Allgemein")), Arrays.toString(testWerte));
+		String subK = "TestSubkategorie1";
+		testModel.insert_Subkategorie(subK, "Testkategorie4");
+		String [] subKArray = {subK};
+		assertEquals(Arrays.toString(testModel.return_Subkategorien("Testkategorie4")), Arrays.toString(subKArray));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -193,9 +194,11 @@ public class BudgetPlanModelTest {
 	@Test
 	public void testUpdate_User() {
 		try {
-		assertEquals(0.0, testModel.getBudget(),0.0); //Da Budget auf keiner Kalkulation basiert ist Epsilon 0.0
-		testModel.update_User(117.117);
-		assertEquals(117.117, testModel.getBudget(), 0.0);
+			double prevBudget = testModel.getBudget();
+			double postBudget = 117.92;
+			testModel.update_User(postBudget);
+			assertFalse(prevBudget == postBudget);
+			assertEquals(postBudget, testModel.getBudget(), 0.00); //Da Budget auf keiner Kalkulation basiert ist Delta 0.0
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -239,7 +242,8 @@ public class BudgetPlanModelTest {
 	public void testReturn_Kategorien() {
 		try {
 		assertNotNull(testModel.return_Kategorien());
-		assertEquals(Arrays.toString(testModel.return_Kategorien()), "[Allgemein]");
+		assertTrue(Arrays.asList(testModel.return_Kategorien()).contains("TestKategorie3"));
+		//assertEquals(Arrays.toString(testModel.return_Kategorien()), "[Allgemein]");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -254,7 +258,7 @@ public class BudgetPlanModelTest {
 	public void testReturn_Subkategorien() {
 		try {
 			assertNotNull(testModel.return_Subkategorien("Allgemein"));
-			assertEquals(Arrays.toString(testModel.return_Subkategorien("Allgemein")), "[-]");
+			assertTrue(Arrays.asList(testModel.return_Subkategorien("Allgemein")).contains("-"));
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -316,12 +320,12 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testDeleteKategorieInt() throws SQLException {
-			testModel.insert_Kategorie("KategorieLöschen");
 			String[] prevKategorie = testModel.return_Kategorien();
-			testModel.deleteKategorie(2); //Wegen Auto-Increment ist bei 1 die Kategorie "Allgemein"
+			testModel.deleteKategorie(2); //TestKategorie1
 			String[] postKategorie = testModel.return_Kategorien();
 			assertFalse(Arrays.toString(postKategorie).equals(Arrays.toString(prevKategorie)));
-			assertTrue(Arrays.toString(postKategorie).equals("[Allgemein]"));			
+			assertFalse(prevKategorie.length == postKategorie.length);
+			assertTrue(Arrays.asList(testModel.return_Kategorien()).contains("TestKategorie3"));			
 	}
 
 	/**
@@ -330,11 +334,11 @@ public class BudgetPlanModelTest {
 	@Test
 	public void testDeleteKategorieString() {
 		try {
-			testModel.insert_Kategorie("TestKategorie");
 			String[] prevKategorie = testModel.return_Kategorien();
-			testModel.deleteKategorie("TestKategorie");
+			testModel.deleteKategorie("TestKategorie2");
 			String[] postKategorie = testModel.return_Kategorien();
-			assertTrue(Arrays.toString(postKategorie).equals("[Allgemein]"));
+			assertTrue(Arrays.asList(testModel.return_Kategorien()).contains("TestKategorie3"));
+			assertFalse(prevKategorie.length == postKategorie.length);
 			assertFalse(Arrays.toString(prevKategorie).equals(Arrays.toString(postKategorie)));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -349,12 +353,12 @@ public class BudgetPlanModelTest {
 	@Test
 	public void testDeleteSubkategorieInt() {
 		try {
-			testModel.insert_Subkategorie("SubkategorieLöschen", "Allgemein");
 			String[] prevSubkategorie = testModel.return_Subkategorien("Allgemein");
-			testModel.deleteSubkategorie(2);
+			testModel.deleteSubkategorie(15); //TestSubkategorie1 der Kategorie Allgemein
 			String[] postSubkategorie = testModel.return_Subkategorien("Allgemein");
-		//	assertTrue(Arrays.toString(postSubkategorie).equals("[-]")); //Problem: In anderem Test wurde bereits eine Subkategorie eingefügt, weshalb dieses assert nicht aufgeht
+			assertFalse(prevSubkategorie.length == postSubkategorie.length);
 			assertFalse(Arrays.toString(prevSubkategorie).equals(Arrays.toString(postSubkategorie)));
+			assertTrue(Arrays.asList(testModel.return_Subkategorien("Allgemein")).contains("-"));
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -369,11 +373,12 @@ public class BudgetPlanModelTest {
 	@Test
 	public void testDeleteSubkategorieStringInt() {
 		try {
-			testModel.insert_Subkategorie("SubkategorieLöschenInt", "Allgemein");
 			String[] prevSubkategorie = testModel.return_Subkategorien("Allgemein");
-			testModel.deleteSubkategorie("SubkategorieLöschenInt", 1);
+			testModel.deleteSubkategorie("TestSubkategorie2", 1);
 			String[] postSubkategorie = testModel.return_Subkategorien("Allgemein");
+			assertFalse(prevSubkategorie.length == postSubkategorie.length);
 			assertFalse(Arrays.toString(prevSubkategorie).equals(Arrays.toString(postSubkategorie)));
+			assertTrue(Arrays.asList(testModel.return_Subkategorien("Allgemein")).contains("-"));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
