@@ -2,6 +2,9 @@
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
@@ -41,7 +44,7 @@ public class BudgetPlanModel
 	public  Connection getConnection() {
 		return BudgetPlanModel.dbConnection;
 	}
-	public void setConnection(Connection dbConnection) {
+	private void setConnection(Connection dbConnection) {
 		BudgetPlanModel.dbConnection = dbConnection;
 	}
 	public void closeConnection() throws SQLException {
@@ -56,8 +59,9 @@ public class BudgetPlanModel
  * @throws ClassNotFoundException Wird geworfen, wenn Datenbankklasse nicht gefunden wird. 
  */
 	public void registerUser(String username, String password) throws SQLException, ClassNotFoundException  {
-//		PasswordHash hasher = new PasswordHash();
-//		String hashedPassword = hasher.createHash(password); //Passwort wird von H2 bei anlegen der Datenbank mit salt gehasht. Eigenes Hashing ist damit obsolet.
+		Path src = Paths.get("./data/dbProfile/BudgetPlanerDaten_" +username+".mv.db");
+		if(Files.exists(src)) 
+			throw new IllegalArgumentException("Eine Datenbank zu diesem Benutzer existiert bereits. Wählen Sie bitte einen anderen Nutzernamen.");
 		Class.forName("org.h2.Driver");
 		Connection dbConnection = DriverManager.getConnection("jdbc:h2:file:./data/dbProfile/BudgetPlanerDaten"+"_"+username, username, password);
 		password = null; //Vorsichtshalber überschreiben der Variable
