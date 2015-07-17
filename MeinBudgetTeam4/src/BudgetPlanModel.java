@@ -284,7 +284,7 @@ public class BudgetPlanModel
     	pStatement.executeUpdate();
     }
     
-    public void insert_Posten(String Posten_Bezeichnung, String Kategorie_Bezeichnung, String Subkategorie_Bezeichnung, double Preis, int Anzahl, String Kommentar, int Dauerauftrag, Date datum) throws SQLException { //Die Frage ist welche Daten verwendet werden
+    public void insert_Posten(String Posten_Bezeichnung, String Kategorie_Bezeichnung, String Subkategorie_Bezeichnung, double Preis, int Anzahl, String Kommentar, int Dauerauftrag, java.sql.Timestamp datum) throws SQLException { //Die Frage ist welche Daten verwendet werden
 		if (Posten_Bezeichnung.isEmpty() || Double.isNaN(Preis))
 			throw new IllegalArgumentException("Bitte geben Sie einen Posten mit dazugehörigem Preis an.");
 	Statement statement = dbConnection.createStatement();
@@ -321,9 +321,10 @@ public class BudgetPlanModel
 //    statement.executeUpdate(query+";");
 //    statement.close();
 	PreparedStatement pStatement = dbConnection.prepareStatement("INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag, Datum)" //Andere Werte werden automatisch belegt.
-    		+ " VALUES(?, " + Preis + ", " + Kategorie_ID + ", " + SubK_ID + ", " + Anzahl + ", " + User_ID +", ?, " + Dauerauftrag +",  " + datum + ")");
+    		+ " VALUES(?, " + Preis + ", " + Kategorie_ID + ", " + SubK_ID + ", " + Anzahl + ", " + User_ID +", ?, " + Dauerauftrag +",  " + " ?" + ")");
 	pStatement.setString(1, Posten_Bezeichnung);
 	pStatement.setString(2, Kommentar);
+	pStatement.setTimestamp(3, datum);
 	pStatement.executeUpdate();
 	
 	
@@ -363,7 +364,7 @@ public class BudgetPlanModel
 	pStatement.executeUpdate();
 }
     
-    public void insert_Posten(String Posten_Bezeichnung, int kategorieId, int subKategorieId, double Preis, int Anzahl, String Kommentar, int Dauerauftrag, Date datum) throws SQLException { //Die Frage ist welche Daten verwendet werden
+    public void insert_Posten(String Posten_Bezeichnung, int kategorieId, int subKategorieId, double Preis, int Anzahl, String Kommentar, int Dauerauftrag, java.sql.Timestamp datum) throws SQLException { //Die Frage ist welche Daten verwendet werden
 		if (Posten_Bezeichnung.isEmpty() || Double.isNaN(Preis))
 			throw new IllegalArgumentException("Bitte geben Sie einen Posten mit dazugehörigem Preis an.");
 	Statement statement = dbConnection.createStatement();
@@ -380,9 +381,10 @@ public class BudgetPlanModel
 //    statement.executeUpdate(query+";");
 //    statement.close();
     PreparedStatement pStatement = dbConnection.prepareStatement("INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag, Datum)" //Andere Werte werden automatisch belegt.
-    		+ " VALUES(?, " + Preis + ", " + kategorieId + ", " + subKategorieId + ", " + Anzahl + ", " + User_ID +", '?', " + Dauerauftrag + ", " + datum +")");
+    		+ " VALUES(?, " + Preis + ", " + kategorieId + ", " + subKategorieId + ", " + Anzahl + ", " + User_ID +", '?', " + Dauerauftrag + ", " + " ?" +")");
 	pStatement.setString(1, Posten_Bezeichnung);
 	pStatement.setString(2, Kommentar);
+	pStatement.setTimestamp(3, datum);
 	pStatement.executeUpdate();
 }
 

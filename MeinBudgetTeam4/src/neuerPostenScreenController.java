@@ -106,7 +106,7 @@ public class neuerPostenScreenController {
 		    Integer d = 0;
 		   
 		    Date heute = new Date();
-		    java.sql.Date sqlheute = new java.sql.Date(heute.getTime());
+		    java.sql.Timestamp sqlheute = new java.sql.Timestamp(heute.getTime());
 		    
 	
 			
