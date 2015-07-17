@@ -62,9 +62,11 @@ public class DatenVerwaltungScreenController {
      * notwendig, da Comboboxen sich nicht anders dynamisch initialisieren ließen
      */
     public void initialize() throws SQLException{
-    	KategorieInputKl_Datenverwaltung.getItems().addAll(model.return_Kategorien());
-    	KategorieInputSe_Datenverwaltung.getItems().addAll(model.return_Kategorien());
-    	KategorieInputSl_Datenverwaltung.getItems().addAll(model.return_Kategorien());
+    	String [] s = model.return_Kategorien();
+    	Arrays.sort(s);
+    	KategorieInputKl_Datenverwaltung.getItems().addAll(s);
+    	KategorieInputSe_Datenverwaltung.getItems().addAll(s);
+    	KategorieInputSl_Datenverwaltung.getItems().addAll(s);
     	KategorieErstellen_button_Datenverwaltung.setDisable(true);
     	KategorieLöschen_button_Datenverwaltung.setDisable(true);
     	subKategorieInput_Datenverwaltung.setDisable(true);
@@ -99,9 +101,12 @@ public class DatenVerwaltungScreenController {
         
         timeline.play();
     }
-    
+    /* Button für Kategorie löschen */
     @FXML
     void bA_KategorieLöschen_Datenverwaltung(ActionEvent event) throws SQLException {
+    	String [] s =  model.return_Subkategorien(KategorieInputKl_Datenverwaltung.getValue());
+    	for(int i= 0; i< model.return_Subkategorien(KategorieInputKl_Datenverwaltung.getValue()).length ;i++)
+    		model.deleteSubkategorie(s [i] ,KategorieInputKl_Datenverwaltung.getValue());
     	model.deleteKategorie(KategorieInputKl_Datenverwaltung.getValue());
     	KategorieInputKl_Datenverwaltung.getItems().clear();
     	KategorieInputSe_Datenverwaltung.getItems().clear();
@@ -123,13 +128,14 @@ public class DatenVerwaltungScreenController {
     		throw new IllegalArgumentException ();
     	else{
     	model.insert_Kategorie(KategorieInput_Datenverwaltung.getText());
-    	KategorieInputKl_Datenverwaltung.getItems().addAll(KategorieInput_Datenverwaltung.getText());
-    	KategorieInputSe_Datenverwaltung.getItems().addAll(KategorieInput_Datenverwaltung.getText());
-    	KategorieInputSl_Datenverwaltung.getItems().addAll(KategorieInput_Datenverwaltung.getText());
+    	KategorieInputKl_Datenverwaltung.getItems().clear();
+    	KategorieInputSe_Datenverwaltung.getItems().clear();
+    	KategorieInputSl_Datenverwaltung.getItems().clear();
+    	initialize();
     	Info_Datenverwaltung.setTextFill(Color.web("green"));
     	Info_Datenverwaltung.setText("Ihre Kategorie wurde erfolgreich erstellt");
     	reset();
-    	init();
+    	
     	
     	}
     	}
@@ -163,7 +169,10 @@ public class DatenVerwaltungScreenController {
         		throw new IllegalArgumentException ();
         	else{
         		model.insert_Subkategorie(subKategorieInput_Datenverwaltung.getText(), KategorieInputSe_Datenverwaltung.getValue());
-            	subkategorieInputSl_Datenverwaltung.getItems().addAll(subKategorieInput_Datenverwaltung.getText());
+            	subkategorieInputSl_Datenverwaltung.getItems().clear();
+            	String [] s = model.return_Subkategorien(KategorieInputSl_Datenverwaltung.getValue());
+            	Arrays.sort(s);
+            	subkategorieInputSl_Datenverwaltung.getItems().addAll(s);
             	Info_Datenverwaltung.setTextFill(Color.web("green"));
             	Info_Datenverwaltung.setText("Ihre Subkategorie wurde erfolgreich angelegt");
             	reset();
@@ -181,9 +190,13 @@ public class DatenVerwaltungScreenController {
 
     @FXML
     void bA_subKategorieLöschen_Datenverwaltung(ActionEvent event) throws SQLException {
-    	model.deleteSubkategorie(subkategorieInputSl_Datenverwaltung.getValue(), 5);
+    	model.deleteSubkategorie(subkategorieInputSl_Datenverwaltung.getValue(),KategorieInputSl_Datenverwaltung.getValue() );
     	subkategorieInputSl_Datenverwaltung.getItems().clear();
     	subkategorieInputSl_Datenverwaltung.getItems().addAll(model.return_Subkategorien(KategorieInputSl_Datenverwaltung.getValue()));
+    	init();
+    	Info_Datenverwaltung.setTextFill(Color.web("green"));
+    	Info_Datenverwaltung.setText("Ihre Subkategorie wurde erfolgreich gelöscht");
+    	reset();
         
     }
 
@@ -204,7 +217,9 @@ public class DatenVerwaltungScreenController {
     void cbA_KategorieInputSl_Datenverwaltung(ActionEvent event) throws SQLException {
     	subkategorieInputSl_Datenverwaltung.getItems().clear();
     	subkategorieInputSl_Datenverwaltung.setDisable(false);
-    	subkategorieInputSl_Datenverwaltung.getItems().addAll(model.return_Subkategorien(KategorieInputSl_Datenverwaltung.getValue()));
+    	String [] s = model.return_Subkategorien(KategorieInputSl_Datenverwaltung.getValue());
+    	Arrays.sort(s);
+    	subkategorieInputSl_Datenverwaltung.getItems().addAll(s);
 
     }
 

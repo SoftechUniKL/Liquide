@@ -24,5 +24,10 @@
       <Label layoutX="350.0" layoutY="325.0" text="Kommentar (optional)" />
       <TextArea fx:id="kommentarInput_neuerPosten" layoutX="350.0" layoutY="350.0" prefHeight="50.0" prefWidth="150.0" />
       <Label fx:id="übernehmen_label_neuerPosten" layoutX="200.0" layoutY="450.0" prefWidth="200.0" />
+      <Label fx:id="kategorie_labelred_neuerPosten" layoutX="72.0" layoutY="129.0" prefWidth="20.0" />
+      <Label fx:id="subkategorie_labelred_neuerPosten" layoutX="68.0" layoutY="204.0" prefWidth="20.0" />
+      <Label fx:id="posten_labelred_neuerPosten" layoutX="315.0" layoutY="129.0" prefWidth="20.0" />
+      <Label fx:id="preis_labelred_neuerPosten" layoutX="315.0" layoutY="279.0" prefWidth="20.0" />
+      <Label fx:id="anzahl_labelred_neuerPosten" layoutX="315.0" layoutY="204.0" prefWidth="20.0" />
    </children>
 </AnchorPane>

@@ -50,7 +50,11 @@ public class MenüScreenController {
     }
 
     @FXML
-    void bA_ausgaben_menue(ActionEvent event) {
+    void bA_ausgaben_menue(ActionEvent event) throws IOException {
+    	Stage stage=(Stage)ausgaben_button_menue.getScene().getWindow();
+        restlicheViews.ausgaben ag = new restlicheViews.ausgaben();
+        ag.setPrimaryStage(stage);
+        ag.startUp_ausgaben();
 
     }
 

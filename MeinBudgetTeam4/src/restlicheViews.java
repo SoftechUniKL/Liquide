@@ -18,6 +18,25 @@ import javafx.stage.Stage;
 
 
 public class restlicheViews {
+	// View für Ausgaben
+	public static class ausgaben {
+  	  private static Stage primaryStage;
+		public static  Stage getPrimaryStage() {
+			return primaryStage;
+		}
+		public static  void setPrimaryStage(Stage primaryStage) {
+			Menue.primaryStage = primaryStage;
+		}
+		public void startUp_ausgaben() throws IOException {
+			Pane myPane = (Pane)FXMLLoader.load(getClass().getResource("Ausgaben_Screen.fxml"));
+			Scene myScene = new Scene(myPane);
+			Menue.primaryStage.setScene(myScene);
+			Menue.primaryStage.show();	
+			
+			
+		}
+	}
+	
 	// ab hier View für Menü
 	public static class Menue {
 		
@@ -124,4 +143,4 @@ public static class neuerPosten   {
 	
 	
 
-}
+	}
