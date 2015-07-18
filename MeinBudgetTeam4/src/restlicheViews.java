@@ -55,7 +55,7 @@ public class restlicheViews {
 			Menue.primaryStage.setScene(myScene);
 			Menue.primaryStage.show();
 			
-///////////////Dummydaten//////////////
+
 			Map<String, Double> map = ConvertDataForChart.getLatest(new BudgetPlanModel().transcribe());
 			Barchart chart = new Barchart("Ausgaben", "Wert", "Datum", map);
 			
