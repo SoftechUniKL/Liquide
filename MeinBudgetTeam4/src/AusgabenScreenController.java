@@ -61,15 +61,21 @@ public class AusgabenScreenController {
 
     @FXML
     void bA_visualisieren_ausgaben(ActionEvent event) throws SQLException {
-
-    	Map<String, Double> map = ConvertDataForChart.convertData(new BudgetPlanModel().transcribe());
+    	if(datumBeginnInput_dp_ausgaben.getValue() == null || datumEndeInput_dp_ausgaben.getValue() == null) {
+    		return;
+    	}
+    	Map<String, Double> map = ConvertDataForChart.getFromTo(new BudgetPlanModel().transcribe(), datumBeginnInput_dp_ausgaben.getValue(), datumEndeInput_dp_ausgaben.getValue());
     	Chart chart;
+    	
+    	//Radiobutton 1 gewählt, säule
     	if(Group1.getSelectedToggle().toString().contains("rb1")) {
         	chart = new Barchart("Ausgaben", "Wert", "Datum", map);
     	}
+    	//Radiobutton 2 gewähl, torte
     	else if(Group1.getSelectedToggle().toString().contains("rb2")) {
         	chart = new Piechart("Ausgaben", map);
     	}
+    	//Keiner oder 3. Radiobutton, linie
     	else {
         	chart = new Linechart("Ausgaben", "Wert", "Datum", map);
     	}
