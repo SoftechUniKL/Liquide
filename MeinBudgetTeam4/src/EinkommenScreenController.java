@@ -46,7 +46,7 @@ public class EinkommenScreenController {
     }
 
     @FXML
-    void bA_zurück_Einkommen(ActionEvent event) throws IOException {
+    void bA_zurück_Einkommen(ActionEvent event) throws IOException, SQLException {
     	Stage stage=(Stage) zurück_Button_Einkommen.getScene().getWindow();
         restlicheViews.Menue menü = new restlicheViews.Menue();
         menü.setPrimaryStage(stage);

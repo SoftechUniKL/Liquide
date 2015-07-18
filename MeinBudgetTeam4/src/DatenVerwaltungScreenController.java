@@ -231,7 +231,7 @@ public class DatenVerwaltungScreenController {
     }
 
     @FXML
-    void bA_zurück_Datenverwaltung(ActionEvent event) throws IOException {
+    void bA_zurück_Datenverwaltung(ActionEvent event) throws IOException, SQLException {
     	Stage stage=(Stage) zurück_button_Datenverwaltung.getScene().getWindow();
         restlicheViews.Menue menü = new restlicheViews.Menue();
         menü.setPrimaryStage(stage);

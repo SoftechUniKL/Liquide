@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -23,11 +24,29 @@
       <ComboBox fx:id="dauerauftragInput_neuerposten" layoutX="100.0" layoutY="275.0" prefWidth="150.0" />
       <Label layoutX="350.0" layoutY="325.0" text="Kommentar (optional)" />
       <TextArea fx:id="kommentarInput_neuerPosten" layoutX="350.0" layoutY="350.0" prefHeight="50.0" prefWidth="150.0" />
-      <Label fx:id="übernehmen_label_neuerPosten" layoutX="200.0" layoutY="450.0" prefWidth="200.0" />
-      <Label fx:id="kategorie_labelred_neuerPosten" layoutX="72.0" layoutY="129.0" prefWidth="20.0" />
-      <Label fx:id="subkategorie_labelred_neuerPosten" layoutX="68.0" layoutY="204.0" prefWidth="20.0" />
-      <Label fx:id="posten_labelred_neuerPosten" layoutX="315.0" layoutY="129.0" prefWidth="20.0" />
-      <Label fx:id="preis_labelred_neuerPosten" layoutX="315.0" layoutY="279.0" prefWidth="20.0" />
-      <Label fx:id="anzahl_labelred_neuerPosten" layoutX="315.0" layoutY="204.0" prefWidth="20.0" />
+      <Label fx:id="übernehmen_label_neuerPosten" alignment="CENTER" layoutX="100.0" layoutY="458.0" prefWidth="400.0">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="kategorie_labelred_neuerPosten" layoutX="90.0" layoutY="124.0" prefWidth="10.0" textFill="RED">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="subkategorie_labelred_neuerPosten" layoutX="90.0" layoutY="199.0" prefWidth="10.0" textFill="RED">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="posten_labelred_neuerPosten" layoutX="340.0" layoutY="124.0" prefWidth="10.0" textFill="RED">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="preis_labelred_neuerPosten" layoutX="340.0" layoutY="274.0" prefWidth="10.0" textFill="RED">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label fx:id="anzahl_labelred_neuerPosten" layoutX="340.0" layoutY="199.0" prefWidth="10.0" textFill="RED">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
    </children>
 </AnchorPane>
