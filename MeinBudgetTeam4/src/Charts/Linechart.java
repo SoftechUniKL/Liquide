@@ -26,7 +26,7 @@ public class Linechart implements Chart{
 		
 		//Chart aus Daten erzeugen
 		JFreeChart chart = ChartFactory.createLineChart(title, categoryAxis, valueAxis, dataset);
-		
+		chart.removeLegend();
 		//Panel zugänglich machen
 		this.panel = new ChartPanel(chart);
 	}

@@ -1,5 +1,6 @@
 import java.awt.Dimension;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,27 +49,20 @@ public class restlicheViews {
 		public static   void setPrimaryStage(Stage primaryStage) {
 			Menue.primaryStage = primaryStage;
 		}
-		public void startUp_menue() throws IOException {
+		public void startUp_menue() throws IOException, SQLException {
 			Pane myPane = (Pane)FXMLLoader.load(getClass().getResource("Menue_Screen.fxml"));
 			Scene myScene = new Scene(myPane);
 			Menue.primaryStage.setScene(myScene);
 			Menue.primaryStage.show();
 			
 ///////////////Dummydaten//////////////
-			Map<String, Double> map = new HashMap<String, Double>();
-			map.put("Jan", 12.3);
-			map.put("Aug", 3.3);
-			map.put("Jul", 4.3);
-			map.put("Jun", 2.3);
-			map.put("Mai", 5.3);
-			map.put("Apr", 8.3);
-			////////////////////////////////
-			Barchart chart = new Barchart("Ausgaben", "Wert", "Monat", map);
+			Map<String, Double> map = ConvertDataForChart.getLatest(new BudgetPlanModel().transcribe());
+			Barchart chart = new Barchart("Ausgaben", "Wert", "Datum", map);
 			
 			JPanel panel = chart.getChartPanel();
-			panel.setPreferredSize(new Dimension(300, 150));
+			panel.setPreferredSize(new Dimension(350, 150));
 			SwingNode node = new SwingNode();
-			node.setLayoutX(300);
+			node.setLayoutX(250);
 			node.setLayoutY(250);
 			node.setContent(panel);
 			myPane.getChildren().add(node);

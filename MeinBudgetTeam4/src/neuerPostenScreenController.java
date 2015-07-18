@@ -186,13 +186,13 @@ public class neuerPostenScreenController {
 
 	@FXML
 	void bA_zurück_neuerPosten(ActionEvent event) throws IOException, SQLException {
-		ArrayList  a = model.transcribe();
+		/*ArrayList  a = model.transcribe();
 		for(int i=0 ; i<a.size(); i++)
-			System.out.println(a.get(0));
-		/*Stage stage = (Stage) zurück_neuerPosten_button.getScene().getWindow();
+			System.out.println(a.get(0));*/
+		Stage stage = (Stage) zurück_neuerPosten_button.getScene().getWindow();
 		restlicheViews.Menue menü = new restlicheViews.Menue();
 		menü.setPrimaryStage(stage);
-		menü.startUp_menue();*/
+		menü.startUp_menue();
 
 	}
 

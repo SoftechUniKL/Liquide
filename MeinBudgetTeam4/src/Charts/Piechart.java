@@ -24,7 +24,7 @@ public class Piechart implements Chart{
 		
 		//Chart aus Daten erzeugen
 		JFreeChart chart = ChartFactory.createPieChart(title, dataset);
-		
+		chart.removeLegend();
 		//Panel zugänglich machen
 		this.panel = new ChartPanel(chart);
 	}

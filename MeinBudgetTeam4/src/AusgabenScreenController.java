@@ -51,7 +51,7 @@ public class AusgabenScreenController {
     private Button visualisieren_button_ausgaben;
 
     @FXML
-    private Button zurück_button_ausgaben;
+    private Button zurÃ¼ck_button_ausgaben;
 
     @FXML
     private RadioButton rb2_rb_ausgaben;
@@ -74,7 +74,6 @@ public class AusgabenScreenController {
         	chart = new Linechart("Ausgaben", "Wert", "Datum", map);
     	}
 		
-		
 		JPanel panel = chart.getChartPanel();
 		panel.setPreferredSize(new Dimension(350, 150));
 		SwingNode node = new SwingNode();
@@ -85,11 +84,11 @@ public class AusgabenScreenController {
     }
 
     @FXML
-    void bA_zurück_ausgaben(ActionEvent event) throws IOException {
-    	Stage stage=(Stage) zurück_button_ausgaben.getScene().getWindow();
-        restlicheViews.Menue menü = new restlicheViews.Menue();
-        menü.setPrimaryStage(stage);
-        menü.startUp_menue();
+    void bA_zurÃ¼ck_ausgaben(ActionEvent event) throws IOException {
+    	Stage stage=(Stage) zurÃ¼ck_button_ausgaben.getScene().getWindow();
+        restlicheViews.Menue menÃ¼ = new restlicheViews.Menue();
+        menÃ¼.setPrimaryStage(stage);
+        menÃ¼.startUp_menue();
     }
 
 }
