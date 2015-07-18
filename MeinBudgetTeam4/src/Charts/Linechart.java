@@ -2,28 +2,30 @@ package Charts;
 
 import java.util.Map;
 import org.jfree.chart.*;
-import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 
-public class Piechart implements Chart{
+public class Linechart implements Chart{
 
 	private ChartPanel panel;
 	
 	/**
 	 * 
 	 * @param title Main title of the Chart
+	 * @param valueAxis Value Axis title
+	 * @param categoryAxis Category Axis title
 	 * @param data HashMap<String, Double> containing the data
 	 */
-	public Piechart(String title, Map<String, Double> data) {
+	public Linechart(String title, String valueAxis, String categoryAxis, Map<String, Double> data) {
 		//Leeres Dataset erzeugen
-		DefaultPieDataset dataset = new DefaultPieDataset();
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 		//Über die Daten iterieren und jedes Element zum dataset hinzufügen
 		for(Map.Entry<String, Double> item : data.entrySet()) {
-			dataset.setValue(item.getKey(), item.getValue());
+			dataset.addValue(item.getValue(), title, item.getKey());
 		}
 		
 		//Chart aus Daten erzeugen
-		JFreeChart chart = ChartFactory.createPieChart(title, dataset);
+		JFreeChart chart = ChartFactory.createLineChart(title, categoryAxis, valueAxis, dataset);
 		
 		//Panel zugänglich machen
 		this.panel = new ChartPanel(chart);

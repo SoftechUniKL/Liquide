@@ -1,20 +1,10 @@
 package Charts;
 
-import org.jfree.chart.*;
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
+import org.jfree.chart.*;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.chart.ChartFactory;
 
-public class Barchart{
+public class Barchart implements Chart{
 
 	private ChartPanel panel;
 	
@@ -28,13 +18,10 @@ public class Barchart{
 	public Barchart(String title, String valueAxis, String categoryAxis, Map<String, Double> data) {
 		//Leeres Dataset erzeugen
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-		//Über die Daten iterieren
-		Iterator it = data.entrySet().iterator();
-		while(it.hasNext()) {
-			Map.Entry pair = (Map.Entry) it.next();
-			//Wertepaar dem Dataset hinzufügen
-			dataset.addValue((Number)pair.getValue(), title, (String)pair.getKey());
+		
+		//Über die Daten iterieren und jedes Element zum dataset hinzufügen
+		for(Map.Entry<String, Double> item : data.entrySet()) {
+			dataset.addValue(item.getValue(), title, item.getKey());
 		}
 		
 		//Chart aus Daten erzeugen
