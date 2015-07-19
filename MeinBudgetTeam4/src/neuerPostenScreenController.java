@@ -16,12 +16,14 @@ import javafx.event.*;
 import java.io.IOException;
 import java.sql.*;
 import java.text.DateFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class neuerPostenScreenController {
 	BudgetPlanModel model = new BudgetPlanModel();
@@ -129,7 +131,7 @@ public class neuerPostenScreenController {
 			String a = anzahlInput_neuerPosten.getText();
 			Integer anzahl;
 			String pr = preisInput_neuerPosten.getText();
-			Double preis;
+			double preis;
 			String kat = kategoerieInput_neuerPosten.getValue();
 			String s = subkategorieInput_neuerPosten.getValue();
 			String kom = kommentarInput_neuerPosten.getText();
@@ -190,7 +192,11 @@ public class neuerPostenScreenController {
 				
 				/* prüft ob der Preis eine double Zahl ist*/
 				try {
-					preis = Double.parseDouble(pr);
+					//preis = Double.parseDouble(pr);
+					NumberFormat nf_in = NumberFormat.getNumberInstance(Locale.GERMANY); //Grüße von Shahin
+					preis = nf_in.parse(pr).doubleValue();
+					System.out.println(preis);
+					
 				}
 				catch (NumberFormatException e) {
 					posten_labelred_neuerPosten.setText("");
@@ -199,6 +205,15 @@ public class neuerPostenScreenController {
 					subkategorie_labelred_neuerPosten.setText("");
 					übernehmen_label_neuerPosten.setTextFill(Color.web("red"));
 					übernehmen_label_neuerPosten.setText("Die Preisangabe ist falsch");
+					anzahl_labelred_neuerPosten.setText("*");
+					return;
+				} catch (ParseException e) {
+					posten_labelred_neuerPosten.setText("");
+					anzahl_labelred_neuerPosten.setText("");
+					kategorie_labelred_neuerPosten.setText("");
+					subkategorie_labelred_neuerPosten.setText("");
+					übernehmen_label_neuerPosten.setTextFill(Color.web("red"));
+					übernehmen_label_neuerPosten.setText("Bitte nutzen sie Kommata oder Punkte für Dezimalzahlen");
 					anzahl_labelred_neuerPosten.setText("*");
 					return;
 				}
