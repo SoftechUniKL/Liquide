@@ -195,7 +195,6 @@ public class neuerPostenScreenController {
 					//preis = Double.parseDouble(pr);
 					NumberFormat nf_in = NumberFormat.getNumberInstance(Locale.GERMANY); //Grüße von Shahin
 					preis = nf_in.parse(pr).doubleValue();
-					System.out.println(preis);
 					
 				}
 				catch (NumberFormatException e) {
