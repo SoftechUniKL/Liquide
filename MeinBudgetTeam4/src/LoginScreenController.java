@@ -1,9 +1,12 @@
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
+
+import javafx.scene.media.AudioClip;
 
 import javafx.animation.RotateTransition;
 import javafx.animation.TranslateTransition;
@@ -26,6 +29,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
@@ -63,6 +68,9 @@ public class LoginScreenController {
 
 	@FXML
 	private ProgressIndicator progressIndicator;
+	
+	 @FXML
+	 private AnchorPane anchorPaneId;
 
 	private Task<Void> task;
 
@@ -94,7 +102,7 @@ public class LoginScreenController {
 			String u = usernameInput.getText();
 			String p = passwordInput.getText();
 			if (u.isEmpty() || p.isEmpty()) {
-				throw new IllegalArgumentException("Bitt füllen Sie beide Felder aus.");
+				throw new IllegalArgumentException("Bitte füllen Sie beide Felder aus.");
 			}
 			// TODO Die beiden Folgenden Prozesse parallel threaden
 			colorChange();
@@ -158,6 +166,36 @@ public class LoginScreenController {
 				}
 
 			}
+		});
+		anchorPaneId.setOnMouseClicked(new EventHandler<MouseEvent> () {
+			@Override
+			public void handle(MouseEvent event) {
+				Platform.runLater(new Runnable() {
+				     @Override
+				     public void run() {
+				         anchorPaneId.requestFocus();
+				     }
+				});	
+			}
+			
+		});
+		anchorPaneId.setOnKeyPressed(new EventHandler<KeyEvent> () {
+			KeyCode[] keyArr = {KeyCode.UP, KeyCode.UP, KeyCode.DOWN, KeyCode.DOWN, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.LEFT, KeyCode.RIGHT, KeyCode.B, KeyCode.A};
+			int i = 0;
+			@Override
+			public void handle(KeyEvent ke) {
+				if(ke.getCode().equals(keyArr[i])) {
+					i++;
+					if(i == keyArr.length) {
+						kCode(); 
+						i = 0;
+					}
+				}
+				else {
+					i = 0;
+				}
+			}
+			
 		});
 	}
 /**
@@ -277,5 +315,29 @@ public class LoginScreenController {
 		};
 		Thread colorChangeThread = new Thread(colorChangeTask);
 		colorChangeThread.start();
+	}
+	/**
+	 * Lässt es regnen.
+	 * @see https://en.wikipedia.org/wiki/Konami_Code
+	 */
+	private void kCode() {
+		URL sound = getClass().getResource("money.mp3");
+		AudioClip money = new AudioClip(sound.toString());
+		money.play();
+		for(int j = 0; j < 2500; j++) { //Darf bei dieser Anzahl nicht in Paralellthread laufen. Zusätzlich veränderte Parameter
+			ImageView coin = new ImageView("file:data/Coin_117.png");
+			double rnd = Math.random();
+			coin.setMouseTransparent(true);
+			coin.setScaleX(0.1 + 0.7 * rnd);
+			coin.setScaleY(0.1 + 0.7 * rnd);
+			coin.setOpacity(0.2 + 0.5 * Math.random());
+			coin.setTranslateX((Math.random() - 0.5) * 2 * 300);
+			loginStackPane.getChildren().add(coin);
+			TranslateTransition transition = new TranslateTransition(Duration.seconds(30 + Math.random() * 40), coin);
+			transition.setFromY(-360 - Math.random() * 1000);
+			transition.setToY(380);
+			transition.play();
+		}
+		
 	}
 }
