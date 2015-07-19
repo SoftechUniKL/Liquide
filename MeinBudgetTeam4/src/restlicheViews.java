@@ -1,19 +1,12 @@
-import java.awt.Dimension;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JPanel;
 
-import Charts.Barchart;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingNode;
+import Charts.ChartFX;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.image.Image;
+import javafx.scene.chart.Chart;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -57,15 +50,12 @@ public class restlicheViews {
 			
 
 			Map<String, Double> map = ConvertDataForChart.getLatest(new BudgetPlanModel().transcribe());
-			Barchart chart = new Barchart("Ausgaben", "Wert", "Datum", map);
-			
-			JPanel panel = chart.getChartPanel();
-			panel.setPreferredSize(new Dimension(350, 150));
-			SwingNode node = new SwingNode();
+			Chart node = new ChartFX(map).makeBarChart("Datum", "Wert");
 			node.setLayoutX(250);
 			node.setLayoutY(250);
-			node.setContent(panel);
+			node.setPrefSize(350, 250);
 			myPane.getChildren().add(node);
+			
 		}
 		
 	}
