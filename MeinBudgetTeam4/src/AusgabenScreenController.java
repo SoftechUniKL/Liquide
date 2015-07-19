@@ -1,4 +1,5 @@
 import javafx.fxml.FXML;
+import javafx.scene.chart.Chart;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -14,11 +15,7 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import Charts.Barchart;
-import Charts.Chart;
-import Charts.Linechart;
-import Charts.Piechart;
-import javafx.embed.swing.SwingNode;
+import Charts.ChartFX;
 import javafx.event.*;
 
 public class AusgabenScreenController {
@@ -69,24 +66,30 @@ public class AusgabenScreenController {
     	
     	//Radiobutton 1 gewählt, säule
     	if(Group1.getSelectedToggle().toString().contains("rb1")) {
-        	chart = new Barchart("Ausgaben", "Wert", "Datum", map);
+        	chart = new ChartFX(map).makeBarChart("Datum", "Wert");
     	}
     	//Radiobutton 2 gewähl, torte
     	else if(Group1.getSelectedToggle().toString().contains("rb2")) {
-        	chart = new Piechart("Ausgaben", map);
+        	chart = new ChartFX(map).makePieChart();
     	}
     	//Keiner oder 3. Radiobutton, linie
     	else {
-        	chart = new Linechart("Ausgaben", "Wert", "Datum", map);
+        	chart = new ChartFX(map).makeLineChart("Datum", "Wert");
     	}
 		
-		JPanel panel = chart.getChartPanel();
-		panel.setPreferredSize(new Dimension(350, 150));
-		SwingNode node = new SwingNode();
-		node.setLayoutX(250);
-		node.setLayoutY(0);
-		node.setContent(panel);
-		result_pane.getChildren().add(node);
+		chart.setLayoutX(250);
+		chart.setLayoutY(0);
+		chart.setPrefSize(350, 250);
+		chart.setId("chart");
+		
+		for(javafx.scene.Node n: result_pane.getChildren()) {
+			if(n.getId().equals("chart")) {
+				result_pane.getChildren().remove(n);
+				break;
+			}
+		}
+		
+		result_pane.getChildren().add(chart);
     }
 
     @FXML
