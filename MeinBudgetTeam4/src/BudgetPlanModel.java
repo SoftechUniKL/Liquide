@@ -150,6 +150,8 @@ public class BudgetPlanModel
             statement.executeUpdate(query + ";");
             statement.close();
             insert_User(username,  0.0);
+            insert_Kategorie("Einkommen"); // ein Kategorie auf die der User keinen Zugriff hat
+                                          // Einkommen wird da gespeichert
             insert_Kategorie("Allgemein");
             }
     }
