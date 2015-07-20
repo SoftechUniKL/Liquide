@@ -1,16 +1,29 @@
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.chart.Chart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.awt.Dimension;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Map;
 
 import javax.swing.JPanel;
@@ -90,6 +103,9 @@ public class AusgabenScreenController {
 		}
 		
 		result_pane.getChildren().add(chart);
+		
+		//Popupfenster mit Tabelle erstellen
+		new AusgabenDetailsPopup(new BudgetPlanModel().transcribe(), datumBeginnInput_dp_ausgaben.getValue(), datumEndeInput_dp_ausgaben.getValue());
     }
 
     @FXML

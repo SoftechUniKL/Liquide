@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 public class ConvertDataForChart {
 
 	/**
@@ -17,6 +20,10 @@ public class ConvertDataForChart {
 		
 		//elemente der ergebnismap hinzufügen
 		for (Posten p : dataSource) {
+			//einzahlungen überspringen
+			if(p.getKategorie_bezeichnung().toLowerCase().equals("einzahlung")) {
+				continue;
+			}
 			//wenn bereits ein key mit dem datum existiert den nächsten DATUM(0), DATUM(1), ..., DATUM(N) nennen
 			if(result.containsKey(p.getDatum().toString())) {
 				int i = 0;
@@ -50,6 +57,10 @@ public class ConvertDataForChart {
 		
 		//die letzten (max) 5 elemente der ergebnis map hinzufügen
 		for(Posten p: dataSource.subList(from, to)) {
+			//einzahlungen überspringen
+			if(p.getKategorie_bezeichnung().toLowerCase().equals("einzahlung")) {
+				continue;
+			}
 			//wenn bereits ein key mit dem datum existiert den nächsten DATUM(0), DATUM(1), ..., DATUM(N) nennen
 			if(result.containsKey(p.getDatum().toString())) {
 				int i = 0;
@@ -92,6 +103,10 @@ public class ConvertDataForChart {
 		
 		// alle elemente aus der temporären Liste der ergebnismap hinzufügen
 		for(Posten p: tmp) {
+			//einzahlungen überspringen
+			if(p.getKategorie_bezeichnung().toLowerCase().equals("einzahlung")) {
+				continue;
+			}
 			//wenn bereits ein key mit dem datum existiert den nächsten DATUM(0), DATUM(1), ..., DATUM(N) nennen
 			if(result.containsKey(p.getDatum().toString())) {
 				int i = 0;
@@ -106,6 +121,26 @@ public class ConvertDataForChart {
 			}
 			//element der ergebnismap hinzufügen
 			result.put(p.getDatum().toString(), p.getPreis()*p.getAnzahl());
+		}
+		return result;
+	}
+	
+	public static ObservableList<Posten> getObservableListFromTo(ArrayList<Posten> dataSource, LocalDate from, LocalDate to) {
+		ObservableList<Posten> result = FXCollections.observableArrayList();
+		
+		//LocalDate in Date konvertieren
+		Date fromDate = Date.from(from.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		Date toDate = Date.from(to.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		
+		// Alle Posten deren from datum nach dem ausgewählten Beginn liegt und deren to datum vor dem ausgewählten ende liegt in eine temporäre liste
+		for(Posten p : dataSource) {
+			//einzahlungen überspringen
+			if(p.getKategorie_bezeichnung().toLowerCase().equals("einzahlung")) {
+				continue;
+			}
+			if(p.getDatum().compareTo(fromDate)>= 0 && p.getDatum().compareTo(toDate) <= 0) {
+				result.add(p);
+			}
 		}
 		return result;
 	}
