@@ -14,6 +14,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.animation.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.*;
 
 
@@ -62,7 +64,9 @@ public class DatenVerwaltungScreenController {
      * notwendig, da Comboboxen sich nicht anders dynamisch initialisieren ließen
      */
     public void initialize() throws SQLException{
-    	String [] s = model.return_Kategorien();
+    	String [] s = new String [model.return_Kategorien().length - 1] ;
+    	for (int i = 0 ; i < s.length ; i++)
+    		s[i] = model.return_Kategorien()[i+1];
     	Arrays.sort(s);
     	KategorieInputKl_Datenverwaltung.getItems().addAll(s);
     	KategorieInputSe_Datenverwaltung.getItems().addAll(s);
@@ -73,14 +77,34 @@ public class DatenVerwaltungScreenController {
     	subkategorieInputSl_Datenverwaltung.setDisable(true);
     	subKategorieErstellen_button_Datenverwaltung.setDisable(true);
     	subKategorieLöschen_button_Datenverwaltung.setDisable(true);
+    	subKategorieInput_Datenverwaltung.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> observable,
+		            String oldValue, String newValue) {
+		    	    if(newValue.length() > 0) 
+		    	    	subKategorieErstellen_button_Datenverwaltung.setDisable(false);
+		    	    else
+		    	    	subKategorieErstellen_button_Datenverwaltung.setDisable(true);	    	
+		    }
+		});
+    	KategorieInput_Datenverwaltung.textProperty().addListener(new ChangeListener<String>() {
+		    @Override
+		    public void changed(ObservableValue<? extends String> observable,
+		            String oldValue, String newValue) {
+		    	    if(newValue.length() > 0) 
+		    	    	KategorieErstellen_button_Datenverwaltung.setDisable(false);
+		    	    else
+		    	    	KategorieErstellen_button_Datenverwaltung.setDisable(true);	    	
+		    }
+		});
     }
     /* init() versetzt das Fenster in den Ursprungszustand*/
     public void init(){
     	KategorieInputKl_Datenverwaltung.setValue(null);
     	KategorieInputSe_Datenverwaltung.setValue(null);
     	KategorieInputSl_Datenverwaltung.setValue(null);
-    	KategorieInput_Datenverwaltung.setText(null);
-    	subKategorieInput_Datenverwaltung.setText(null);
+    	KategorieInput_Datenverwaltung.setText("");
+    	subKategorieInput_Datenverwaltung.setText("");
     	KategorieErstellen_button_Datenverwaltung.setDisable(true);
     	KategorieLöschen_button_Datenverwaltung.setDisable(true);
     	subKategorieInput_Datenverwaltung.setDisable(true);
@@ -98,7 +122,6 @@ public class DatenVerwaltungScreenController {
     	Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(10), ev -> {
             Info_Datenverwaltung.setText(null);
         }));
-        
         timeline.play();
     }
     /* Button für Kategorie löschen */
@@ -128,6 +151,7 @@ public class DatenVerwaltungScreenController {
     		throw new IllegalArgumentException ();
     	else{
     	model.insert_Kategorie(KategorieInput_Datenverwaltung.getText());
+    	KategorieInput_Datenverwaltung.setText("");
     	KategorieInputKl_Datenverwaltung.getItems().clear();
     	KategorieInputSe_Datenverwaltung.getItems().clear();
     	KategorieInputSl_Datenverwaltung.getItems().clear();
@@ -148,12 +172,7 @@ public class DatenVerwaltungScreenController {
 
     }
 
-    @FXML
-    void tfA_KategorieInput_Datenverwaltung(ActionEvent event) {
-    	KategorieErstellen_button_Datenverwaltung.setDisable(false);
-    	
-
-    }
+   
 
     @FXML
     void cbA_KategorieInputKl_Datenverwaltung(ActionEvent event) {
@@ -207,11 +226,7 @@ public class DatenVerwaltungScreenController {
 
     }
 
-    @FXML
-    void tfA_subKategorieInput_Datenverwaltung(ActionEvent event) {
-    	subKategorieErstellen_button_Datenverwaltung.setDisable(false);
-
-    }
+  
 
     @FXML
     void cbA_KategorieInputSl_Datenverwaltung(ActionEvent event) throws SQLException {
