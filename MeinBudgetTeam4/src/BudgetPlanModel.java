@@ -285,7 +285,18 @@ public class BudgetPlanModel
     	pStatement.setString(2, Kommentar);
     	pStatement.executeUpdate();
     }
-    
+    /**
+     * Ein neuer Posten wird in die Datenbank eingefügt.
+     * @param Posten_Bezeichnung Bezeichnung des einzufügenden Postens.
+     * @param Kategorie_Bezeichnung Bezeichnung der zugehörigen Kategorie. Muss bereits in Posten-Tabelle existieren.
+     * @param Subkategorie_Bezeichnung Bezeichnung der zur Hauptkategorie zugehörigen Subkategorie. Muss bereits in Subkategorie-Tabelle existieren.
+     * @param Preis Preis des entsprechenden Postens für eine Einheit.
+     * @param Anzahl Anzahl dieses Postens.
+     * @param Kommentar Ein Kommentar zum zugehörigen Artikel. Nicht mehr als 100 Zeichen.
+     * @param Dauerauftrag Gibt an ob es sich um einen Dauerauftrag handelt. Die genau Zahl gibt den Turnus an.
+     * @param datum Der entsprechende Zeitwert des Postens.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+     */
     public void insert_Posten(String Posten_Bezeichnung, String Kategorie_Bezeichnung, String Subkategorie_Bezeichnung, double Preis, int Anzahl, String Kommentar, int Dauerauftrag, java.sql.Timestamp datum) throws SQLException { //Die Frage ist welche Daten verwendet werden
 		if (Posten_Bezeichnung.isEmpty() || Double.isNaN(Preis))
 			throw new IllegalArgumentException("Bitte geben Sie einen Posten mit dazugehörigem Preis an.");
@@ -365,7 +376,19 @@ public class BudgetPlanModel
 	pStatement.setString(2, Kommentar);
 	pStatement.executeUpdate();
 }
-    
+    /**
+     * 
+     * Ein neuer Posten wird in die Datenbank eingefügt.
+     * @param Posten_Bezeichnung Bezeichnung des einzufügenden Postens.
+     * @param kategorieId Die ID der zum Posten zugehörigen Kategorie.
+     * @param subKategorieId Die ID der zur Kategorie zugehörigen Subkategorie.
+     * @param Preis Preis des entsprechenden Postens für eine Einheit.
+     * @param Anzahl Anzahl dieses Postens.
+     * @param Kommentar Ein Kommentar zum zugehörigen Artikel. Nicht mehr als 100 Zeichen.
+     * @param Dauerauftrag Gibt an ob es sich um einen Dauerauftrag handelt. Die genau Zahl gibt den Turnus an.
+     * @param datum Der entsprechende Zeitwert des Postens.
+     * @throws SQLException Wird geworfen, wenn irgendeine SQL-Anfrage nicht funktioniert hat.
+     */
     public void insert_Posten(String Posten_Bezeichnung, int kategorieId, int subKategorieId, double Preis, int Anzahl, String Kommentar, int Dauerauftrag, java.sql.Timestamp datum) throws SQLException { //Die Frage ist welche Daten verwendet werden
 		if (Posten_Bezeichnung.isEmpty() || Double.isNaN(Preis))
 			throw new IllegalArgumentException("Bitte geben Sie einen Posten mit dazugehörigem Preis an.");
@@ -383,7 +406,7 @@ public class BudgetPlanModel
 //    statement.executeUpdate(query+";");
 //    statement.close();
     PreparedStatement pStatement = dbConnection.prepareStatement("INSERT INTO Posten(Bezeichnung, Preis, Kategorie, Subkategorie, Anzahl, Nutzer, Kommentar, Dauerauftrag, Datum)" //Andere Werte werden automatisch belegt.
-    		+ " VALUES(?, " + Preis + ", " + kategorieId + ", " + subKategorieId + ", " + Anzahl + ", " + User_ID +", '?', " + Dauerauftrag + ", " + " ?" +")");
+    		+ " VALUES(?, " + Preis + ", " + kategorieId + ", " + subKategorieId + ", " + Anzahl + ", " + User_ID +", ?, " + Dauerauftrag + ", " + " ?" +")");
 	pStatement.setString(1, Posten_Bezeichnung);
 	pStatement.setString(2, Kommentar);
 	pStatement.setTimestamp(3, datum);
