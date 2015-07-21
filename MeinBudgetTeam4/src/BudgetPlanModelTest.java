@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 
 
 import static org.junit.Assert.*;
@@ -15,8 +13,10 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -228,6 +228,38 @@ public class BudgetPlanModelTest {
 	public void testInsert_PostenStringIntIntDoubleIntStringInt() {
 		try {
 			testModel.insert_Posten("Testposten", 1	, 1, 24.24, 9, "Auch ich bin ein Testposten", 1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
+	}
+	/**
+	 * Test method for {@link BudgetPlanModel#insert_Posten(java.lang.String, java.lang.String, java.lang.String, double, int, java.lang.String, int, Timestamp)}.
+	 */
+	@Test
+	public void testInsert_PostenStringStringStringDoubleIntStringIntTimestamp() {
+		try {
+			Date heute = new Date();
+		    Timestamp sqlheute = new Timestamp(heute.getTime());
+			testModel.insert_Posten("TestPostenDatum", "Allgemein", "-", 42.99, 3, "Ich bin ein Testposten mit Timestamp", 3, sqlheute);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Exception thrown");
+		}
+		
+	}
+	
+	/**
+	 * Test method for {@link BudgetPlanModel#insert_Posten(java.lang.String, int, int, double, int, java.lang.String, int, Timestamp)}.
+	 */
+	@Test
+	public void testInsert_PostenStringIntIntDoubleIntStringIntTimestamp() {
+		try {
+			Date heute = new Date();
+		    Timestamp sqlheute = new Timestamp(heute.getTime());
+			testModel.insert_Posten("Testposten mit Timestamp", 1	, 1, 24.99, 9, "Auch ich bin ein Testposten mit Timestamp", 1, sqlheute);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
