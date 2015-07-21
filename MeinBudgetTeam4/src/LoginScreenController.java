@@ -94,6 +94,7 @@ public class LoginScreenController {
  * Wenn der Button zum einloggen betätigt wird, wird versucht eine Verbindung zur Datenbank aufzubauen.
  * @param event
  * @throws IOException 
+ * @throws InterruptedException 
  */
 	@FXML
 	void buttonAction_signInButton(ActionEvent event) throws IOException  {
@@ -104,18 +105,18 @@ public class LoginScreenController {
 			if (u.isEmpty() || p.isEmpty()) {
 				throw new IllegalArgumentException("Bitte füllen Sie beide Felder aus.");
 			}
-			// TODO Die beiden Folgenden Prozesse parallel threaden
 			colorChange();
 			BudgetPlanModel model = new BudgetPlanModel();
 			model.initiateDatabase(u, p);
 			colorChangeTask.cancel();
 			Stage stage=(Stage) signInButton.getScene().getWindow();
-	        restlicheViews.Menue menü = new restlicheViews.Menue();
-	        menü.setPrimaryStage(stage);
-	        menü.startUp_menue();
-			 colorChangeTask.cancel();
+	        restlicheViews.Menue menue = new restlicheViews.Menue();
+	        menue.setPrimaryStage(stage);
+	        menue.startUp_menue();
+			colorChangeTask.cancel();
 		} catch (ClassNotFoundException | SQLException | IllegalArgumentException e) {
 			colorChangeTask.cancel();
+			progressIndicator.setVisible(false);
 			AlertView alertV = new AlertView();
 			alertV.startUp(e);
 		}
@@ -158,7 +159,6 @@ public class LoginScreenController {
 						try {
 							buttonAction_signInButton(new ActionEvent());
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
