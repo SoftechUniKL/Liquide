@@ -1,7 +1,12 @@
 
 
 
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -10,17 +15,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -52,11 +53,9 @@ public class BudgetPlanModelTest {
 		//testModel.registerUser("test", "test");
 		testModel.initiateDatabase("test", "test");
 	} catch (SQLException | ClassNotFoundException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 		fail("SQL Exception thrown");
 	} catch (IOException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 		fail("IOException");
 	}
@@ -76,7 +75,6 @@ public class BudgetPlanModelTest {
 	@Test
 	public void testBudgetPlanModel() {
 		//Leerer Konstruktor nicht testbar
-		//fail("Not yet implemented");
 	}
 	
 	/**
@@ -118,19 +116,15 @@ public class BudgetPlanModelTest {
 				method.invoke(testModel, "test","test"); //hier sollte keine Exception geworfen werden
 				method.invoke(testModel, "existiertnicht", "existiertnicht"); //Hier sollte Exception geworfen werden.
 			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				fail("ClassNotFoundException");
 			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				fail("SecurityException");
 			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				fail("IllegalAccessException");
 			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				fail("IllegalArgumentException");
 			}
@@ -141,14 +135,12 @@ public class BudgetPlanModelTest {
 	 */
 	@Test
 	public void testInitiateDatabase() {
-//		try {
-//			//testModel.registerUser("test", "test");
-//			testModel.initiateDatabase("test", "test");
-//		} catch (ClassNotFoundException | SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			fail(e.getCause().getMessage());
-//		}
+		try {
+			testModel.initiateDatabase("test", "test");
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+			fail(e.getCause().getMessage());
+		}
 	}
 
 	/**
@@ -165,7 +157,6 @@ public class BudgetPlanModelTest {
 			assertFalse(newKateg.equals(postKateg));
 			assertTrue(Arrays.asList(testModel.return_Kategorien()).contains(newKateg));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("SQLException");
 		}
@@ -213,7 +204,10 @@ public class BudgetPlanModelTest {
 	@Test
 	public void testInsert_PostenStringStringStringDoubleIntStringInt() { 
 		try {
+			ArrayList<Posten> before = testModel.transcribe();
 			testModel.insert_Posten("TestPosten", "Allgemein", "-", 42.42, 3, "Ich bin ein Testposten", 3);
+			ArrayList<Posten> after = testModel.transcribe();
+			assertTrue(before.size() != after.size());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -227,9 +221,11 @@ public class BudgetPlanModelTest {
 	@Test
 	public void testInsert_PostenStringIntIntDoubleIntStringInt() {
 		try {
+			ArrayList<Posten> before = testModel.transcribe();
 			testModel.insert_Posten("Testposten", 1	, 1, 24.24, 9, "Auch ich bin ein Testposten", 1);
+			ArrayList<Posten> after = testModel.transcribe();
+			assertTrue(before.size() != after.size());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Exception thrown");
 		}
@@ -241,10 +237,12 @@ public class BudgetPlanModelTest {
 	public void testInsert_PostenStringStringStringDoubleIntStringIntTimestamp() {
 		try {
 			Date heute = new Date();
+			ArrayList<Posten> before = testModel.transcribe();
 		    Timestamp sqlheute = new Timestamp(heute.getTime());
 			testModel.insert_Posten("TestPostenDatum", "Allgemein", "-", 42.99, 3, "Ich bin ein Testposten mit Timestamp", 3, sqlheute);
+			ArrayList<Posten> after = testModel.transcribe();
+			assertTrue(before.size() != after.size());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Exception thrown");
 		}
@@ -258,8 +256,11 @@ public class BudgetPlanModelTest {
 	public void testInsert_PostenStringIntIntDoubleIntStringIntTimestamp() {
 		try {
 			Date heute = new Date();
+			ArrayList<Posten> before = testModel.transcribe();
 		    Timestamp sqlheute = new Timestamp(heute.getTime());
 			testModel.insert_Posten("Testposten mit Timestamp", 1	, 1, 24.99, 9, "Auch ich bin ein Testposten mit Timestamp", 1, sqlheute);
+			ArrayList<Posten> after = testModel.transcribe();
+			assertTrue(before.size() != after.size());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -275,9 +276,7 @@ public class BudgetPlanModelTest {
 		try {
 		assertNotNull(testModel.return_Kategorien());
 		assertTrue(Arrays.asList(testModel.return_Kategorien()).contains("TestKategorie3"));
-		//assertEquals(Arrays.toString(testModel.return_Kategorien()), "[Allgemein]");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Exception thrown");
 		}
@@ -292,7 +291,6 @@ public class BudgetPlanModelTest {
 			assertNotNull(testModel.return_Subkategorien("Allgemein"));
 			assertTrue(Arrays.asList(testModel.return_Subkategorien("Allgemein")).contains("-"));
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				fail("Exception thrown");
 			}
@@ -306,7 +304,6 @@ public class BudgetPlanModelTest {
 		try {
 			assertNotNull(testModel.getBudget());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Exception thrown");
 		}
@@ -341,7 +338,6 @@ public class BudgetPlanModelTest {
 			int postSize = testPosten.size();
 			assertFalse(prevSize == postSize); //TODO: Hier wird eigentlich nur getestet, ob gelöscht wird. nicht was
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Exception thrown");
 		}
@@ -373,7 +369,6 @@ public class BudgetPlanModelTest {
 			assertFalse(prevKategorie.length == postKategorie.length);
 			assertFalse(Arrays.toString(prevKategorie).equals(Arrays.toString(postKategorie)));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Exception thrown");
 		}
@@ -393,7 +388,6 @@ public class BudgetPlanModelTest {
 			assertTrue(Arrays.asList(testModel.return_Subkategorien("Allgemein")).contains("-"));
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Exception thrown");
 		}
@@ -412,7 +406,6 @@ public class BudgetPlanModelTest {
 			assertFalse(Arrays.toString(prevSubkategorie).equals(Arrays.toString(postSubkategorie)));
 			assertTrue(Arrays.asList(testModel.return_Subkategorien("Allgemein")).contains("-"));
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Exception thrown");
 		}
@@ -432,7 +425,6 @@ public class BudgetPlanModelTest {
 			int postSize = testModel.transcribe().size();
 			assertFalse(prevSize == postSize);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Exception thrown");
 		}
@@ -452,7 +444,6 @@ public class BudgetPlanModelTest {
 			int postSize = testModel.transcribe().size();
 			assertFalse(prevSize == postSize);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Exception thrown");
 		}
@@ -467,7 +458,6 @@ public class BudgetPlanModelTest {
 			testModel.insert_Posten("Testposten", 1, 1, 12, 2, "Testposten für transcribe", 3);
 			assertNotNull(testModel.transcribe());
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Exception thrown");
 		}
