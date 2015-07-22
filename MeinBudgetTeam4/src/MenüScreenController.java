@@ -29,7 +29,7 @@ public class MenüScreenController {
     private AnchorPane menue_pane_menue;
 
     @FXML
-    private Button budgetverwaltung_button_menue;
+    private Button postenverwaltung_button_menue;
 
     @FXML
     private Button datenverwaltung_button_menue;
@@ -59,7 +59,11 @@ public class MenüScreenController {
     }
 
     @FXML
-    void bA_budgetverwaltung_menue(ActionEvent event) {
+    void bA_postenverwaltung_menue(ActionEvent event) throws IOException {
+    	Stage stage=(Stage)postenverwaltung_button_menue.getScene().getWindow();
+        restlicheViews.postenverwaltung pw = new restlicheViews.postenverwaltung();
+        pw.setPrimaryStage(stage);
+        pw.startUp_postenverwaltung();
 
     }
 

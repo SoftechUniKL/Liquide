@@ -1,8 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
-</AnchorPane>
-
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PostenverwaltungScreenController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="600.0" minWidth="0.0" prefWidth="0.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="150.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="450.0" minHeight="10.0" prefHeight="258.0" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <DatePicker fx:id="anfangInput_postenverwaltung" layoutX="75.0" layoutY="50.0" />
+            <DatePicker fx:id="endeInput_postenvewaltung" layoutX="350.0" layoutY="50.0" />
+            <RadioButton fx:id="ausgaben_rb_postenverwaltung" layoutX="75.0" layoutY="100.0" mnemonicParsing="false" onAction="#rbA_ausgaben" text="Ausgaben">
+               <toggleGroup>
+                  <ToggleGroup fx:id="Group1" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="einkommenr_rb_postenverwaltung" layoutX="350.0" layoutY="100.0" mnemonicParsing="false" onAction="#rbA_einkommen" text="Einkommen" toggleGroup="$Group1" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="mittlererAnchor_postenverwaltung" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+         <children>
+            <TableView fx:id="tabelle1" prefHeight="350.0" prefWidth="600.0">
+              <columns>
+                <TableColumn fx:id="bezeichnungTC_postenverwaltung" prefWidth="75.0" text="Bezeichnung" />
+                <TableColumn fx:id="kategorieTC_postenverwaltung" prefWidth="75.0" text="Kategorie" />
+                  <TableColumn fx:id="subkategorieTC_postenverwaltung" prefWidth="81.0" text="Subkategorie" />
+                  <TableColumn fx:id="anzahlTC_postenverwaltung" prefWidth="48.0" text="Anzahl" />
+                  <TableColumn fx:id="preisTC_postenverwaltung" prefWidth="54.0" text="Preis" />
+                  <TableColumn fx:id="kommentarTC_postenverwaltung" prefWidth="149.0" text="Kommentar" />
+                  <TableColumn fx:id="dauerauftragTC_postenverwaltung" prefWidth="43.0" text="Dauerauftrag" />
+                  <TableColumn fx:id="datumTC_postenverwaltung" prefWidth="75.0" text="Datum" />
+              </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+         <children>
+            <Button fx:id="löschen_button_postenverwaltung" layoutX="56.0" layoutY="38.0" mnemonicParsing="false" onAction="#bA_löschen" prefHeight="50.0" prefWidth="125.0" text="löschen" />
+            <Button fx:id="zurück_button_postenverwaltung" layoutX="423.0" layoutY="38.0" mnemonicParsing="false" onAction="#bA_zurück" prefHeight="50.0" prefWidth="125.0" text="zurück" />
+         </children>
+      </AnchorPane>
+   </children>
+</GridPane>
