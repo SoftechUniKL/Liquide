@@ -144,4 +144,36 @@ public class ConvertDataForChart {
 		}
 		return result;
 	}
+	
+	public static Map<String, Double> getFromToByCategory(ArrayList<Posten> dataSource, LocalDate from, LocalDate to) {
+		Map<String, Double> result = new HashMap<String, Double>();
+		ArrayList<Posten> tmp = new ArrayList<Posten>();
+		
+		//LocalDate in Date konvertieren
+		Date fromDate = Date.from(from.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		Date toDate = Date.from(to.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		
+		// Alle Posten deren from datum nach dem ausgewählten Beginn liegt und deren to datum vor dem ausgewählten ende liegt in eine temporäre liste
+		for(Posten p : dataSource) {
+			if(p.getDatum().compareTo(fromDate)>= 0 && p.getDatum().compareTo(toDate) <= 0) {
+				tmp.add(p);
+			}
+		}
+		
+		// alle elemente aus der temporären Liste der ergebnismap hinzufügen
+		for(Posten p: tmp) {
+			//einzahlungen überspringen
+			if(p.getKategorie_bezeichnung().toLowerCase().equals("einzahlung")) {
+				continue;
+			}
+			if(!result.containsKey(p.getKategorie_bezeichnung())) {
+				//element der ergebnismap hinzufügen
+				result.put(p.getKategorie_bezeichnung(), p.getPreis()*p.getAnzahl());
+			} else {
+				double value = result.get(p.getKategorie_bezeichnung()) + (p.getPreis() * p.getAnzahl());
+				result.put(p.getKategorie_bezeichnung(), value);
+			}
+		}
+		return result;
+	}
 }

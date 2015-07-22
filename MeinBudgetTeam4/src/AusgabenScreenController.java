@@ -1,7 +1,9 @@
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.Chart;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
@@ -12,10 +14,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -76,14 +80,18 @@ public class AusgabenScreenController {
     	}
     	Map<String, Double> map = ConvertDataForChart.getFromTo(new BudgetPlanModel().transcribe(), datumBeginnInput_dp_ausgaben.getValue(), datumEndeInput_dp_ausgaben.getValue());
     	Chart chart;
-    	
+        
     	//Radiobutton 1 gewählt, säule
     	if(Group1.getSelectedToggle().toString().contains("rb1")) {
         	chart = new ChartFX(map).makeBarChart("Datum", "Wert");
     	}
     	//Radiobutton 2 gewähl, torte
     	else if(Group1.getSelectedToggle().toString().contains("rb2")) {
+    		map = ConvertDataForChart.getFromToByCategory(new BudgetPlanModel().transcribe(), datumBeginnInput_dp_ausgaben.getValue(), datumEndeInput_dp_ausgaben.getValue());
         	chart = new ChartFX(map).makePieChart();
+        	for(PieChart.Data data : ((PieChart) chart).getData()) {
+        		data.setName(data.getName() + "\n" + data.getPieValue() + "€");
+        	}
     	}
     	//Keiner oder 3. Radiobutton, linie
     	else {
@@ -103,7 +111,7 @@ public class AusgabenScreenController {
 		}
 		
 		result_pane.getChildren().add(chart);
-		
+    	
 		//Popupfenster mit Tabelle erstellen
 		new AusgabenDetailsPopup(new BudgetPlanModel().transcribe(), datumBeginnInput_dp_ausgaben.getValue(), datumEndeInput_dp_ausgaben.getValue());
     }
