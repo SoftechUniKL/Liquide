@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -25,6 +26,8 @@
                </toggleGroup>
             </RadioButton>
             <RadioButton fx:id="einkommenr_rb_postenverwaltung" layoutX="350.0" layoutY="100.0" mnemonicParsing="false" onAction="#rbA_einkommen" text="Einkommen" toggleGroup="$Group1" />
+            <Label layoutX="75.0" layoutY="27.0" text="Anfang" />
+            <Label layoutX="350.0" layoutY="27.0" text="Ende" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="mittlererAnchor_postenverwaltung" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
@@ -47,6 +50,11 @@
          <children>
             <Button fx:id="löschen_button_postenverwaltung" layoutX="56.0" layoutY="38.0" mnemonicParsing="false" onAction="#bA_löschen" prefHeight="50.0" prefWidth="125.0" text="löschen" />
             <Button fx:id="zurück_button_postenverwaltung" layoutX="423.0" layoutY="38.0" mnemonicParsing="false" onAction="#bA_zurück" prefHeight="50.0" prefWidth="125.0" text="zurück" />
+            <Label fx:id="Info_postenverwaltung" layoutX="50.0" layoutY="1.0" prefWidth="500.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>
