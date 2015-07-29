@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
@@ -9,17 +10,32 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="menue_pane_menue" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MenüScreenController">
+<AnchorPane fx:id="menue_pane_menue" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" stylesheets="@Template.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MenüScreenController">
    <children>
-      <Button fx:id="neuerPosten_button_menue" layoutX="100.0" layoutY="50.0" mnemonicParsing="false" onAction="#bA_neuerPosten_menue" prefHeight="50.0" prefWidth="125.0" text="neuer Posten" />
-      <Button fx:id="ausgaben_button_menue" layoutX="100.0" layoutY="175.0" mnemonicParsing="false" onAction="#bA_ausgaben_menue" prefHeight="50.0" prefWidth="125.0" text="Ausgaben" />
-      <Button fx:id="postenverwaltung_button_menue" layoutX="100.0" layoutY="325.0" mnemonicParsing="false" onAction="#bA_postenverwaltung_menue" prefHeight="50.0" prefWidth="125.0" text="Postenverwaltung" />
-      <Button fx:id="datenverwaltung_button_menue" layoutX="100.0" layoutY="250.0" mnemonicParsing="false" onAction="#bA_datenverwaltung_menue" prefHeight="50.0" prefWidth="125.0" text="Datenverwealtung" />
-      <Button fx:id="optionen_button_menue" layoutX="100.0" layoutY="471.0" mnemonicParsing="false" onAction="#bA_optionen_menue" prefHeight="50.0" prefWidth="125.0" text="Optionen" />
-      <Pane blendMode="DIFFERENCE" layoutX="262.0" layoutY="262.0" prefHeight="300.0" prefWidth="300.0" />
+      <ImageView fitHeight="600.0" fitWidth="600.0" opacity="0.85" pickOnBounds="true">
+         <image>
+            <Image url="@../data/background_small1.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="ausgaben_button_menue" layoutX="50.0" layoutY="235.0" mnemonicParsing="false" onAction="#bA_ausgaben_menue" prefHeight="50.0" prefWidth="175.0" text="Ausgaben" />
+      <Button fx:id="postenverwaltung_button_menue" layoutX="50.0" layoutY="315.0" mnemonicParsing="false" onAction="#bA_postenverwaltung_menue" prefHeight="50.0" prefWidth="175.0" text="Postenverwaltung" />
+      <Button fx:id="datenverwaltung_button_menue" layoutX="50.0" layoutY="395.0" mnemonicParsing="false" onAction="#bA_datenverwaltung_menue" prefHeight="50.0" prefWidth="175.0" text="Datenverwaltung" />
+      <Button fx:id="optionen_button_menue" layoutX="50.0" layoutY="475.0" mnemonicParsing="false" onAction="#bA_optionen_menue" prefHeight="50.0" prefWidth="175.0" text="Optionen" />
+      <Pane blendMode="DIFFERENCE" layoutX="273.0" layoutY="260.0" prefHeight="300.0" prefWidth="300.0">
+         <children>
+            <Label fx:id="Info_menü" alignment="CENTER" layoutX="136.0" layoutY="218.0" />
+            <Label fx:id="aktuellesBudgetOutput_Menü" layoutX="-78.0" layoutY="217.0" prefHeight="54.0" prefWidth="400.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children></Pane>
       <Label layoutX="368.0" layoutY="225.0" text="letzte Ausgaben:" />
       <Label layoutX="368.0" layoutY="100.0" text="aktuelles Budget" />
-      <Button fx:id="Einkommen_Button_Menü" layoutX="100.0" layoutY="117.0" mnemonicParsing="false" onAction="#bA_Einkommen_Menü" prefHeight="50.0" prefWidth="125.0" text="Einkommen" />
-      <Label fx:id="aktuellesBudgetOutput_Menü" layoutX="368.0" layoutY="125.0" />
+      <Button fx:id="Einkommen_Button_Menü" layoutX="50.0" layoutY="155.0" mnemonicParsing="false" onAction="#bA_Einkommen_Menü" prefHeight="50.0" prefWidth="175.0" text="Einkommen" />
+      <Button fx:id="neuerPosten_button_menue" layoutX="50.0" layoutY="75.0" mnemonicParsing="false" onAction="#bA_neuerPosten_menue" prefHeight="50.0" prefWidth="175.0" text="neuer Posten" textFill="#460808">
+         <tooltip>
+            <Tooltip text="Hier könne Sie neue Posten bilden (Ausgaben)" />
+         </tooltip></Button>
    </children>
 </AnchorPane>

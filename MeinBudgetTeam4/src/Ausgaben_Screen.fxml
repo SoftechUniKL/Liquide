@@ -1,37 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AusgabenScreenController">
+
+<AnchorPane stylesheets="@Template.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AusgabenScreenController">
    <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+      <ImageView fitHeight="600.0" fitWidth="600.0" opacity="0.85" pickOnBounds="true">
+         <image>
+            <Image url="@../data/background_small1.png" />
+         </image>
+      </ImageView>
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0">
          <children>
-            <DatePicker fx:id="datumBeginnInput_dp_ausgaben" layoutX="100.0" layoutY="100.0" />
-            <DatePicker fx:id="datumEndeInput_dp_ausgaben" layoutX="325.0" layoutY="100.0" />
-            <Label layoutX="100.0" layoutY="75.0" text="Beginn" />
-            <Label layoutX="325.0" layoutY="75.0" text="Ende" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <DatePicker fx:id="datumBeginnInput_dp_ausgaben" layoutX="100.0" layoutY="100.0" />
+                  <DatePicker fx:id="datumEndeInput_dp_ausgaben" layoutX="325.0" layoutY="100.0" />
+                  <Label layoutX="100.0" layoutY="75.0" text="Beginn" />
+                  <Label layoutX="325.0" layoutY="75.0" text="Ende" />
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="result_pane" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <RadioButton fx:id="rb1_rb_ausgaben" layoutX="100.0" layoutY="25.0" mnemonicParsing="false" text="Säulendiagramm">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="Group1" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="rb2_rb_ausgaben" layoutX="100.0" layoutY="85.0" mnemonicParsing="false" text="Tortendiagramm" toggleGroup="$Group1" />
+                  <RadioButton fx:id="rb3_rb_ausgaben" layoutX="100.0" layoutY="145.0" mnemonicParsing="false" text="Liniendiagramm" toggleGroup="$Group1" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="visualisieren_button_ausgaben" layoutX="75.0" layoutY="100.0" mnemonicParsing="false" onAction="#bA_visualisieren_ausgaben" prefHeight="50.0" prefWidth="175.0" text="visualisieren" />
+                  <Button fx:id="zurück_button_ausgaben" layoutX="350.0" layoutY="100.0" mnemonicParsing="false" onAction="#bA_zurück_ausgaben" prefHeight="50.0" prefWidth="175.0" text="zurück" />
+                  <Label fx:id="Info_ausgaben" layoutX="100.0" layoutY="50.0" prefHeight="25.0" prefWidth="400.0" />
+               </children>
+            </AnchorPane>
          </children>
-      </AnchorPane>
-      <AnchorPane fx:id="result_pane" prefHeight="200.0" prefWidth="200.0">
-         <children>
-            <RadioButton fx:id="rb1_rb_ausgaben" layoutX="100.0" layoutY="25.0" mnemonicParsing="false" text="Säulendiagramm">
-               <toggleGroup>
-                  <ToggleGroup fx:id="Group1" />
-               </toggleGroup></RadioButton>
-            <RadioButton fx:id="rb2_rb_ausgaben" layoutX="100.0" layoutY="58.0" mnemonicParsing="false" text="Tortendiagramm" toggleGroup="$Group1" />
-            <RadioButton fx:id="rb3_rb_ausgaben" layoutX="100.0" layoutY="91.0" mnemonicParsing="false" text="Liniendiagramm" toggleGroup="$Group1" />
-         </children>
-      </AnchorPane>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0">
-         <children>
-            <Button fx:id="visualisieren_button_ausgaben" layoutX="100.0" layoutY="100.0" mnemonicParsing="false" onAction="#bA_visualisieren_ausgaben" prefHeight="50.0" prefWidth="125.0" text="visualisieren" />
-            <Button fx:id="zurück_button_ausgaben" layoutX="350.0" layoutY="100.0" mnemonicParsing="false" onAction="#bA_zurück_ausgaben" prefHeight="50.0" prefWidth="150.0" text="zurück" />
-            <Label fx:id="Info_ausgaben" layoutX="100.0" layoutY="50.0" prefHeight="25.0" prefWidth="400.0" />
-         </children>
-      </AnchorPane>
+      </VBox>
    </children>
-</VBox>
+</AnchorPane>

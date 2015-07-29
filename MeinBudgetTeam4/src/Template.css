@@ -1,9 +1,4 @@
-TilePane {
-	-fx-background-image: url("../data/background_small.png");
-	-fx-background-position: center center;
-	-fx-background-size: 100%; 
-	-fx-background-repeat: stretch;
-}
+
 
 Label {
 	-fx-font: 20px "System";
@@ -25,3 +20,35 @@ Label .text {
 	-fx-opacity: 1.0;
 }
 
+.button {
+	-fx-background-color: 
+        #3c7fb1,
+        linear-gradient(#fafdfe, #e8f5fc),
+        linear-gradient(#eaf6fd 0%, #d9f0fc 49%, #bee6fd 50%, #a7d9f5 100%);
+    -fx-background-insets: 0,1,2;
+    -fx-background-radius: 3,2,1;
+    -fx-padding: 3 30 3 30;
+    -fx-text-fill: black;
+    -fx-font-size: 14px;
+    -fx-background-radius: 30;
+}
+
+.button:focused {
+   /*  -fx-color: -fx-focused-base; */
+    -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-insets: -1.4, 0, 1, 2;
+    -fx-background-radius: 30
+}
+ .button:hover {
+    -fx-background-color: 
+        #4689bb,
+        linear-gradient(#fafafa, #f2f5fc),
+        linear-gradient(#f4f6fd 0%, #e3fafc 49%, #c8f0fd 50%, #b1e3f5 100%);
+}
+
+.radio-button {
+	-fx-font: 20px "System";
+	-fx-text-fill: rgba(255, 255, 255, 0.8);
+ 	-fx-font-weight: bold; 
+	
+}

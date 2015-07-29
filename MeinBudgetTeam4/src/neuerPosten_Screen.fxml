@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="neuerPosten_pane" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="neuerPostenScreenController">
+<AnchorPane fx:id="neuerPosten_pane" prefHeight="600.0" prefWidth="600.0" stylesheets="@Template.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="neuerPostenScreenController">
    <children>
+      <ImageView fitHeight="600.0" fitWidth="600.0" opacity="0.85" pickOnBounds="true">
+         <image>
+            <Image url="@../data/background_small1.png" />
+         </image>
+      </ImageView>
       <Label layoutX="100.0" layoutY="100.0" text="Kategorie" />
       <ComboBox fx:id="kategoerieInput_neuerPosten" layoutX="100.0" layoutY="125.0" onAction="#cbA_kategorieInput_neuerPosten" prefWidth="150.0" />
       <Label layoutX="100.0" layoutY="175.0" text="Subkategorie" />
@@ -18,13 +24,13 @@
       <TextField fx:id="anzahlInput_neuerPosten" layoutX="350.0" layoutY="200.0" />
       <Label layoutX="350.0" layoutY="250.0" text="Preis" />
       <TextField fx:id="preisInput_neuerPosten" layoutX="350.0" layoutY="275.0" />
-      <Button fx:id="übernehmen_button" layoutX="101.0" layoutY="500.0" mnemonicParsing="false" onAction="#bA_übernehmen" prefHeight="50.0" prefWidth="125.0" text="übernehmen" />
+      <Button fx:id="übernehmen_button" layoutX="75.0" layoutY="500.0" mnemonicParsing="false" onAction="#bA_übernehmen" prefHeight="50.0" prefWidth="175.0" text="übernehmen" />
       <CheckBox fx:id="dauerauftragWechsel_neuerPosten" layoutX="100.0" layoutY="250.0" mnemonicParsing="false" onAction="#cbc_dauerauftragWechsel_neuerPosten" text="Dauerauftrag" />
-      <Button fx:id="zurück_neuerPosten_button" layoutX="375.0" layoutY="500.0" mnemonicParsing="false" onAction="#bA_zurück_neuerPosten" prefHeight="50.0" prefWidth="125.0" text="zurück" />
+      <Button fx:id="zurück_neuerPosten_button" layoutX="350.0" layoutY="500.0" mnemonicParsing="false" onAction="#bA_zurück_neuerPosten" prefHeight="50.0" prefWidth="175.0" text="zurück" />
       <ComboBox fx:id="dauerauftragInput_neuerposten" layoutX="100.0" layoutY="275.0" prefWidth="150.0" />
       <Label layoutX="350.0" layoutY="325.0" text="Kommentar (optional)" />
       <TextArea fx:id="kommentarInput_neuerPosten" layoutX="350.0" layoutY="350.0" prefHeight="50.0" prefWidth="150.0" />
-      <Label fx:id="übernehmen_label_neuerPosten" alignment="CENTER" layoutX="100.0" layoutY="458.0" prefWidth="400.0">
+      <Label fx:id="übernehmen_label_neuerPosten" alignment="CENTER" layoutX="50.0" layoutY="458.0" prefWidth="500.0">
          <font>
             <Font size="18.0" />
          </font></Label>

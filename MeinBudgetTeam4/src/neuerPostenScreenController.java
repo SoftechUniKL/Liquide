@@ -81,24 +81,6 @@ public class neuerPostenScreenController {
 	@FXML
 	private Button übernehmen_button;
 
-	public class NumberTextField extends TextField {
-
-		@Override
-		public void replaceText(int start, int end, String text) {
-			if (text.matches("[0-9]") || text == "") {
-				super.replaceText(start, end, text);
-			}
-		}
-
-		@Override
-		public void replaceSelection(String text) {
-			if (text.matches("[0-9]") || text == "") {
-				super.replaceSelection(text);
-			}
-		}
-
-	}
-
 	/* initialisiert das Fenster mit den notwendigen Werten beim Öffnen */
 	public void initialize() throws SQLException {
 		String[] s = new String[model.return_Kategorien().length - 1];
@@ -108,6 +90,96 @@ public class neuerPostenScreenController {
 		kategoerieInput_neuerPosten.getItems().addAll(s);
 		subkategorieInput_neuerPosten.setDisable(true);
 		dauerauftragInput_neuerposten.setDisable(true);
+        /* prüft ob die Eingabe des Preises mit einer double Zahl übereinstimmt
+         * Komma darf nur einmal gesetzt werden
+         * nach einem Komma erfolgen nur zwei Stellen
+         */
+		preisInput_neuerPosten.textProperty().addListener(
+				new ChangeListener<String>() {
+					@Override
+					public void changed(
+							ObservableValue<? extends String> observable,
+							String oldValue, String newValue) {
+						if(newValue.length()< oldValue.length()){
+							
+						}
+						else {
+						if(newValue.length()>0) {
+							char first = newValue.charAt(0);
+							char last = newValue.charAt(newValue.length()-1);
+							if(newValue.length() == 1) {
+								if(last == '0'||last == '1'||last == '2'||last == '3'||last == '4'||last == '5'||last == '6'||last == '7'||last == '8'||last == '9'){
+									
+								}
+								else {
+									preisInput_neuerPosten.setText(oldValue);
+								}
+							}
+							else{
+								if(newValue.length() == 2) {
+									if(first == '0') {
+										if(last == ',') {
+											
+										}
+										else{
+											preisInput_neuerPosten.setText(oldValue);
+										}
+									}
+									else {
+										if(last == ','||last == '0'||last == '1'||last == '2'||last == '3'||last == '4'||last == '5'||last == '6'||last == '7'||last == '8'||last == '9'){
+											
+										}
+										else{
+											preisInput_neuerPosten.setText(oldValue);
+										}
+									}
+								}
+								else {
+									if(newValue.length() > 2) {
+                                        if(last ==',' ||last == '0'||last == '1'||last == '2'||last == '3'||last == '4'||last == '5'||last == '6'||last == '7'||last == '8'||last == '9'){
+											if(oldValue.contains(",")){
+												if(newValue.length() > (oldValue.indexOf(',') + 3) || last == ',') {
+                                    				preisInput_neuerPosten.setText(oldValue);
+                                    			}
+                                    			else {
+                                    				
+                                    				
+                                    			}
+											}
+											else {
+												
+											}
+										}
+                                        else {
+                                        	if(oldValue.contains(",")) {
+                                        		if(last == ',') {
+                                        			preisInput_neuerPosten.setText(oldValue);
+                                        		}
+                                        		else {
+                                        			if(newValue.length() > (oldValue.indexOf(',') + 3)) {
+                                        				preisInput_neuerPosten.setText(oldValue);
+                                        			}
+                                        			else {
+                                        				preisInput_neuerPosten.setText(oldValue);
+                                        				
+                                        			}
+                                        		}
+                                        	}
+                                        	else{
+                                        		preisInput_neuerPosten.setText(oldValue);
+                                        	}
+                                        }
+									}
+								}
+							}
+						}
+						else{
+							
+						}
+						}
+					}
+				});
+
 		anzahlInput_neuerPosten.textProperty().addListener(
 				new ChangeListener<String>() {
 					@Override
@@ -132,10 +204,8 @@ public class neuerPostenScreenController {
 										|| last == '7' || last == '8'
 										|| last == '9') {
 									anzahlInput_neuerPosten.setText(newValue);
-								übernehmen_label_neuerPosten
-								.setText("");
-								}
-								else {
+									übernehmen_label_neuerPosten.setText("");
+								} else {
 									anzahlInput_neuerPosten.setText(oldValue);
 									übernehmen_label_neuerPosten
 											.setTextFill(Color.web("red"));

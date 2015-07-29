@@ -7,11 +7,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.*;
 
 public class EinkommenScreenController {
+	
+
+    @FXML
+    private ToggleGroup Group1;
 	
 	@FXML
 	private TextField bezeichnungInput_einkommen;
@@ -33,6 +40,94 @@ public class EinkommenScreenController {
 
     @FXML
     private Button zurück_Button_Einkommen;
+    
+    public void initialize() {
+    	EinzahlungInput.textProperty().addListener(
+				new ChangeListener<String>() {
+					@Override
+					public void changed(
+							ObservableValue<? extends String> observable,
+							String oldValue, String newValue) {
+						if(newValue.length()< oldValue.length()){
+							
+						}
+						else {
+						if(newValue.length()>0) {
+							char first = newValue.charAt(0);
+							char last = newValue.charAt(newValue.length()-1);
+							if(newValue.length() == 1) {
+								if(last == '0'||last == '1'||last == '2'||last == '3'||last == '4'||last == '5'||last == '6'||last == '7'||last == '8'||last == '9'){
+									
+								}
+								else {
+									EinzahlungInput.setText(oldValue);
+								}
+							}
+							else{
+								if(newValue.length() == 2) {
+									if(first == '0') {
+										if(last == ',') {
+											
+										}
+										else{
+											EinzahlungInput.setText(oldValue);
+										}
+									}
+									else {
+										if(last == ','||last == '0'||last == '1'||last == '2'||last == '3'||last == '4'||last == '5'||last == '6'||last == '7'||last == '8'||last == '9'){
+											
+										}
+										else{
+											EinzahlungInput.setText(oldValue);
+										}
+									}
+								}
+								else {
+									if(newValue.length() > 2) {
+                                        if(last ==',' ||last == '0'||last == '1'||last == '2'||last == '3'||last == '4'||last == '5'||last == '6'||last == '7'||last == '8'||last == '9'){
+											if(oldValue.contains(",")){
+												if(newValue.length() > (oldValue.indexOf(',') + 3) || last == ',') {
+													EinzahlungInput.setText(oldValue);
+                                    			}
+                                    			else {
+                                    				
+                                    				
+                                    			}
+											}
+											else {
+												
+											}
+										}
+                                        else {
+                                        	if(oldValue.contains(",")) {
+                                        		if(last == ',') {
+                                        			EinzahlungInput.setText(oldValue);
+                                        		}
+                                        		else {
+                                        			if(newValue.length() > (oldValue.indexOf(',') + 3)) {
+                                        				EinzahlungInput.setText(oldValue);
+                                        			}
+                                        			else {
+                                        				EinzahlungInput.setText(oldValue);
+                                        				
+                                        			}
+                                        		}
+                                        	}
+                                        	else{
+                                        		EinzahlungInput.setText(oldValue);
+                                        	}
+                                        }
+									}
+								}
+							}
+						}
+						else{
+							
+						}
+						}
+					}
+				});
+    }
     
     public void init (){
     	monatlich_rb_Einkommen.setSelected(false);

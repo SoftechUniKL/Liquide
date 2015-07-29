@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -8,7 +10,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.event.*;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeFieldType;
+import org.joda.time.Days;
+
 public class MenüScreenController {
+	
+	 @FXML
+	    private Label Info_menü;
 
     @FXML
     private Button neuerPosten_button_menue;
@@ -36,8 +45,48 @@ public class MenüScreenController {
 
     public void initialize() throws SQLException {
     	BudgetPlanModel model = new BudgetPlanModel();
-    	String s = String.valueOf(model.getBudget());
+    	DateTime heute = new DateTime();
+    	double rest = 0;
+    	
+    	ArrayList<Posten> data = model.transcribe();
+		ArrayList<Posten> dataDA = new ArrayList<Posten>();
+		ArrayList<Posten> dataDApos = new ArrayList<Posten>();
+		ArrayList<Posten> dataDAneg = new ArrayList<Posten>();
+		for (int i = 0; i < data.size(); i++) {
+			if (data.get(i).getDauerauftrag() <= 0)
+				continue;
+			else
+				dataDA.add(data.get(i));
+		}	
+		for (int i = 0; i < dataDA.size(); i++) {
+			if (dataDA.get(i).getKategorie_bezeichnung()
+					.equals("Einkommen"))
+				dataDApos.add(dataDA.get(i));
+			else
+				dataDAneg.add(dataDA.get(i));
+		}
+		for (int i = 0 ;i< dataDApos.size(); i ++) {
+			DateTime obj = new DateTime (dataDApos.get(i).getDatum()) ;
+			   for (int j = 1 ; heute.compareTo(obj.plusMonths(dataDApos.get(i).getDauerauftrag()*j)) > 0; j++ ){
+				   rest = rest + dataDApos.get(i).getPreis();	   
+			   }
+		}
+		for (int i = 0 ;i< dataDAneg.size(); i ++) {
+			DateTime obj = new DateTime (dataDAneg.get(i).getDatum()) ;
+			   for (int j = 1 ; heute.compareTo(obj.plusMonths(dataDAneg.get(i).getDauerauftrag()*j)) > 0; j++ ){
+				   rest = rest - dataDAneg.get(i).getPreis();	  	   
+			   }
+		}
+		
+		String s = String.valueOf(model.getBudget() + rest);
     	aktuellesBudgetOutput_Menü.setText(s);
+    	
+    	System.out.println(rest);
+		
+		
+		
+		
+		
     	
     }
     @FXML
@@ -89,5 +138,8 @@ public class MenüScreenController {
         ek.startUp_datenverwaltung();
 
     }
+    
+    
+   
 
 }
