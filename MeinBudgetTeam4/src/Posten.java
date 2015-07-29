@@ -90,7 +90,7 @@ public class Posten {
 		this.anzahl = anzahl;
 	}
 
-	public int isDauerauftrag() {
+	public int getDauerauftrag() {
 		return dauerauftrag;
 	}
 
