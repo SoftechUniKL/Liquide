@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane stylesheets="@Template.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PostenverwaltungScreenController">
    <children>
       <ImageView fitHeight="600.0" fitWidth="600.0" opacity="0.85" pickOnBounds="true">
@@ -35,8 +34,8 @@
                      </toggleGroup>
                   </RadioButton>
                   <RadioButton fx:id="einkommenr_rb_postenverwaltung" layoutX="225.0" layoutY="100.0" mnemonicParsing="false" onAction="#rbA_einkommen" text="Einkommen" toggleGroup="$Group1" />
-                  <Label layoutX="75.0" layoutY="27.0" text="Anfang" />
-                  <Label layoutX="350.0" layoutY="27.0" text="Ende" />
+                  <Label layoutX="75.0" layoutY="20.0" text="Anfang" />
+                  <Label layoutX="350.0" layoutY="20.0" text="Ende" />
                   <RadioButton fx:id="daueraufträge_rb_postenverwaltung" layoutX="400.0" layoutY="100.0" mnemonicParsing="false" onAction="#rbA_daueraufträge" text="Daueraufträge" toggleGroup="$Group1" />
                </children>
             </AnchorPane>
@@ -60,7 +59,7 @@
                <children>
                   <Button fx:id="löschen_button_postenverwaltung" layoutX="18.0" layoutY="38.0" mnemonicParsing="false" onAction="#bA_löschen" prefHeight="50.0" prefWidth="175.0" text="löschen" />
                   <Button fx:id="zurück_button_postenverwaltung" layoutX="407.0" layoutY="38.0" mnemonicParsing="false" onAction="#bA_zurück" prefHeight="50.0" prefWidth="175.0" text="zurück" />
-                  <Label fx:id="Info_postenverwaltung" layoutX="50.0" layoutY="1.0" prefWidth="500.0">
+                  <Label fx:id="Info_postenverwaltung" alignment="CENTER" layoutY="1.0" prefWidth="600.0">
                      <font>
                         <Font size="18.0" />
                      </font>

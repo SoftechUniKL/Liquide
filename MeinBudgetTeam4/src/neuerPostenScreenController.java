@@ -29,7 +29,9 @@ import java.util.Locale;
 
 public class neuerPostenScreenController {
 	BudgetPlanModel model = new BudgetPlanModel();
-
+	/**
+	 * die ID´s der einzelnen Inhalte aus dem Scene Builder übernommen
+	 */
 	@FXML
 	private Label posten_labelred_neuerPosten;
 
@@ -81,7 +83,7 @@ public class neuerPostenScreenController {
 	@FXML
 	private Button übernehmen_button;
 
-	/* initialisiert das Fenster mit den notwendigen Werten beim Öffnen */
+	/** initialisiert das Fenster mit den notwendigen Werten beim Öffnen */
 	public void initialize() throws SQLException {
 		String[] s = new String[model.return_Kategorien().length - 1];
 		for (int i = 0; i < s.length; i++)
@@ -90,96 +92,134 @@ public class neuerPostenScreenController {
 		kategoerieInput_neuerPosten.getItems().addAll(s);
 		subkategorieInput_neuerPosten.setDisable(true);
 		dauerauftragInput_neuerposten.setDisable(true);
-        /* prüft ob die Eingabe des Preises mit einer double Zahl übereinstimmt
-         * Komma darf nur einmal gesetzt werden
-         * nach einem Komma erfolgen nur zwei Stellen
-         */
+		kommentarInput_neuerPosten.textProperty().addListener(
+				new ChangeListener<String>() {
+					@Override
+					public void changed(
+							ObservableValue<? extends String> observable,
+							String oldValue, String newValue) {
+						if(newValue.length() > 100){
+							kommentarInput_neuerPosten.setText(oldValue);
+							übernehmen_label_neuerPosten.setTextFill(Color.web("red"));
+							übernehmen_label_neuerPosten
+									.setText("Ihr Kommentar darf nur aus höchstens 100 Zeichen bestehen");
+							reset();
+						}
+						 
+					}
+					});
+		/*
+		 * prüft ob die Eingabe des Preises mit einer double Zahl übereinstimmt
+		 * Komma darf nur einmal gesetzt werden nach einem Komma erfolgen nur
+		 * zwei Stellen
+		 */
 		preisInput_neuerPosten.textProperty().addListener(
 				new ChangeListener<String>() {
 					@Override
 					public void changed(
 							ObservableValue<? extends String> observable,
 							String oldValue, String newValue) {
-						if(newValue.length()< oldValue.length()){
-							
-						}
-						else {
-						if(newValue.length()>0) {
-							char first = newValue.charAt(0);
-							char last = newValue.charAt(newValue.length()-1);
-							if(newValue.length() == 1) {
-								if(last == '0'||last == '1'||last == '2'||last == '3'||last == '4'||last == '5'||last == '6'||last == '7'||last == '8'||last == '9'){
-									
-								}
-								else {
-									preisInput_neuerPosten.setText(oldValue);
-								}
-							}
-							else{
-								if(newValue.length() == 2) {
-									if(first == '0') {
-										if(last == ',') {
-											
-										}
-										else{
-											preisInput_neuerPosten.setText(oldValue);
-										}
+						if (newValue.length() < oldValue.length()) {
+
+						} else {
+							if (newValue.length() > 0) {
+								char first = newValue.charAt(0);
+								char last = newValue.charAt(newValue.length() - 1);
+								if (newValue.length() == 1) {
+									if (last == '0' || last == '1'
+											|| last == '2' || last == '3'
+											|| last == '4' || last == '5'
+											|| last == '6' || last == '7'
+											|| last == '8' || last == '9') {
+
+									} else {
+										preisInput_neuerPosten
+												.setText(oldValue);
 									}
-									else {
-										if(last == ','||last == '0'||last == '1'||last == '2'||last == '3'||last == '4'||last == '5'||last == '6'||last == '7'||last == '8'||last == '9'){
-											
-										}
-										else{
-											preisInput_neuerPosten.setText(oldValue);
-										}
-									}
-								}
-								else {
-									if(newValue.length() > 2) {
-                                        if(last ==',' ||last == '0'||last == '1'||last == '2'||last == '3'||last == '4'||last == '5'||last == '6'||last == '7'||last == '8'||last == '9'){
-											if(oldValue.contains(",")){
-												if(newValue.length() > (oldValue.indexOf(',') + 3) || last == ',') {
-                                    				preisInput_neuerPosten.setText(oldValue);
-                                    			}
-                                    			else {
-                                    				
-                                    				
-                                    			}
+								} else {
+									if (newValue.length() == 2) {
+										if (first == '0') {
+											if (last == ',') {
+
+											} else {
+												preisInput_neuerPosten
+														.setText(oldValue);
 											}
-											else {
-												
+										} else {
+											if (last == ',' || last == '0'
+													|| last == '1'
+													|| last == '2'
+													|| last == '3'
+													|| last == '4'
+													|| last == '5'
+													|| last == '6'
+													|| last == '7'
+													|| last == '8'
+													|| last == '9') {
+
+											} else {
+												preisInput_neuerPosten
+														.setText(oldValue);
 											}
 										}
-                                        else {
-                                        	if(oldValue.contains(",")) {
-                                        		if(last == ',') {
-                                        			preisInput_neuerPosten.setText(oldValue);
-                                        		}
-                                        		else {
-                                        			if(newValue.length() > (oldValue.indexOf(',') + 3)) {
-                                        				preisInput_neuerPosten.setText(oldValue);
-                                        			}
-                                        			else {
-                                        				preisInput_neuerPosten.setText(oldValue);
-                                        				
-                                        			}
-                                        		}
-                                        	}
-                                        	else{
-                                        		preisInput_neuerPosten.setText(oldValue);
-                                        	}
-                                        }
+									} else {
+										if (newValue.length() > 2) {
+											if (last == ',' || last == '0'
+													|| last == '1'
+													|| last == '2'
+													|| last == '3'
+													|| last == '4'
+													|| last == '5'
+													|| last == '6'
+													|| last == '7'
+													|| last == '8'
+													|| last == '9') {
+												if (oldValue.contains(",")) {
+													if (newValue.length() > (oldValue
+															.indexOf(',') + 3)
+															|| last == ',') {
+														preisInput_neuerPosten
+																.setText(oldValue);
+													} else {
+
+													}
+												} else {
+
+												}
+											} else {
+												if (oldValue.contains(",")) {
+													if (last == ',') {
+														preisInput_neuerPosten
+																.setText(oldValue);
+													} else {
+														if (newValue.length() > (oldValue
+																.indexOf(',') + 3)) {
+															preisInput_neuerPosten
+																	.setText(oldValue);
+														} else {
+															preisInput_neuerPosten
+																	.setText(oldValue);
+
+														}
+													}
+												} else {
+													preisInput_neuerPosten
+															.setText(oldValue);
+												}
+											}
+										}
 									}
 								}
+							} else {
+
 							}
-						}
-						else{
-							
-						}
 						}
 					}
 				});
-
+		/*
+		 * bei der Anzahl kann auch nur eine Zahl eingegeben werden, die nicht
+		 * mit '0' beginnt
+		 */
 		anzahlInput_neuerPosten.textProperty().addListener(
 				new ChangeListener<String>() {
 					@Override
@@ -221,7 +261,10 @@ public class neuerPostenScreenController {
 
 	}
 
-	/* versetzt das Fenster in den Urpsrung */
+	/*
+	 * versetzt das Fenster in den Urpsrung Felder werden geleert, Comboboxen
+	 * geleert
+	 */
 	public void init() {
 		kategoerieInput_neuerPosten.setValue(null);
 		subkategorieInput_neuerPosten.setValue(null);
@@ -244,7 +287,7 @@ public class neuerPostenScreenController {
 		timeline.play();
 	}
 
-	/*
+	/**
 	 * beim auswählen eines wertes in der Kategorie combobox wird die
 	 * Subkategorie combobox aktiviert und die jeweiligen Daten sortiert
 	 * eingetragen
@@ -287,18 +330,26 @@ public class neuerPostenScreenController {
 				 * ein rotes "*" bei diesem feld angezeigt
 				 */
 				if (p.isEmpty()) {
+					posten_labelred_neuerPosten.setTextFill(Color
+							.web("red"));
 					posten_labelred_neuerPosten.setText("*");
 				} else
 					posten_labelred_neuerPosten.setText("");
 				if (a.isEmpty()) {
+					anzahl_labelred_neuerPosten.setTextFill(Color
+							.web("red"));
 					anzahl_labelred_neuerPosten.setText("*");
 				} else
 					anzahl_labelred_neuerPosten.setText("");
 				if (pr.isEmpty()) {
+					preis_labelred_neuerPosten.setTextFill(Color
+							.web("red"));
 					preis_labelred_neuerPosten.setText("*");
 				} else
 					preis_labelred_neuerPosten.setText("");
 				if (kat == null) {
+					kategorie_labelred_neuerPosten.setTextFill(Color
+							.web("red"));
 					kategorie_labelred_neuerPosten.setText("*");
 				} else
 					kategorie_labelred_neuerPosten.setText("");
@@ -322,6 +373,8 @@ public class neuerPostenScreenController {
 				übernehmen_label_neuerPosten.setTextFill(Color.web("red"));
 				übernehmen_label_neuerPosten
 						.setText("Die Anzahlangabe ist falsch");
+				anzahl_labelred_neuerPosten.setTextFill(Color
+						.web("red"));
 				anzahl_labelred_neuerPosten.setText("*");
 				return;
 
@@ -342,6 +395,8 @@ public class neuerPostenScreenController {
 				übernehmen_label_neuerPosten.setTextFill(Color.web("red"));
 				übernehmen_label_neuerPosten
 						.setText("Die Preisangabe ist falsch");
+				anzahl_labelred_neuerPosten.setTextFill(Color
+						.web("red"));
 				anzahl_labelred_neuerPosten.setText("*");
 				return;
 			} catch (ParseException e) {
@@ -352,6 +407,8 @@ public class neuerPostenScreenController {
 				übernehmen_label_neuerPosten.setTextFill(Color.web("red"));
 				übernehmen_label_neuerPosten
 						.setText("Bitte nutzen sie Kommata oder Punkte für Dezimalzahlen");
+				anzahl_labelred_neuerPosten.setTextFill(Color
+						.web("red"));
 				anzahl_labelred_neuerPosten.setText("*");
 				return;
 			}
@@ -421,10 +478,6 @@ public class neuerPostenScreenController {
 	@FXML
 	void bA_zurück_neuerPosten(ActionEvent event) throws IOException,
 			SQLException {
-		/*
-		 * ArrayList a = model.transcribe(); for(int i=0 ; i<a.size(); i++)
-		 * System.out.println(a.get(0));
-		 */
 		Stage stage = (Stage) zurück_neuerPosten_button.getScene().getWindow();
 		restlicheViews.Menue menü = new restlicheViews.Menue();
 		menü.setPrimaryStage(stage);

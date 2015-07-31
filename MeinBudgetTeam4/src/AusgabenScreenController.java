@@ -36,7 +36,9 @@ import Charts.ChartFX;
 import javafx.event.*;
 
 public class AusgabenScreenController {
-
+	/** die ID´s der einzelnen Inhalte
+	 * aus dem Scene Builder übernommen
+	 */
     @FXML
     private ToggleGroup Group1;
 
@@ -72,7 +74,10 @@ public class AusgabenScreenController {
     
     @FXML
     private AnchorPane result_pane;
-
+    
+    /** visualisiert die Posten je nach Auswahl der Visualisierungsmöglichkeit
+     * @throws SQLException
+     */
     @FXML
     void bA_visualisieren_ausgaben(ActionEvent event) throws SQLException {
     	if(datumBeginnInput_dp_ausgaben.getValue() == null || datumEndeInput_dp_ausgaben.getValue() == null) {
@@ -115,7 +120,9 @@ public class AusgabenScreenController {
 		//Popupfenster mit Tabelle erstellen
 		new AusgabenDetailsPopup(new BudgetPlanModel().transcribe(), datumBeginnInput_dp_ausgaben.getValue(), datumEndeInput_dp_ausgaben.getValue());
     }
-
+    /** zurück zum Hauptmenü
+     * @throws SQLException
+     */
     @FXML
     void bA_zurück_ausgaben(ActionEvent event) throws IOException, SQLException {
     	Stage stage=(Stage) zurück_button_ausgaben.getScene().getWindow();

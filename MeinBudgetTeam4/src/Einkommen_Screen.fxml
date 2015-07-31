@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane stylesheets="@Template.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="EinkommenScreenController">
    <children>
       <ImageView fitHeight="600.0" fitWidth="600.0" opacity="0.85" pickOnBounds="true">
@@ -38,7 +37,7 @@
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
                   <Button fx:id="zurück_Button_Einkommen" layoutX="350.0" layoutY="100.0" mnemonicParsing="false" onAction="#bA_zurück_Einkommen" prefHeight="50.0" prefWidth="175.0" text="zurück" />
-                  <Label fx:id="Info_Einkommen" alignment="CENTER" layoutX="100.0" layoutY="50.0" prefWidth="400.0">
+                  <Label fx:id="Info_Einkommen" alignment="CENTER" layoutY="50.0" prefWidth="600.0">
                      <font>
                         <Font size="18.0" />
                      </font>

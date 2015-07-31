@@ -30,7 +30,7 @@
       <ComboBox fx:id="dauerauftragInput_neuerposten" layoutX="100.0" layoutY="275.0" prefWidth="150.0" />
       <Label layoutX="350.0" layoutY="325.0" text="Kommentar (optional)" />
       <TextArea fx:id="kommentarInput_neuerPosten" layoutX="350.0" layoutY="350.0" prefHeight="50.0" prefWidth="150.0" />
-      <Label fx:id="übernehmen_label_neuerPosten" alignment="CENTER" layoutX="50.0" layoutY="458.0" prefWidth="500.0">
+      <Label fx:id="übernehmen_label_neuerPosten" alignment="CENTER" layoutY="458.0" prefWidth="600.0">
          <font>
             <Font size="18.0" />
          </font></Label>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="600.0" prefWidth="600.0" stylesheets="@Template.css" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="OptionenScreenController">
+   <children>
+      <ImageView fitHeight="600.0" fitWidth="600.0" opacity="0.8" pickOnBounds="true">
+         <image>
+            <Image url="@../data/background_small1.png" />
+         </image>
+      </ImageView>
+      <VBox prefHeight="600.0" prefWidth="600.0">
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="reset_button_optionen" layoutX="50.0" layoutY="75.0" mnemonicParsing="false" onAction="#bA_reset_optionen" prefHeight="50.0" prefWidth="175.0" text="Reset des Users" />
+                  <Button fx:id="ja_button_optionen" layoutX="300.0" layoutY="115.0" mnemonicParsing="false" onAction="#bA_ja_optionen" prefWidth="87.0" text="ja" visible="false" />
+                  <Button fx:id="nein_button_optionen" layoutX="413.0" layoutY="115.0" mnemonicParsing="false" onAction="#bA_nein_optionen" text="nein" visible="false" />
+                  <Label fx:id="frage_optionen" layoutX="250.0" layoutY="75.0" text="Wollen sie sicher alles löschen?" visible="false" />
+               </children>
+            </AnchorPane>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="zurück_button_optionen" layoutX="212.0" layoutY="100.0" mnemonicParsing="false" onAction="#bA_zurück_optionen" prefHeight="50.0" prefWidth="175.0" text="zurück" />
+                  <Label fx:id="info_optionen" alignment="CENTER" layoutX="50.0" layoutY="50.0" prefWidth="500.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>

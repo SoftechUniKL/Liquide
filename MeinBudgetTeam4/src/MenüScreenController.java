@@ -1,5 +1,7 @@
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -15,9 +17,11 @@ import org.joda.time.DateTimeFieldType;
 import org.joda.time.Days;
 
 public class MenüScreenController {
-	
-	 @FXML
-	    private Label Info_menü;
+	/** die ID´s der einzelnen Inhalte
+	 * aus dem Scene Builder übernommen
+	 */
+	@FXML
+    private Label datum_menue;
 
     @FXML
     private Button neuerPosten_button_menue;
@@ -42,12 +46,28 @@ public class MenüScreenController {
 
     @FXML
     private Button datenverwaltung_button_menue;
-
+    /**
+     * initialisiert das Fenster mit dynamischen Inhalten
+     * notwendig, da ich es nicht anders hinbekommen habe
+     * @throws SQLException wenn Fehler bei der SQL-Anfrage
+     */
     public void initialize() throws SQLException {
     	BudgetPlanModel model = new BudgetPlanModel();
     	DateTime heute = new DateTime();
-    	double rest = 0;
-    	
+    	double rest = 0; // beim rest werden alle Daueraufträge addiert oder subtrahiert
+    	/*Datum wird in String umgewandelt
+    	 * Datum wird im Fenster ausgegeben
+    	 */
+    	Date heute1 = new Date();
+    	DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    	String heutes = df.format(heute1);
+    	datum_menue.setText(heutes);
+    	/*alle Daueraufträge werden gesammelt
+    	 * ind positive und negative Daueraufträge getrennt
+    	 * positive --> bringen Geld ein
+    	 * negative --> kosten Geld
+    	 * 
+    	 */
     	ArrayList<Posten> data = model.transcribe();
 		ArrayList<Posten> dataDA = new ArrayList<Posten>();
 		ArrayList<Posten> dataDApos = new ArrayList<Posten>();
@@ -65,6 +85,9 @@ public class MenüScreenController {
 			else
 				dataDAneg.add(dataDA.get(i));
 		}
+		/* vergleicht jedesmal wieviel Daueraufträge seit dem Eintrag und bis zum heutigen Tag abgebucht wurden
+		 * ein wenig umständlich, aber mit Quatz Scheduler hab ich es nicht hinbekommen
+		 */
 		for (int i = 0 ;i< dataDApos.size(); i ++) {
 			DateTime obj = new DateTime (dataDApos.get(i).getDatum()) ;
 			   for (int j = 1 ; heute.compareTo(obj.plusMonths(dataDApos.get(i).getDauerauftrag()*j)) > 0; j++ ){
@@ -81,7 +104,6 @@ public class MenüScreenController {
 		String s = String.valueOf(model.getBudget() + rest);
     	aktuellesBudgetOutput_Menü.setText(s);
     	
-    	System.out.println(rest);
 		
 		
 		
@@ -89,6 +111,9 @@ public class MenüScreenController {
 		
     	
     }
+    /*die einzelne Buttons, die zum nächsten Fenster führen
+     * es werden jeweils Views gebildet zu jedem Fenster
+     */
     @FXML
     void bA_neuerPosten_menue(ActionEvent event) throws IOException, SQLException {
     	Stage stage=(Stage)neuerPosten_button_menue.getScene().getWindow();
@@ -126,7 +151,11 @@ public class MenüScreenController {
     }
 
     @FXML
-    void bA_optionen_menue(ActionEvent event) {
+    void bA_optionen_menue(ActionEvent event) throws IOException, SQLException  {
+    	Stage stage=(Stage)datenverwaltung_button_menue.getScene().getWindow();
+        restlicheViews.optionen op = new restlicheViews.optionen();
+        op.setPrimaryStage(stage);
+        op.startUp_optionen();
 
     }
 

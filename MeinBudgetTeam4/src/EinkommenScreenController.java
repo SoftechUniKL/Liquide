@@ -1,6 +1,9 @@
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Date;
+import java.util.Locale;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,7 +19,10 @@ import javafx.event.*;
 
 public class EinkommenScreenController {
 	
-
+	/** die ID´s der einzelnen Inhalte
+	 * aus dem Scene Builder übernommen
+	 */
+    
     @FXML
     private ToggleGroup Group1;
 	
@@ -40,8 +46,13 @@ public class EinkommenScreenController {
 
     @FXML
     private Button zurück_Button_Einkommen;
-    
+    /** initialisiert das Fenster mit dyanamischen Werten
+     * 
+     */
     public void initialize() {
+    	/*prüft ob die Zahl eine korrekte double Zahl ist
+    	 * 1:1 aus dem neuerPostenScreenController übernommen
+    	 */
     	EinzahlungInput.textProperty().addListener(
 				new ChangeListener<String>() {
 					@Override
@@ -128,22 +139,32 @@ public class EinkommenScreenController {
 					}
 				});
     }
-    
+    /**
+     * Fenster wird in den Ursprungszustand gebracht
+     */
     public void init (){
     	monatlich_rb_Einkommen.setSelected(false);
     	einmalig_rb_Einkommen.setSelected(false);
     	EinzahlungInput.setText("");
     	bezeichnungInput_einkommen.setText("");
     }
-
+    /** prüft ob die Eingaben okay sind, wenn ja wird Posten übernommen
+     *  prüft ob Posten einmalig ist oder monatlich
+     * @throws SQLException wenn Problem mit SQL-Anfrage
+     */
     
     @FXML
     void bA_übernehmen_Einkommen(ActionEvent event) throws SQLException {
-    	try{
+    	try {
     		Date heute = new Date();
 		    java.sql.Timestamp sqlheute = new java.sql.Timestamp(heute.getTime());
     		BudgetPlanModel model = new BudgetPlanModel();
-    		double e = Double.parseDouble(EinzahlungInput.getText());
+    		String ein = EinzahlungInput.getText();
+    		double e;
+    		NumberFormat nf_in = NumberFormat
+					.getNumberInstance(Locale.GERMANY); // Grüße von Shahin
+			e = nf_in.parse(ein).doubleValue();
+    		
     		String bez = bezeichnungInput_einkommen.getText();
     		if(bez.isEmpty()){
     			Info_Einkommen.setTextFill(Color.web("red"));
@@ -156,6 +177,8 @@ public class EinkommenScreenController {
     			}
     			else {
     				if(monatlich_rb_Einkommen.isSelected()){
+    		
+    					
     					model.insert_Posten(bez, "Einkommen","-", e, 1, "", 1, sqlheute);	
     		    		model.update_User(model.getBudget() + e);
     		    		Info_Einkommen.setTextFill(Color.web("green"));
@@ -173,16 +196,18 @@ public class EinkommenScreenController {
     		
     		}
     	}
-    	/* wenn keine Zahl eingegeben wird, kommt eine Fehlermeldung */
-    	catch (IllegalArgumentException e) {
+    	catch(ParseException f) {
     		Info_Einkommen.setTextFill(Color.web("red"));
-    		Info_Einkommen.setText("Dies ist keine Zahl");
+    		Info_Einkommen.setText("Sie müssen eine korrekte Zahl eingeben");
     	}
+    	
     
     	
 
     }
-
+    /** zurück zum Hauptmenü
+     * @throws SQLException
+     */
     @FXML
     void bA_zurück_Einkommen(ActionEvent event) throws IOException, SQLException {
     	Stage stage=(Stage) zurück_Button_Einkommen.getScene().getWindow();

@@ -25,7 +25,8 @@ import javafx.event.*;
 
 public class PostenverwaltungScreenController {
 	BudgetPlanModel model = new BudgetPlanModel();
-    /* Konstrukt aus scene builder übernommen*/
+    /**
+     *  Konstrukt aus scene builder übernommen*/
 	@FXML
     private RadioButton daueraufträge_rb_postenverwaltung;
 	
@@ -94,7 +95,7 @@ public class PostenverwaltungScreenController {
 				}));
 		timeline.play();
 	}
-    /* löschen Button soll nicht betätigt werden können.
+    /** löschen Button soll nicht betätigt werden können.
      * nur wenn eine Zeile in der Tabelle ausgewählt wird, kann man den Button löschen betätigen
      * stornieren darf nur betätigt werden, wenn ein Dauerauftrag ausgewählt wurde
      */
@@ -111,7 +112,7 @@ public class PostenverwaltungScreenController {
 				});
 
 	}
-    /* Radio Button für Ausgaben
+    /** Radio Button für Ausgaben
      * beim Betätigen wird die Tabelle für die (negativen Posten) geladen
      * wenn kein Zeitraum oder ein falscher Zeitraum gewählt wird, kommt eine Fehlermeldung
      */
@@ -590,7 +591,7 @@ public class PostenverwaltungScreenController {
 
 						}
 					} catch (IllegalArgumentException e) {
-						einkommenr_rb_postenverwaltung.setSelected(false);
+						daueraufträge_rb_postenverwaltung.setSelected(false);
 						Info_postenverwaltung.setTextFill(Color.web("red"));
 						Info_postenverwaltung
 								.setText("Das Ende des Zeitraums darf nicht vor dem Anfang liegen");
@@ -599,7 +600,7 @@ public class PostenverwaltungScreenController {
 				}
 
 			} catch (IllegalArgumentException e) {
-				einkommenr_rb_postenverwaltung.setSelected(false);
+				daueraufträge_rb_postenverwaltung.setSelected(false);
 				Info_postenverwaltung.setTextFill(Color.web("red"));
 				Info_postenverwaltung
 						.setText("Sie müssen einen Anfang und Ende des Zeitraums bestimmen");

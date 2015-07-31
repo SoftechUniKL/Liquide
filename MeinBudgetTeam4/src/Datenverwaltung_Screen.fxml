@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane stylesheets="@Template.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="DatenVerwaltungScreenController">
    <children>
       <ImageView fitHeight="600.0" fitWidth="600.0" opacity="0.85" pickOnBounds="true">
@@ -44,7 +43,7 @@
             <AnchorPane prefHeight="200.0" prefWidth="200.0">
                <children>
                   <Button fx:id="zurück_button_Datenverwaltung" layoutX="212.0" layoutY="100.0" mnemonicParsing="false" onAction="#bA_zurück_Datenverwaltung" prefHeight="50.0" prefWidth="175.0" text="zurück" />
-                  <Label fx:id="Info_Datenverwaltung" alignment="CENTER" layoutX="150.0" layoutY="61.0" prefHeight="25.0" prefWidth="500.0">
+                  <Label fx:id="Info_Datenverwaltung" alignment="CENTER" layoutX="50.0" layoutY="61.0" prefHeight="25.0" prefWidth="500.0">
                      <font>
                         <Font size="18.0" />
                      </font>

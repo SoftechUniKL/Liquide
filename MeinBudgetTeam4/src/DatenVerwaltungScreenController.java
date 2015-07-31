@@ -23,7 +23,7 @@ import javafx.event.*;
 public class DatenVerwaltungScreenController {
 	BudgetPlanModel model = new BudgetPlanModel ();
 	
-    /* alle Elemente mit ID´s aus dem Scenebuilder übernommen*/
+    /** alle Elemente mit ID´s aus dem Scenebuilder übernommen*/
     @FXML
     private TextField KategorieInput_Datenverwaltung;
 
@@ -124,7 +124,10 @@ public class DatenVerwaltungScreenController {
         }));
         timeline.play();
     }
-    /* Button für Kategorie löschen */
+    /**
+     *  Button für Kategorie löschen 
+     *  kann kaum was schief gehen, das Weg festgelegt
+     */
     @FXML
     void bA_KategorieLöschen_Datenverwaltung(ActionEvent event) throws SQLException {
     	String [] s =  model.return_Subkategorien(KategorieInputKl_Datenverwaltung.getValue());
@@ -141,7 +144,7 @@ public class DatenVerwaltungScreenController {
     	reset();
 
     }
-/* Wenn Kategorie bereits besteht, kommt eine Fehlermeldung. Ansonsten wird Kategorie aufgenommen. 
+/** Wenn Kategorie bereits besteht, kommt eine Fehlermeldung. Ansonsten wird Kategorie aufgenommen. 
  * Die neue Kategorie wird in die restlichen comboboxen eingefügt
  */
     @FXML
@@ -173,14 +176,17 @@ public class DatenVerwaltungScreenController {
     }
 
    
-
+    /** Button wir aktiviert, wenn Kategorie ausgewählt wurde
+     */
     @FXML
     void cbA_KategorieInputKl_Datenverwaltung(ActionEvent event) {
     	KategorieLöschen_button_Datenverwaltung.setDisable(false);
     	
 
     }
-
+    /** erstellt Subkategorie, falls sie noch nicht vorhanden ist
+     * @throws SQLException
+     */
     @FXML
     void bA_subKategorieErstellen_Datenverwaltung(ActionEvent event) throws SQLException {
     	try{
@@ -196,17 +202,21 @@ public class DatenVerwaltungScreenController {
             	Info_Datenverwaltung.setText("Ihre Subkategorie wurde erfolgreich angelegt");
             	reset();
             	init();
-            	
         	}
         	}
+    	    /* Fehler, falls Subkategorie bereits besteht
+    	     */
         	catch (IllegalArgumentException e) {
         		Info_Datenverwaltung.setTextFill(Color.web("red"));
         		Info_Datenverwaltung.setText("Diese Subkategorie gibt es bereits");
         		reset();
-        	}
-    	
+        	}	
     }
-
+    
+    /** löscht die Ausgewählt Subkategorie
+     *  kann kaum was schief gehen, da der Weg bis zum löschen festgelegt ist
+     * @throws SQLException
+     */
     @FXML
     void bA_subKategorieLöschen_Datenverwaltung(ActionEvent event) throws SQLException {
     	model.deleteSubkategorie(subkategorieInputSl_Datenverwaltung.getValue(),KategorieInputSl_Datenverwaltung.getValue() );
@@ -215,19 +225,21 @@ public class DatenVerwaltungScreenController {
     	init();
     	Info_Datenverwaltung.setTextFill(Color.web("green"));
     	Info_Datenverwaltung.setText("Ihre Subkategorie wurde erfolgreich gelöscht");
-    	reset();
-        
+    	reset();   
     }
-
+    
+    /** Wenn Kategorie ausgewählt wurde, wird die Combobox der Subkategorie aktiviert
+     * @throws SQLException
+     */
     @FXML
     void cbA_KategorieInputSe_Datenverwaltung(ActionEvent event) throws SQLException {
     	subKategorieInput_Datenverwaltung.setDisable(false);
-    	
-
     }
-
   
-
+    /** Wenn neue Kategorie ausgewählt wurde, wird die Combobox der Subkategorie mit den
+     *  richtigen Werten gefüllt
+     * @throws SQLException
+     */
     @FXML
     void cbA_KategorieInputSl_Datenverwaltung(ActionEvent event) throws SQLException {
     	subkategorieInputSl_Datenverwaltung.getItems().clear();
@@ -235,25 +247,22 @@ public class DatenVerwaltungScreenController {
     	String [] s = model.return_Subkategorien(KategorieInputSl_Datenverwaltung.getValue());
     	Arrays.sort(s);
     	subkategorieInputSl_Datenverwaltung.getItems().addAll(s);
-
     }
-
+    
+    /**wenn Subkategorie ausgewählt wurde, dann wird Button aktiviert
+     */
     @FXML
     void cbA_SubkategorieInputSl_Datenverwaltung(ActionEvent event) {
     	subKategorieLöschen_button_Datenverwaltung.setDisable(false);
-    	
-
     }
-
+    /** identisch zu allen anderen zurück-Buttons
+     * @throws SQLException
+     */
     @FXML
     void bA_zurück_Datenverwaltung(ActionEvent event) throws IOException, SQLException {
     	Stage stage=(Stage) zurück_button_Datenverwaltung.getScene().getWindow();
         restlicheViews.Menue menü = new restlicheViews.Menue();
         menü.setPrimaryStage(stage);
         menü.startUp_menue();
-
     }
-    
-    
-
 }

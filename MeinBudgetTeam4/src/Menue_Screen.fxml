@@ -17,25 +17,38 @@
             <Image url="@../data/background_small1.png" />
          </image>
       </ImageView>
-      <Button fx:id="ausgaben_button_menue" layoutX="50.0" layoutY="235.0" mnemonicParsing="false" onAction="#bA_ausgaben_menue" prefHeight="50.0" prefWidth="175.0" text="Ausgaben" />
-      <Button fx:id="postenverwaltung_button_menue" layoutX="50.0" layoutY="315.0" mnemonicParsing="false" onAction="#bA_postenverwaltung_menue" prefHeight="50.0" prefWidth="175.0" text="Postenverwaltung" />
-      <Button fx:id="datenverwaltung_button_menue" layoutX="50.0" layoutY="395.0" mnemonicParsing="false" onAction="#bA_datenverwaltung_menue" prefHeight="50.0" prefWidth="175.0" text="Datenverwaltung" />
-      <Button fx:id="optionen_button_menue" layoutX="50.0" layoutY="475.0" mnemonicParsing="false" onAction="#bA_optionen_menue" prefHeight="50.0" prefWidth="175.0" text="Optionen" />
-      <Pane blendMode="DIFFERENCE" layoutX="273.0" layoutY="260.0" prefHeight="300.0" prefWidth="300.0">
-         <children>
-            <Label fx:id="Info_menü" alignment="CENTER" layoutX="136.0" layoutY="218.0" />
-            <Label fx:id="aktuellesBudgetOutput_Menü" layoutX="-78.0" layoutY="217.0" prefHeight="54.0" prefWidth="400.0">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-         </children></Pane>
-      <Label layoutX="368.0" layoutY="225.0" text="letzte Ausgaben:" />
-      <Label layoutX="368.0" layoutY="100.0" text="aktuelles Budget" />
-      <Button fx:id="Einkommen_Button_Menü" layoutX="50.0" layoutY="155.0" mnemonicParsing="false" onAction="#bA_Einkommen_Menü" prefHeight="50.0" prefWidth="175.0" text="Einkommen" />
       <Button fx:id="neuerPosten_button_menue" layoutX="50.0" layoutY="75.0" mnemonicParsing="false" onAction="#bA_neuerPosten_menue" prefHeight="50.0" prefWidth="175.0" text="neuer Posten" textFill="#460808">
          <tooltip>
             <Tooltip text="Hier könne Sie neue Posten bilden (Ausgaben)" />
+         </tooltip></Button>
+      <Button fx:id="postenverwaltung_button_menue" layoutX="50.0" layoutY="315.0" mnemonicParsing="false" onAction="#bA_postenverwaltung_menue" prefHeight="50.0" prefWidth="175.0" stylesheets="@Template.css" text="Postenverwaltung">
+         <tooltip>
+            <Tooltip text="Löschen und Stornieren von Posten, bzw. Daueraufträgen" />
+         </tooltip></Button>
+      <Button fx:id="datenverwaltung_button_menue" layoutX="50.0" layoutY="395.0" mnemonicParsing="false" onAction="#bA_datenverwaltung_menue" prefHeight="50.0" prefWidth="175.0" text="Datenverwaltung">
+         <tooltip>
+            <Tooltip text="Hier können Sie Kategorien erstellen oder löschen" />
+         </tooltip></Button>
+      <Button fx:id="optionen_button_menue" layoutX="50.0" layoutY="475.0" mnemonicParsing="false" onAction="#bA_optionen_menue" prefHeight="50.0" prefWidth="175.0" text="Optionen">
+         <tooltip>
+            <Tooltip text="Hier können Sie alle Daten des Users löschen" />
+         </tooltip></Button>
+      <Pane blendMode="DIFFERENCE" layoutX="273.0" layoutY="260.0" prefHeight="300.0" prefWidth="300.0" />
+      <Label layoutX="368.0" layoutY="225.0" text="letzte Ausgaben:" />
+      <Label layoutX="368.0" layoutY="100.0" text="aktuelles Budget" />
+      <Button fx:id="Einkommen_Button_Menü" layoutX="50.0" layoutY="155.0" mnemonicParsing="false" onAction="#bA_Einkommen_Menü" prefHeight="50.0" prefWidth="175.0" text="Einkommen">
+         <tooltip>
+            <Tooltip text="Hier können Sie das Einkommen bestimmen" />
+         </tooltip></Button>
+      <Label fx:id="aktuellesBudgetOutput_Menü" alignment="CENTER" layoutX="368.0" layoutY="125.0" prefHeight="30.0" prefWidth="158.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="datum_menue" alignment="CENTER" layoutX="450.0" layoutY="560.0" prefHeight="30.0" prefWidth="140.0" />
+      <Button fx:id="ausgaben_button_menue" layoutX="50.0" layoutY="235.0" mnemonicParsing="false" onAction="#bA_ausgaben_menue" prefHeight="50.0" prefWidth="175.0" text="Ausgaben">
+         <tooltip>
+            <Tooltip text="Visualisierung der Ausgaben" />
          </tooltip></Button>
    </children>
 </AnchorPane>
