@@ -81,9 +81,9 @@ public class LoginScreenController {
  */
 	@FXML
 	void buttonAction_registrationButton_login(ActionEvent event) { // Wechsel
-																						// in
-																						// anderes
-																						// Menü
+																	// in
+																	// anderes
+																	// Menü
 		task.cancel();
 		Stage stage = (Stage) registrationButton_login.getScene().getWindow();
 		RegistrationView registration = new RegistrationView();
@@ -278,7 +278,6 @@ public class LoginScreenController {
 				while(true) {
 					Thread.sleep(99);
 					double m = (2d * (percent/100)%4);
-					System.out.println((int)(2d*(percent/100)%4));
 					int n = (int) m;
 					double f = m-n;
 					int t = (int) (255*f);

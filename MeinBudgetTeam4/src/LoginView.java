@@ -1,20 +1,8 @@
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
-
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.TilePane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class LoginView {
@@ -34,17 +22,7 @@ public class LoginView {
 	}
 
 	public void startUp() {
-//		primaryStage.setTitle("Liquide wie Friede");
-//		//Pane myPane = (Pane)FXMLLoader.load(getClass().getResource("LoginScreen.fxml"));
-//		FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginScreen.fxml"));
-//		//Scene myScene = new Scene(myPane);
-//		primaryStage.setScene(new Scene((Pane) loader.load()));
-//		primaryStage.setResizable(false);
-//		primaryStage.getIcons().add(new Image("file:data/Coin.png")); //Details: http://docs.oracle.com/javafx/2/api/javafx/scene/image/Image.html
-//		primaryStage.show();
 		initiate();
-	//	resize();
-	//	resizeListener();
 		
 	}
 	

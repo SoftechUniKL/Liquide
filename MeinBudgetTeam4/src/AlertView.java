@@ -1,6 +1,5 @@
 import java.io.IOException;
 
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -18,7 +17,6 @@ public class AlertView {
 		try {
 			primaryStage.setScene(new Scene((Pane) loader.load()));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		primaryStage.setTitle("Liquide wie Friede - Fehler");
